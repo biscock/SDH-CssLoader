@@ -3,7 +3,7 @@ import { FilterQueryResponse, ThemeQueryRequest, ThemeQueryResponse } from "@/ty
 import { StoreApi, createStore, useStore } from "zustand";
 import { getCSSLoaderState } from "@/backend";
 import { isEqual } from "lodash";
-import { getThemeBrowserSharedState } from "./ThemeBrowserSharedStore";
+import { getThemeBrowserSharedState, themeBrowserSharedStore } from "./ThemeBrowserSharedStore";
 
 interface ThemeBrowserStoreValues {
   loading: boolean;
@@ -83,6 +83,12 @@ export function ThemeBrowserStoreProvider({
         try {
           await get().getFilters();
           await get().getThemes();
+
+          themeBrowserSharedStore.subscribe((state, prevState) => {
+            if (state.targetOverride !== prevState.targetOverride) {
+              get().getThemes();
+            }
+          });
         } catch (error) {}
       },
       getFilters: async () => {

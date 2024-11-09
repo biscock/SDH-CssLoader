@@ -18,7 +18,7 @@ interface IThemeBrowserSharedStore
   extends ThemeBrowserSharedStoreValues,
     ThemeBrowserSharedStoreActions {}
 
-const themeBrowserSharedStore = createStore<IThemeBrowserSharedStore>((set) => {
+export const themeBrowserSharedStore = createStore<IThemeBrowserSharedStore>((set) => {
   return {
     browserCardSize: 3,
     targetOverride: "",
