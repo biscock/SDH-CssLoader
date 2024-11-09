@@ -6,6 +6,7 @@ import { isEqual } from "lodash";
 import { getThemeBrowserSharedState } from "./ThemeBrowserSharedStore";
 
 interface ThemeBrowserStoreValues {
+  loading: boolean;
   themes: ThemeQueryResponse;
   searchOpts: ThemeQueryRequest;
   prevSearchOpts: ThemeQueryRequest;
@@ -57,6 +58,7 @@ export function ThemeBrowserStoreProvider({
 
   if (!storeRef.current) {
     storeRef.current = createStore<IThemeBrowserStore>((set, get) => ({
+      loading: true,
       themes: { total: 0, items: [] },
       searchOpts: {
         page: 1,
@@ -109,6 +111,7 @@ export function ThemeBrowserStoreProvider({
         await getThemes();
       },
       getThemes: async () => {
+        set({ loading: true });
         try {
           const { searchOpts } = get();
           const { targetOverride } = getThemeBrowserSharedState();
@@ -125,6 +128,7 @@ export function ThemeBrowserStoreProvider({
             set({ themes: response, indexToSnapToOnLoad: -1 });
           }
         } catch (error) {}
+        set({ loading: false });
       },
     }));
   }
