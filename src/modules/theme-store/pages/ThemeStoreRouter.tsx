@@ -13,12 +13,27 @@ export function ThemeStoreRouter() {
         onShowTab={(tab) => setCurrentTab(tab)}
         tabs={[
           {
-            id: "allthemes",
-            title: "All Themes",
+            id: "bpm-themes",
+            title: "BPM Themes",
             content: (
               <ThemeBrowserStoreProvider
                 filterPath="/themes/filters"
                 themePath="/themes"
+                themeType="BPM"
+                requiresAuth={false}
+              >
+                <ThemeBrowserPage />
+              </ThemeBrowserStoreProvider>
+            ),
+          },
+          {
+            id: "desktop-themes",
+            title: "Desktop Themes",
+            content: (
+              <ThemeBrowserStoreProvider
+                filterPath="/themes/filters"
+                themePath="/themes"
+                themeType="DESKTOP"
                 requiresAuth={false}
               >
                 <ThemeBrowserPage />

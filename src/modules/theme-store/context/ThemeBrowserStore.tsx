@@ -26,17 +26,14 @@ interface IThemeBrowserStore extends ThemeBrowserStoreValues, ThemeBrowserStoreA
 
 const ThemeBrowserStoreContext = createContext<StoreApi<IThemeBrowserStore> | null>(null);
 
-function generateParamStr(searchOpts: ThemeQueryRequest) {
+function generateParamStr(searchOpts: ThemeQueryRequest, themeType: "ALL" | "DESKTOP" | "BPM") {
   const searchOptsClone = structuredClone(searchOpts);
-  let prependString = "BPM-CSS.-Preset";
-  if (searchOptsClone.filters.includes("Desktop")) {
-    prependString = "-Preset";
-  }
-  if (searchOptsClone.filters.includes("Preset")) {
-    prependString = "BPM-CSS";
-  }
+
+  let prependString =
+    themeType === "ALL" ? "CSS" : themeType === "DESKTOP" ? "DESKTOP-CSS" : "BPM-CSS";
+  // "All" is a fake term made up by the frontend to have a unique key for it, the server just expects empty
   searchOptsClone.filters === "All" ? (searchOptsClone.filters = "") : (prependString += ".");
-  prependString && (searchOptsClone.filters = prependString + searchOptsClone.filters);
+  searchOptsClone.filters = prependString + searchOptsClone.filters;
 
   // @ts-expect-error
   const paramStr = new URLSearchParams(searchOptsClone).toString();
@@ -47,11 +44,13 @@ export function ThemeBrowserStoreProvider({
   children,
   filterPath,
   themePath,
+  themeType,
   requiresAuth = false,
 }: {
   children: React.ReactNode;
   filterPath: string;
   themePath: string;
+  themeType: "ALL" | "DESKTOP" | "BPM";
   requiresAuth?: boolean;
 }) {
   const storeRef = useRef<StoreApi<IThemeBrowserStore> | null>(null);
@@ -84,6 +83,7 @@ export function ThemeBrowserStoreProvider({
           await get().getFilters();
           await get().getThemes();
 
+          // This ensures that it actually fetches new themed when you click on a forced target
           themeBrowserSharedStore.subscribe((state, prevState) => {
             if (state.targetOverride !== prevState.targetOverride) {
               get().getThemes();
@@ -93,9 +93,15 @@ export function ThemeBrowserStoreProvider({
       },
       getFilters: async () => {
         const { apiFetch } = getCSSLoaderState();
+        const typeMapping = {
+          ALL: "CSS",
+          DESKTOP: "DESKTOP-CSS",
+          BPM: "BPM-CSS",
+        };
+
         try {
           const response = await apiFetch<FilterQueryResponse>(
-            `${filterPath}?type=CSS`,
+            `${filterPath}?type=${typeMapping[themeType]}`,
             {},
             requiresAuth
           );
@@ -126,7 +132,7 @@ export function ThemeBrowserStoreProvider({
 
           const { apiFetch } = getCSSLoaderState();
           const response = await apiFetch<ThemeQueryResponse>(
-            `${themePath}?${generateParamStr(searchOpts)}`,
+            `${themePath}?${generateParamStr(formattedSearchOpts, themeType)}`,
             {},
             requiresAuth
           );
