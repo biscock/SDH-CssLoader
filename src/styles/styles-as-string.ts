@@ -1,6 +1,11 @@
 import { gamepadDialogClasses } from "@decky/ui";
 
 export const styles = `
+/* THIS FILE IS NOT USED IN BUILD */
+/* ANY MODIFICATIONS HERE MUST BE COPY PASTED INTO styles-as-string.ts */
+/* THAT IS NEEDED FOR STATIC CLASS INJECTION */
+/* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
+
 .flex {
   display: flex !important;
 }
@@ -67,6 +72,10 @@ export const styles = `
 
 .w-full {
   width: 100% !important;
+}
+
+.max-w-1\/2 {
+  max-width: 50% !important;
 }
 
 .relative {
@@ -196,7 +205,7 @@ export const styles = `
   align-items: start !important;
 }
 
-.cl-store-dropdown-hide-spacer> button > div > .${gamepadDialogClasses.Spacer} {
+.cl-store-dropdown-hide-spacer > button > div > .${gamepadDialogClasses.Spacer} {
   width: 0 !important;
 }
 
@@ -211,6 +220,14 @@ export const styles = `
   gap: 0.5rem !important;
   max-width: 20% !important;
   height: 48% !important;
+}
+
+.cl-store-loadmore-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .cl-store-scale-slider {

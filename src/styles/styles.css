@@ -71,6 +71,10 @@
   width: 100% !important;
 }
 
+.max-w-1\/2 {
+  max-width: 50% !important;
+}
+
 .relative {
   position: relative !important;
 }
@@ -198,7 +202,7 @@
   align-items: start !important;
 }
 
-.cl-store-dropdown-hide-spacer> button > div > .${gamepadDialogClasses.Spacer} {
+.cl-store-dropdown-hide-spacer > button > div > .${gamepadDialogClasses.Spacer} {
   width: 0 !important;
 }
 
@@ -213,6 +217,14 @@
   gap: 0.5rem !important;
   max-width: 20% !important;
   height: 48% !important;
+}
+
+.cl-store-loadmore-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
 }
 
 .cl-store-scale-slider {

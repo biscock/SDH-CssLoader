@@ -55,9 +55,7 @@ export function ThemeBrowserPage() {
             ))
         )}
       </Focusable>
-      <div>
-        <LoadMoreButton />
-      </div>
+      <LoadMoreButton />
     </>
   );
 }

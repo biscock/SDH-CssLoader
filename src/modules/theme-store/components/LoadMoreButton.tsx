@@ -13,14 +13,14 @@ export function LoadMoreButton() {
   }
 
   return (
-    <>
+    <div className="cl-store-loadmore-container">
       {themes.length < themeTotal ? (
-        <>
+        <div className="max-w-1/2">
           <DialogButton onClick={handleClick} disabled={loading}>
             Load More
           </DialogButton>
-        </>
+        </div>
       ) : null}
-    </>
+    </div>
   );
 }
