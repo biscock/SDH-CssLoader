@@ -14,7 +14,7 @@ export function Modal({
     <ModalRoot onCancel={closeModal} onEscKeypress={closeModal}>
       <StyleProvider>
         <div>
-          <h1>{title}</h1>
+          {title && <h1>{title}</h1>}
           {children}
         </div>
       </StyleProvider>

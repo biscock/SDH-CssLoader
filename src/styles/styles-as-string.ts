@@ -1,11 +1,6 @@
 import { gamepadDialogClasses } from "@decky/ui";
 
 export const styles = `
-/* THIS FILE IS NOT USED IN BUILD */
-/* ANY MODIFICATIONS HERE MUST BE COPY PASTED INTO styles-as-string.ts */
-/* THAT IS NEEDED FOR STATIC CLASS INJECTION */
-/* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
-
 /*
 MARK: TAILWIND
 */
@@ -544,5 +539,28 @@ MARK: Account Page
   align-items: center !important;
   justify-content: center !important;
   gap: 0.5rem !important;
+}
+
+/* 
+MARK: Author View Modal
+*/
+
+.cl_authorview_avatar {
+  margin-right: 0.25em !important;
+}
+
+.cl_authorview_username {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.cl_authorview_authorcontainer {
+  display: flex !important;
+  margin-bottom: 1em !important;
+  align-items: center !important;
+}
+.cl_authorview_supportericoncontainer {
+  margin-left: auto !important;
+  transform: translateY(2px) !important;
 }
 `;

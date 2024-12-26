@@ -1,7 +1,8 @@
-import { DialogButton, Focusable, Navigation, ScrollPanelGroup } from "@decky/ui";
+import { DialogButton, Focusable, Navigation, ScrollPanelGroup, showModal } from "@decky/ui";
 import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { ExpandedViewImageContainer } from "./ExpandedViewImageContainer";
 import { useThemeBrowserSharedAction } from "@/modules/theme-store/context";
+import { AuthorViewModal } from "@/lib";
 
 export function ExpandedViewScrollingSection() {
   const data = useExpandedViewValue("data");
@@ -37,8 +38,7 @@ export function ExpandedViewScrollingSection() {
               onOKActionDescription="View Profile"
               focusClassName="gpfocuswithin"
               onActivate={() => {
-                // TODO: MODAL
-                // showModal(<AuthorViewModalRoot authorData={fullThemeData.author} />);
+                showModal(<AuthorViewModal authorData={data.author} />);
               }}
             >
               By <span className="cl_expandedview_bluetext">{data.specifiedAuthor}</span>

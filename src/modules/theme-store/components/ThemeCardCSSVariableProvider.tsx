@@ -1,8 +1,8 @@
 import { themeCardStylesGenerator } from "@/styles";
-import { useThemeBrowserSharedValue } from "../context";
+import { ColumnNumbers, useThemeBrowserSharedValue } from "../context";
 
-export function ThemeCardCSSVariableProvider() {
+export function ThemeCardCSSVariableProvider({ cardSize }: { cardSize?: ColumnNumbers }) {
   const browserCardSize = useThemeBrowserSharedValue("browserCardSize");
 
-  return <style>{themeCardStylesGenerator(browserCardSize)}</style>;
+  return <style>{themeCardStylesGenerator(cardSize || browserCardSize)}</style>;
 }
