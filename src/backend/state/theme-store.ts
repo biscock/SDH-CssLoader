@@ -51,6 +51,8 @@ export interface CSSLoaderStateActions {
     request?: RequestInit,
     requiresAuth?: boolean | string
   ) => Promise<Return>;
+  logInWithShortToken: (newToken?: string) => Promise<void>;
+  logOut: () => void;
   getThemes: () => Promise<void>;
   changePreset: (presetName: string) => Promise<void>;
   testBackend: () => Promise<void>;
@@ -171,6 +173,10 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const hiddenMotd = await backend.storeRead("hiddenMotd");
           set({ hiddenMotdId: hiddenMotd ?? "" });
 
+          if (shortToken) {
+            await get().logInWithShortToken();
+          }
+
           const { bulkThemeUpdateCheck, scheduleBulkThemeUpdateCheck } = get();
           await bulkThemeUpdateCheck();
           scheduleBulkThemeUpdateCheck();
@@ -211,6 +217,50 @@ export const createCSSLoaderStore = (backend: Backend) =>
         } catch (error) {
           console.error("Error Reloading Themes", error);
         }
+      },
+      logInWithShortToken: async (newToken?: string) => {
+        try {
+          const token = newToken ?? get().apiShortToken;
+          if (!token) {
+            throw new Error("No Token Provided");
+          }
+          // This can't use apiFetch because it doesn't use header based auth
+          const json = await backend.fetch<{ token: string }>(`${apiUrl}/auth/authenticate_token`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          });
+          if (!json.token) {
+            throw new FetchError(
+              "Token Authentication Failed",
+              `${apiUrl}/auth/authenticate_token`,
+              "No Token in Response"
+            );
+          }
+          backend.storeWrite("shortToken", token);
+          set({
+            apiShortToken: token,
+            apiFullToken: json.token,
+            apiTokenExpireDate: new Date().valueOf() + 1000 * 10 * 60,
+          });
+          const meJson = await apiFetch<FullAccountData>("/auth/me", undefined, true);
+          if (meJson) {
+            set({ apiMeData: meJson });
+          }
+        } catch (error) {
+          backend.toast("CSSLoader", "Failed to log in");
+        }
+      },
+      logOut: () => {
+        set({
+          apiShortToken: "",
+          apiFullToken: "",
+          apiMeData: undefined,
+          apiTokenExpireDate: undefined,
+        });
+        backend.storeWrite("shortToken", "");
       },
       refreshToken: async (): Promise<string | undefined> => {
         const { apiFullToken, apiTokenExpireDate } = get();

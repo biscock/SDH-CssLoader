@@ -6,6 +6,10 @@ export const styles = `
 /* THAT IS NEEDED FOR STATIC CLASS INJECTION */
 /* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
 
+/*
+MARK: TAILWIND
+*/
+
 .flex {
   display: flex !important;
 }
@@ -16,6 +20,10 @@ export const styles = `
 
 .flex-wrap {
   flex-wrap: wrap !important;
+}
+
+.flex-1 {
+  flex: 1 1 0% !important;
 }
 
 .gap-1 {
@@ -93,7 +101,9 @@ export const styles = `
   transform: translate(-50%, -50%) !important;
 }
 
-/* Fullscreen Routes */
+/*
+MARK: Fullscreen Routes
+*/
 
 .cl_fullscreenroute_container {
   margin-top: 40px !important;
@@ -101,7 +111,15 @@ export const styles = `
   background: #0e141b !important;
 }
 
-/* TitleView */
+.cl_fullscrenroute_title {
+  font-size: 2rem !important;
+  font-weight: bold !important;
+}
+
+/*
+MARK: TitleView
+*/
+
 
 .cl-title-view-button {
   height: 28px !important;
@@ -131,7 +149,10 @@ export const styles = `
   animation: onboardingButton 1s infinite ease-in-out !important;
 }
 
-/* QAM Tab */
+/*
+MARK: QAM Tab
+*/
+
 
 .cl-qam-collapse-button-container > div > div > div > div > button {
   height: 10px !important;
@@ -190,7 +211,10 @@ export const styles = `
   white-space: nowrap !important;
 }
 
-/* Theme Store */
+/*
+MARK: Store
+*/
+
 
 .cl-store-filter-field-container {
   display: flex !important;
@@ -249,6 +273,7 @@ export const styles = `
 /* The variables should be injected wherever needed */
 /* This module actually is based on font-size, so EM makes sense over REM */
 
+/* TODO: For some reason I made half of these classes with dashes and the other half with underscores, standardize it!!! */
 .cl_storeitem_notifbubble {
   position: absolute !important;
   background: linear-gradient(135deg, #fca904 50%, transparent 51%) !important;
@@ -342,7 +367,10 @@ export const styles = `
   font-size: 0.75em !important;
 }
 
-/* Expanded View */
+/*
+MARK: Expanded View
+*/
+
 
 @keyframes cl_spin {
   to {
@@ -504,5 +532,17 @@ export const styles = `
   width: 1rem !important;
   min-width: 1rem !important;
   position: relative;
+}
+
+/*
+MARK: Account Page
+*/
+
+.cl_accountpage_actionbutton {
+  max-width: 30% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
 }
 `;
