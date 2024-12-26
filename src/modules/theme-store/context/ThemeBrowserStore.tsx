@@ -1,5 +1,10 @@
 import { createContext, useContext, useRef } from "react";
-import { FilterQueryResponse, ThemeQueryRequest, ThemeQueryResponse } from "@/types";
+import {
+  FilterQueryResponse,
+  PartialCSSThemeInfo,
+  ThemeQueryRequest,
+  ThemeQueryResponse,
+} from "@/types";
 import { StoreApi, createStore, useStore } from "zustand";
 import { getCSSLoaderState } from "@/backend";
 import { isEqual } from "lodash";
@@ -7,7 +12,8 @@ import { getThemeBrowserSharedState, themeBrowserSharedStore } from "./ThemeBrow
 
 interface ThemeBrowserStoreValues {
   loading: boolean;
-  themes: ThemeQueryResponse;
+  themes: PartialCSSThemeInfo[];
+  themeTotal: number;
   searchOpts: ThemeQueryRequest;
   prevSearchOpts: ThemeQueryRequest;
   filterOptions: FilterQueryResponse;
@@ -17,7 +23,7 @@ interface ThemeBrowserStoreValues {
 interface ThemeBrowserStoreActions {
   initializeStore: () => Promise<void>;
   getFilters: () => Promise<void>;
-  setSearchOpts: (searchOpts: ThemeQueryRequest) => void;
+  setSearchOpts: (searchOpts: ThemeQueryRequest) => Promise<void>;
   refreshThemes: () => Promise<void>;
   getThemes: () => Promise<void>;
 }
@@ -58,7 +64,8 @@ export function ThemeBrowserStoreProvider({
   if (!storeRef.current) {
     storeRef.current = createStore<IThemeBrowserStore>((set, get) => ({
       loading: true,
-      themes: { total: 0, items: [] },
+      themes: [],
+      themeTotal: 0,
       searchOpts: {
         page: 1,
         perPage: 50,
@@ -110,17 +117,18 @@ export function ThemeBrowserStoreProvider({
           }
         } catch (error) {}
       },
-      setSearchOpts(searchOpts) {
+      setSearchOpts: async (searchOpts, options: { dontResetPage?: boolean } = {}) => {
         const { searchOpts: prevSearchOpts, themes, getThemes } = get();
         set({ searchOpts, prevSearchOpts });
 
-        if (!isEqual(prevSearchOpts, searchOpts) || themes.total === 0) {
-          getThemes();
+        if (!isEqual(prevSearchOpts, searchOpts) || themes.length === 0) {
+          await getThemes();
         }
       },
       refreshThemes: async () => {
-        const { getThemes } = get();
-        await getThemes();
+        // setSearchOpts calls get
+        const { searchOpts, setSearchOpts } = get();
+        await setSearchOpts({ ...searchOpts, page: 1 });
       },
       getThemes: async () => {
         set({ loading: true });
@@ -137,7 +145,17 @@ export function ThemeBrowserStoreProvider({
             requiresAuth
           );
           if (response.items) {
-            set({ themes: response, indexToSnapToOnLoad: -1 });
+            set({ themeTotal: response.total });
+            if (searchOpts.page === 1) {
+              set({ themes: response.items, indexToSnapToOnLoad: -1 });
+            } else {
+              set({
+                themes: [...get().themes, ...response.items],
+                // This ensures that you snap back to the last theme you were viewing
+                // For example, if you were at the end of page 1 (theme 50) and you load page 2, you should snap back to theme 50
+                indexToSnapToOnLoad: searchOpts.perPage * (searchOpts.page - 1) - 1,
+              });
+            }
           }
         } catch (error) {}
         set({ loading: false });

@@ -5,6 +5,7 @@ import { useCSSLoaderValue } from "@/backend";
 import { ThemeCard } from "./ThemeCard";
 import { useEffect, useRef } from "react";
 import { ImSpinner5 } from "react-icons/im";
+import { LoadMoreButton } from "./LoadMoreButton";
 
 export function ThemeBrowserPage() {
   const initializeStore = useThemeBrowserStoreAction("initializeStore");
@@ -20,6 +21,12 @@ export function ThemeBrowserPage() {
     void initializeStore();
   }, []);
 
+  useEffect(() => {
+    if (endOfPageRef?.current) {
+      endOfPageRef?.current?.focus();
+    }
+  }, [indexToSnapToOnLoad]);
+
   return (
     <>
       <BrowserSearchFields />
@@ -31,25 +38,26 @@ export function ThemeBrowserPage() {
             <span className="cl_expandedview_loadingtext">Loading</span>
           </div>
         ) : (
-          <>
-            {themes.items
-              .filter((theme) => theme.manifestVersion <= backendVersion)
-              .map((theme, index) => (
-                <ThemeCard
-                  ref={
-                    index === indexToSnapToOnLoad
-                      ? endOfPageRef
-                      : index === 0
-                      ? firstCardRef
-                      : undefined
-                  }
-                  key={theme.id}
-                  theme={theme}
-                />
-              ))}
-          </>
+          themes
+            .filter((theme) => theme.manifestVersion <= backendVersion)
+            .map((theme, index) => (
+              <ThemeCard
+                ref={
+                  index === indexToSnapToOnLoad
+                    ? endOfPageRef
+                    : index === 0
+                    ? firstCardRef
+                    : undefined
+                }
+                key={theme.id}
+                theme={theme}
+              />
+            ))
         )}
       </Focusable>
+      <div>
+        <LoadMoreButton />
+      </div>
     </>
   );
 }

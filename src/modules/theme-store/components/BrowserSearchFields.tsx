@@ -54,8 +54,8 @@ export function BrowserSearchFields() {
               strDefaultLabel="Last Updated"
               selectedOption={searchOpts.order}
               onChange={(value) => {
-                const newSearchOpts = { ...searchOpts, order: value.data };
-                setSearchOpts(newSearchOpts);
+                const newSearchOpts = { ...searchOpts, order: value.data, page: 1 };
+                void setSearchOpts(newSearchOpts);
               }}
             />
           </div>
@@ -68,8 +68,8 @@ export function BrowserSearchFields() {
               selectedOption={targetOverride ?? searchOpts.filters}
               onChange={(value) => {
                 // When you select a new target, remove the global override
-                const newSearchOpts = { ...searchOpts, filters: value.data };
-                setSearchOpts(newSearchOpts);
+                const newSearchOpts = { ...searchOpts, filters: value.data, page: 1 };
+                void setSearchOpts(newSearchOpts);
                 setTargetOverride(null);
               }}
             />
@@ -83,8 +83,8 @@ export function BrowserSearchFields() {
               label="Search"
               value={searchOpts.search}
               onChange={(event) => {
-                const newSearchOpts = { ...searchOpts, search: event.target.value };
-                setSearchOpts(newSearchOpts);
+                const newSearchOpts = { ...searchOpts, search: event.target.value, page: 1 };
+                void setSearchOpts(newSearchOpts);
               }}
             />
           </div>
