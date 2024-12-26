@@ -6,6 +6,8 @@ import {
   useThemeBrowserSharedValue,
 } from "../context";
 
+// TODO: Make the tab definition a constant so that it isn't re-generated every page load
+
 export function ThemeStoreRouter() {
   const currentTab = useThemeBrowserSharedValue("currentTab");
   const setCurrentTab = useThemeBrowserSharedAction("setCurrentTab");
