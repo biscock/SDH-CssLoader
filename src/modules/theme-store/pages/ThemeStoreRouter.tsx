@@ -1,10 +1,14 @@
 import { Tabs } from "@decky/ui";
 import { ThemeBrowserPage, ThemeCardCSSVariableProvider } from "../components";
-import { ThemeBrowserStoreProvider } from "../context";
-import { useState } from "react";
+import {
+  ThemeBrowserStoreProvider,
+  useThemeBrowserSharedAction,
+  useThemeBrowserSharedValue,
+} from "../context";
 
 export function ThemeStoreRouter() {
-  const [currentTab, setCurrentTab] = useState("allthemes");
+  const currentTab = useThemeBrowserSharedValue("currentTab");
+  const setCurrentTab = useThemeBrowserSharedAction("setCurrentTab");
   return (
     <div className="cl_fullscreenroute_container">
       <ThemeCardCSSVariableProvider />

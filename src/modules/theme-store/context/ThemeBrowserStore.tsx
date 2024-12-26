@@ -23,7 +23,7 @@ interface ThemeBrowserStoreValues {
 interface ThemeBrowserStoreActions {
   initializeStore: () => Promise<void>;
   getFilters: () => Promise<void>;
-  setSearchOpts: (searchOpts: ThemeQueryRequest) => Promise<void>;
+  setSearchOpts: (searchOpts: ThemeQueryRequest, forceRefresh?: boolean) => Promise<void>;
   refreshThemes: () => Promise<void>;
   getThemes: () => Promise<void>;
 }
@@ -88,14 +88,22 @@ export function ThemeBrowserStoreProvider({
       initializeStore: async () => {
         try {
           await get().getFilters();
-          await get().getThemes();
 
-          // This ensures that it actually fetches new themed when you click on a forced target
-          themeBrowserSharedStore.subscribe((state, prevState) => {
-            if (state.targetOverride !== prevState.targetOverride) {
-              get().getThemes();
-            }
-          });
+          // When you navigate to the expanded view and back, it re-loads the page, which re-runs this, so we can just check if there is a target override
+          const { targetOverride } = getThemeBrowserSharedState();
+          if (targetOverride) {
+            get().setSearchOpts(
+              {
+                ...get().searchOpts,
+                filters: targetOverride,
+                page: 1,
+              },
+              true
+            );
+            themeBrowserSharedStore.setState({ targetOverride: null });
+          } else {
+            await get().getThemes();
+          }
         } catch (error) {}
       },
       getFilters: async () => {
@@ -117,30 +125,27 @@ export function ThemeBrowserStoreProvider({
           }
         } catch (error) {}
       },
-      setSearchOpts: async (searchOpts, options: { dontResetPage?: boolean } = {}) => {
+      setSearchOpts: async (searchOpts, forceRefresh?: boolean) => {
         const { searchOpts: prevSearchOpts, themes, getThemes } = get();
         set({ searchOpts, prevSearchOpts });
 
-        if (!isEqual(prevSearchOpts, searchOpts) || themes.length === 0) {
+        if (!isEqual(prevSearchOpts, searchOpts) || forceRefresh || themes.length === 0) {
           await getThemes();
         }
       },
       refreshThemes: async () => {
         // setSearchOpts calls get
         const { searchOpts, setSearchOpts } = get();
-        await setSearchOpts({ ...searchOpts, page: 1 });
+        await setSearchOpts({ ...searchOpts, page: 1 }, true);
       },
       getThemes: async () => {
         set({ loading: true });
         try {
           const { searchOpts } = get();
-          const { targetOverride } = getThemeBrowserSharedState();
-          const formattedSearchOpts = { ...searchOpts };
-          targetOverride && (formattedSearchOpts.filters = targetOverride);
 
           const { apiFetch } = getCSSLoaderState();
           const response = await apiFetch<ThemeQueryResponse>(
-            `${themePath}?${generateParamStr(formattedSearchOpts, themeType)}`,
+            `${themePath}?${generateParamStr(searchOpts, themeType)}`,
             {},
             requiresAuth
           );

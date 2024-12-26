@@ -6,11 +6,13 @@ export type ColumnNumbers = 3 | 4 | 5;
 
 interface ThemeBrowserSharedStoreValues {
   browserCardSize: ColumnNumbers;
+  currentTab: string;
   targetOverride: string | null;
 }
 
 interface ThemeBrowserSharedStoreActions {
   setBrowserCardSize: (value: ColumnNumbers) => void;
+  setCurrentTab: (value: string) => void;
   setTargetOverride: (value: string | null) => void;
 }
 
@@ -21,8 +23,10 @@ interface IThemeBrowserSharedStore
 export const themeBrowserSharedStore = createStore<IThemeBrowserSharedStore>((set) => {
   return {
     browserCardSize: 3,
+    currentTab: "bpm-themes",
     targetOverride: "",
     setBrowserCardSize: (value: ColumnNumbers) => set({ browserCardSize: value }),
+    setCurrentTab: (value: string) => set({ currentTab: value }),
     setTargetOverride: (value: string | null) => set({ targetOverride: value }),
   };
 });

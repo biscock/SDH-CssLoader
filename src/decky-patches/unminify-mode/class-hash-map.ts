@@ -12,6 +12,7 @@ export function initializeClassHashMap() {
         // Filter out things that start with a number (eg: Breakpoints like 800px)
         // I have confirmed the new classes don't start with numbers
         if (isNaN(Number(value.charAt(0)))) {
+          // @ts-expect-error
           filteredModule[propertyName] = value;
         }
       });
@@ -24,9 +25,12 @@ export function initializeClassHashMap() {
 
   const mappings = allClasses.reduce((acc, cur) => {
     Object.entries(cur).forEach(([property, value]) => {
+      // @ts-expect-error
       if (acc[property]) {
+        // @ts-expect-error
         acc[property].push(value);
       } else {
+        // @ts-expect-error
         acc[property] = [value];
       }
     });

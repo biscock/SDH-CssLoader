@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   useThemeBrowserSharedAction,
   useThemeBrowserSharedValue,
@@ -22,9 +22,6 @@ export function BrowserSearchFields() {
   const searchOpts = useThemeBrowserStoreValue("searchOpts");
   const setSearchOpts = useThemeBrowserStoreAction("setSearchOpts");
   const refreshThemes = useThemeBrowserStoreAction("refreshThemes");
-
-  const targetOverride = useThemeBrowserSharedValue("targetOverride");
-  const setTargetOverride = useThemeBrowserSharedAction("setTargetOverride");
 
   const browserCardSize = useThemeBrowserSharedValue("browserCardSize");
   const setBrowserCardSize = useThemeBrowserSharedAction("setBrowserCardSize");
@@ -65,12 +62,10 @@ export function BrowserSearchFields() {
               menuLabel="Filter"
               rgOptions={formattedFilters}
               strDefaultLabel="All"
-              selectedOption={targetOverride ?? searchOpts.filters}
+              selectedOption={searchOpts.filters}
               onChange={(value) => {
-                // When you select a new target, remove the global override
                 const newSearchOpts = { ...searchOpts, filters: value.data, page: 1 };
                 void setSearchOpts(newSearchOpts);
-                setTargetOverride(null);
               }}
             />
           </div>
