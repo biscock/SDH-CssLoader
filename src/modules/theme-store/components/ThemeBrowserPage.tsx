@@ -2,10 +2,11 @@ import { Focusable } from "@decky/ui";
 import { useThemeBrowserStoreAction, useThemeBrowserStoreValue } from "../context";
 import { BrowserSearchFields } from "./BrowserSearchFields";
 import { useCSSLoaderValue } from "@/backend";
-import { ThemeCard } from "./ThemeCard";
 import { useEffect, useRef } from "react";
 import { ImSpinner5 } from "react-icons/im";
 import { LoadMoreButton } from "./LoadMoreButton";
+import { useExpandedViewAction } from "@/modules/expanded-view";
+import { ThemeCard } from "@/lib";
 
 export function ThemeBrowserPage() {
   const initializeStore = useThemeBrowserStoreAction("initializeStore");
@@ -13,6 +14,8 @@ export function ThemeBrowserPage() {
   const loading = useThemeBrowserStoreValue("loading");
   const indexToSnapToOnLoad = useThemeBrowserStoreValue("indexToSnapToOnLoad");
   const backendVersion = useCSSLoaderValue("backendVersion");
+
+  const openTheme = useExpandedViewAction("openTheme");
 
   const endOfPageRef = useRef<HTMLDivElement>(null);
   const firstCardRef = useRef<HTMLDivElement>(null);
@@ -42,6 +45,7 @@ export function ThemeBrowserPage() {
             .filter((theme) => theme.manifestVersion <= backendVersion)
             .map((theme, index) => (
               <ThemeCard
+                onClick={() => openTheme(theme.id)}
                 ref={
                   index === indexToSnapToOnLoad
                     ? endOfPageRef

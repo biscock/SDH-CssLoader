@@ -1,8 +1,7 @@
 // This is for things that are shared across the entire Theme Browser page and all tabs.
 
 import { createStore, useStore } from "zustand";
-
-export type ColumnNumbers = 3 | 4 | 5;
+import { ColumnNumbers } from "../../../lib/components/theme-card";
 
 interface ThemeBrowserSharedStoreValues {
   browserCardSize: ColumnNumbers;

@@ -1,5 +1,5 @@
 import { Tabs } from "@decky/ui";
-import { ThemeBrowserPage, ThemeCardCSSVariableProvider } from "../components";
+import { ThemeBrowserPage } from "../components";
 import {
   ThemeBrowserStoreProvider,
   useThemeBrowserSharedAction,
@@ -8,6 +8,7 @@ import {
 import { AccountPage } from "./AccountPage";
 import { useCSSLoaderValue } from "@/backend";
 import { Permissions } from "@/types";
+import { ThemeCardCSSVariableProvider } from "@/lib";
 
 // TODO: Make the tab definition a constant so that it isn't re-generated every page load
 
@@ -87,8 +88,13 @@ export function ThemeStoreRouter() {
 
   return (
     <div className="cl_fullscreenroute_container">
-      <ThemeCardCSSVariableProvider />
       <Tabs activeTab={currentTab} onShowTab={(tab) => setCurrentTab(tab)} tabs={tabs}></Tabs>
     </div>
   );
+}
+
+function BrowserCardSizeVariableProvider() {
+  const browserCardSize = useThemeBrowserSharedValue("browserCardSize");
+
+  return <ThemeCardCSSVariableProvider cardSize={browserCardSize} />;
 }

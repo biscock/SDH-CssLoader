@@ -1,4 +1,4 @@
-import { ColumnNumbers } from "@/modules/theme-store/context";
+import { ColumnNumbers } from "@/lib";
 
 export function themeCardStylesGenerator(size: ColumnNumbers) {
   return `
