@@ -6,22 +6,20 @@ import { SupporterIcon } from "./SupporterIcon";
 import { ImSpinner5 } from "react-icons/im";
 import { Focusable } from "@decky/ui";
 import { ThemeCard, ThemeCardCSSVariableProvider } from "../../theme-card";
-// Hardcoded to prevent require cycle
-import { useExpandedViewAction } from "@/modules/expanded-view/context";
 
 export function AuthorViewModal({
   closeModal,
   authorData,
+  onThemeClick,
 }: {
   closeModal?: () => void;
   authorData: UserInfo;
+  onThemeClick?: (themeId: string) => void;
 }) {
   const apiFetch = useCSSLoaderAction("apiFetch");
 
   const [loaded, setLoaded] = useState<boolean>(false);
   const [themes, setThemes] = useState<PartialCSSThemeInfo[]>([]);
-
-  const openTheme = useExpandedViewAction("openTheme");
 
   const firstThemeRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +64,7 @@ export function AuthorViewModal({
                   theme={theme}
                   onClick={() => {
                     closeModal?.();
-                    openTheme(theme.id);
+                    onThemeClick?.(theme.id);
                   }}
                 />
               );

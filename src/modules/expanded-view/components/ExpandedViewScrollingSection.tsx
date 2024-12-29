@@ -7,6 +7,7 @@ import { AuthorViewModal } from "@/lib";
 export function ExpandedViewScrollingSection() {
   const data = useExpandedViewValue("data");
   const close = useExpandedViewAction("close");
+  const openTheme = useExpandedViewAction("openTheme");
 
   const setTargetOverride = useThemeBrowserSharedAction("setTargetOverride");
 
@@ -38,7 +39,12 @@ export function ExpandedViewScrollingSection() {
               onOKActionDescription="View Profile"
               focusClassName="gpfocuswithin"
               onActivate={() => {
-                showModal(<AuthorViewModal authorData={data.author} />);
+                showModal(
+                  <AuthorViewModal
+                    authorData={data.author}
+                    onThemeClick={(themeId) => openTheme(themeId)}
+                  />
+                );
               }}
             >
               By <span className="cl_expandedview_bluetext">{data.specifiedAuthor}</span>
