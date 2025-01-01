@@ -1,5 +1,5 @@
 import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
-import { ThemePatch, toggleThemeWithModals, useForcedRerender } from "@/lib";
+import { ThemePatch, ThemeSettingsModal, toggleThemeWithModals, useForcedRerender } from "@/lib";
 import { useEffect, useState } from "react";
 import { LocalThemeStatus, Theme } from "@/types";
 import { ButtonItem, Focusable, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
@@ -32,8 +32,7 @@ export function QamThemeToggle({ theme }: { theme: Theme }) {
           onOKActionDescription="Toggle Theme"
           onOptionsActionDescription="Expand Settings"
           onOptionsButton={() => {
-            // @ts-ignore
-            showModal(<ThemeSettingsModal selectedTheme={theme.id} />);
+            showModal(<ThemeSettingsModal themeId={theme.id} />);
           }}
           onSecondaryActionDescription={isOutdated ? "Update Theme" : undefined}
           onSecondaryButton={
