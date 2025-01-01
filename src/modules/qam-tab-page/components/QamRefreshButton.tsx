@@ -8,10 +8,6 @@ export function QamRefreshButton() {
 
   const refreshButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    console.log(refreshButtonRef.current);
-  });
-
   async function handleRefresh() {
     await reloadPlugin();
     // This just ensures focus isn't lost

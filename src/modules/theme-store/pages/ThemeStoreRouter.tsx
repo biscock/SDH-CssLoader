@@ -88,6 +88,7 @@ export function ThemeStoreRouter() {
 
   return (
     <div className="cl_fullscreenroute_container">
+      <BrowserCardSizeVariableProvider />
       <Tabs activeTab={currentTab} onShowTab={(tab) => setCurrentTab(tab)} tabs={tabs}></Tabs>
     </div>
   );

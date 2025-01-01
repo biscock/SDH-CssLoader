@@ -14,8 +14,6 @@ export function PresetSelectionDropdown() {
 
   const [render, rerender] = useForcedRerender();
 
-  console.log(themes, presets, selectedPreset, hasInvalidPresetState);
-
   return (
     <>
       {render && (

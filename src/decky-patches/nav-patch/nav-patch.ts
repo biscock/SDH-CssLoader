@@ -16,7 +16,6 @@ export function enableNavPatch(): Patch {
       for (let t = e + n; t >= 0 && t < this.m_rgChildren.length; t += n) {
         // @ts-ignore
         const e = this.m_rgChildren[t].FindFocusableNode(r);
-        console.log(e.m_element);
         if (e && window.getComputedStyle(e.m_element).display !== "none") return e;
       }
       return null;
