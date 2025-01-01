@@ -1,0 +1,70 @@
+import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { PresetSelectionDropdown } from "@/lib";
+import { Flags, LocalThemeStatus, Theme } from "@/types";
+import { DialogButton, Focusable, PanelSectionRow } from "@decky/ui";
+import { AiOutlineDownload } from "react-icons/ai";
+import { FaTrash } from "react-icons/fa";
+
+export function ProfileSettings() {
+  const themes = useCSSLoaderValue("themes");
+  const profiles = themes.filter((e) => e.flags.includes(Flags.isPreset));
+
+  return (
+    <Focusable>
+      <PresetSelectionDropdown />
+      <Focusable className="flex flex-col gap-2">
+        {profiles.map((profile) => (
+          <ProfileEntry key={profile.id} data={profile} />
+        ))}
+      </Focusable>
+    </Focusable>
+  );
+}
+
+function ProfileEntry({ data }: { data: Theme }) {
+  const isWorking = useCSSLoaderValue("isWorking");
+  const updateStatuses = useCSSLoaderValue("updateStatuses");
+
+  let updateStatus: LocalThemeStatus = "installed";
+  const themeArrPlace = updateStatuses.find((f) => f[0] === data.id);
+  if (themeArrPlace) updateStatus = themeArrPlace[1];
+  const isOutdated = updateStatus === "outdated";
+
+  const installTheme = useCSSLoaderAction("installTheme");
+  const deleteTheme = useCSSLoaderAction("deleteTheme");
+
+  return (
+    <PanelSectionRow>
+      <div className="grid grid-cols-[1fr,2fr] items-center p-0 mt-4">
+        <span>{data.name}</span>
+        <div>
+          {isOutdated && (
+            <DialogButton
+              style={{
+                marginRight: "8px",
+                minWidth: "calc(50% - 8px)",
+                maxWidth: "calc(50% - 8px)",
+                filter: "invert(6%) sepia(90%) saturate(200%) hue-rotate(160deg) contrast(122%)",
+              }}
+              onClick={() => installTheme(data.id)}
+              disabled={isWorking}
+            >
+              <AiOutlineDownload />
+            </DialogButton>
+          )}
+          <DialogButton
+            style={{
+              minWidth: "calc(50% - 8px)",
+              maxWidth: "calc(50% - 8px)",
+              marginLeft: "auto",
+            }}
+            onClick={() => deleteTheme(data.id)}
+            disabled={isWorking}
+          >
+            <FaTrash />
+          </DialogButton>
+        </div>
+      </div>
+    </PanelSectionRow>
+  );
+}

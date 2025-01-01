@@ -36,6 +36,21 @@ export class Backend {
   async storeWrite(key: string, value: string) {
     await Backend.repository.call<[string, string], void>("store_write", [key, value]);
   }
+  async getServerState() {
+    return await Backend.repository.call<[], boolean>("get_server_state", []);
+  }
+  async enableServer() {
+    return await Backend.repository.call<[], void>("enable_server", []);
+  }
+  async getWatchState() {
+    return await Backend.repository.call<[], boolean>("get_watch_state", []);
+  }
+  async toggleWatchState(bool: boolean, onlyThisSession: boolean) {
+    return await Backend.repository.call<[boolean, boolean], void>("toggle_watch_state", [
+      bool,
+      onlyThisSession,
+    ]);
+  }
   async getThemes() {
     return await Backend.repository.call<[], Theme[]>("get_themes", []);
   }
@@ -89,8 +104,8 @@ export class Backend {
   async deleteTheme(themeName: string) {
     return await Backend.repository.call<[string], void>("delete_theme", [themeName]);
   }
-  async fetch<Return>(url: string, request: RequestInit = {}) {
-    return Backend.repository.fetch<Return>(url, request);
+  async fetch<Return>(url: string, request: RequestInit = {}, mode: "json" | "text" = "json") {
+    return Backend.repository.fetch<Return>(url, request, mode);
   }
 
   toast(title: string, body?: string) {

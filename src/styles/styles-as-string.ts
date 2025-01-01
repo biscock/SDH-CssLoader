@@ -1,6 +1,11 @@
 import { gamepadDialogClasses } from "@decky/ui";
 
 export const styles = `
+/* THIS FILE IS NOT USED IN BUILD */
+/* ANY MODIFICATIONS HERE MUST BE COPY PASTED INTO styles-as-string.ts */
+/* THAT IS NEEDED FOR STATIC CLASS INJECTION */
+/* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
+
 /*
 MARK: TAILWIND
 */
@@ -19,6 +24,18 @@ MARK: TAILWIND
 
 .flex-1 {
   flex: 1 1 0% !important;
+}
+
+.grid {
+  display: grid !important;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.grid-cols-\\[1fr\\,2fr\\] {
+  grid-template-columns: 1fr 2fr !important;
 }
 
 .gap-1 {
@@ -65,12 +82,28 @@ MARK: TAILWIND
   padding: 0 !important;
 }
 
+.pl-4 {
+  padding-left: 1rem !important;
+}
+
 .m-0 {
   margin: 0 !important;
 }
 
+.ml-auto {
+  margin-left: auto !important;
+}
+
 .mb-0 {
   margin-bottom: 0 !important;
+}
+
+.mb-4 {
+  margin-bottom: 1rem !important;
+}
+
+.mt-4 {
+  margin-top: 1rem !important;
 }
 
 .w-full {
@@ -91,6 +124,18 @@ MARK: TAILWIND
 
 .text-xs {
   font-size: 0.75rem !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+}
+
+.text-2xl {
+  font-size: 1.5rem !important;
 }
 
 .absolute-center {

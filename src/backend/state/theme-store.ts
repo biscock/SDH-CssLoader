@@ -23,7 +23,7 @@ export interface CSSLoaderStateValues {
 
   // Theme Metadata
   updateStatuses: UpdateStatus[];
-  nextUpdateCheckTime: number; // Unix timestamp;
+  nextUpdateCheckTime: number; // Unix time stamp;
   updateCheckTimeout: NodeJS.Timeout | undefined;
   unpinnedThemes: string[];
   isWorking: boolean;
@@ -37,6 +37,10 @@ export interface CSSLoaderStateValues {
   backendVersion: number;
   motd: Motd | undefined;
   hiddenMotdId: string;
+  serverState: boolean;
+  watchState: boolean;
+  translationsBranch: "-1" | "0" | "1";
+  patrons: string[];
 }
 
 export interface CSSLoaderStateActions {
@@ -78,6 +82,9 @@ export interface CSSLoaderStateActions {
   pinTheme: (themeId: string) => Promise<void>;
   unpinTheme: (themeId: string) => Promise<void>;
   deleteTheme: (themeId: string, refreshAfter?: boolean) => Promise<void>;
+  setTranslationBranch: (branch: "-1" | "0" | "1") => Promise<void>;
+  setServerState: (state: boolean) => Promise<void>;
+  setWatchState: (state: boolean) => Promise<void>;
 }
 
 export interface ICSSLoaderState extends CSSLoaderStateValues, CSSLoaderStateActions {}
@@ -112,6 +119,18 @@ export const createCSSLoaderStore = (backend: Backend) =>
       }
     }
 
+    async function getPatrons() {
+      try {
+        const data = await backend.fetch<string>(`${apiUrl}/patrons`, {}, "text");
+        if (data) {
+          return data.split("\n");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      return [];
+    }
+
     return {
       apiUrl: apiUrl,
       // Account Data
@@ -136,8 +155,10 @@ export const createCSSLoaderStore = (backend: Backend) =>
       backendVersion: 9,
       motd: undefined,
       hiddenMotdId: "",
-      unminifyModeOn: false,
-      navPatchInstance: undefined,
+      serverState: false,
+      watchState: false,
+      translationsBranch: "-1",
+      patrons: [],
 
       initializeStore: async () => {
         try {
@@ -180,9 +201,22 @@ export const createCSSLoaderStore = (backend: Backend) =>
             await get().logInWithShortToken();
           }
 
+          const serverState = await backend.getServerState();
+          const watchState = await backend.getWatchState();
+          set({ serverState, watchState });
+          const translationsBranch = await backend.storeRead("beta_translations");
+          set({
+            translationsBranch: ["-1", "0", "1"].includes(translationsBranch)
+              ? (translationsBranch as "-1" | "0" | "1")
+              : "-1",
+          });
+
           const { bulkThemeUpdateCheck, scheduleBulkThemeUpdateCheck } = get();
           await bulkThemeUpdateCheck();
           scheduleBulkThemeUpdateCheck();
+
+          const patrons = await getPatrons();
+          set({ patrons });
         } catch (error) {
           console.log("Error During Initialzation", error);
         }
@@ -511,6 +545,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
         } catch (error) {}
       },
       deleteTheme: async (themeId: string, refreshAfter: boolean = true) => {
+        set({ isWorking: true });
         try {
           const { themes } = get();
           // The python defs say theme name, just gonna assume it's this and not ID
@@ -518,6 +553,35 @@ export const createCSSLoaderStore = (backend: Backend) =>
           if (!themeName) return;
           await backend.deleteTheme(themeName);
           refreshAfter && (await get().getThemes());
+        } catch (error) {}
+        set({ isWorking: false });
+      },
+      setTranslationBranch: async (branch: "-1" | "0" | "1") => {
+        try {
+          await backend.storeWrite("beta_translations", branch);
+          const newValue = await backend.storeRead("beta_translations");
+          set({
+            translationsBranch: ["-1", "0", "1"].includes(newValue)
+              ? (newValue as "-1" | "0" | "1")
+              : "-1",
+          });
+        } catch (error) {}
+      },
+      setServerState: async (state: boolean) => {
+        try {
+          if (state) {
+            await backend.enableServer();
+          }
+          await backend.storeWrite("server", state ? "1" : "0");
+          const newValue = await backend.getServerState();
+          set({ serverState: newValue });
+        } catch (error) {}
+      },
+      setWatchState: async (state: boolean) => {
+        try {
+          await backend.toggleWatchState(state, false);
+          const newValue = await backend.getWatchState();
+          set({ watchState: newValue });
         } catch (error) {}
       },
     };

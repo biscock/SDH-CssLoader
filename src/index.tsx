@@ -6,6 +6,7 @@ import { getCSSLoaderState } from "@/backend";
 import { getDeckyPatchState } from "./decky-patches";
 import { ThemeStoreRouter } from "./modules/theme-store";
 import { ExpandedViewPage } from "./modules/expanded-view";
+import { SettingsPageRouter } from "./modules/settings";
 
 export default definePlugin(() => {
   getCSSLoaderState().initializeStore();
@@ -20,6 +21,12 @@ export default definePlugin(() => {
   routerHook.addRoute("/cssloader/expanded-view", () => (
     <StyleProvider>
       <ExpandedViewPage />
+    </StyleProvider>
+  ));
+
+  routerHook.addRoute("/cssloader/settings", () => (
+    <StyleProvider>
+      <SettingsPageRouter />
     </StyleProvider>
   ));
 

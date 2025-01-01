@@ -17,5 +17,5 @@ export function getMainMenu() {
   return getElementFromNavID("MainNavMenuContainer");
 }
 export function getRootElements() {
-  return [getSP(), getQAM(), getMainMenu()].filter((e) => e);
+  return [getSP(), getQAM(), getMainMenu()].filter(Boolean);
 }
