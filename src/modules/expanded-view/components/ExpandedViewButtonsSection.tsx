@@ -1,7 +1,7 @@
-import { shortenNumber, useThemeInstallState } from "@/lib";
+import { shortenNumber, useThemeInstallState, ThemeSettingsModal } from "@/lib";
 import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { FaRegStar, FaStar } from "react-icons/fa";
-import { DialogButton, Focusable } from "@decky/ui";
+import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { useEffect, useRef, useState } from "react";
 import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
 import { ImCog } from "react-icons/im";
@@ -35,8 +35,6 @@ export function ExpandedViewButtonsSection() {
       setHasFocused(true);
     }
   }, [downloadButtonRef, hasBeenFocused]);
-
-  console.log("INSTALL STATUS, ", installStatus);
 
   return (
     <Focusable className="cl_expandedview_buttonscontainer">
@@ -93,16 +91,7 @@ export function ExpandedViewButtonsSection() {
             {(installStatus === "installed" || installStatus === "local") && (
               <DialogButton
                 onClick={() => {
-                  // TODO: THEME SETTINGS MODAL
-                  // showModal(
-                  //   <ThemeSettingsModalRoot
-                  //     selectedTheme={
-                  //       installedThemes.find((e) => e.id === fullThemeData.id)?.id ||
-                  //       // using name here because in submissions id is different
-                  //       installedThemes.find((e) => e.name === fullThemeData.name)!.id
-                  //     }
-                  //   />
-                  // );
+                  showModal(<ThemeSettingsModal themeId={data.id} />);
                 }}
                 className="cl_expandedview_configure_button"
               >

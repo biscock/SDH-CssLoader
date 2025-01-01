@@ -75,6 +75,9 @@ export interface CSSLoaderStateActions {
     enableDeps?: boolean,
     enableDepValues?: boolean
   ) => Promise<void>;
+  pinTheme: (themeId: string) => Promise<void>;
+  unpinTheme: (themeId: string) => Promise<void>;
+  deleteTheme: (themeId: string, refreshAfter?: boolean) => Promise<void>;
 }
 
 export interface ICSSLoaderState extends CSSLoaderStateValues, CSSLoaderStateActions {}
@@ -485,6 +488,32 @@ export const createCSSLoaderStore = (backend: Backend) =>
             await get().regenerateCurrentPreset();
             await get().getThemes();
           }
+        } catch (error) {}
+      },
+      pinTheme: async (themeId: string) => {
+        try {
+          const { unpinnedThemes } = get();
+          const unpinnedClone = unpinnedThemes.filter((e) => e !== themeId);
+          set({ unpinnedThemes: unpinnedClone });
+          backend.storeWrite("unpinnedThemes", JSON.stringify(unpinnedClone));
+        } catch (error) {}
+      },
+      unpinTheme: async (themeId: string) => {
+        try {
+          const { unpinnedThemes } = get();
+          const unpinnedClone = [...unpinnedThemes, themeId];
+          set({ unpinnedThemes: unpinnedClone });
+          backend.storeWrite("unpinnedThemes", JSON.stringify(unpinnedClone));
+        } catch (error) {}
+      },
+      deleteTheme: async (themeId: string, refreshAfter: boolean = true) => {
+        try {
+          const { themes } = get();
+          // The python defs say theme name, just gonna assume it's this and not ID
+          const themeName = themes.find((e) => e.id === themeId)?.name;
+          if (!themeName) return;
+          await backend.deleteTheme(themeName);
+          refreshAfter && (await get().getThemes());
         } catch (error) {}
       },
     };

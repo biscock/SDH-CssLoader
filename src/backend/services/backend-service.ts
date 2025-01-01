@@ -86,7 +86,9 @@ export class Backend {
   async getBackendVersion() {
     return await Backend.repository.call<[], number>("get_backend_version", []);
   }
-
+  async deleteTheme(themeName: string) {
+    return await Backend.repository.call<[string], void>("delete_theme", [themeName]);
+  }
   async fetch<Return>(url: string, request: RequestInit = {}) {
     return Backend.repository.fetch<Return>(url, request);
   }

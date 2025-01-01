@@ -4,16 +4,16 @@ import { useState } from "react";
 import { DropdownItem, PanelSectionRow, SliderField, ToggleField } from "@decky/ui";
 import { ThemePatchComponent } from "./ThemePatchComponent";
 
-const modal = false;
-
 export function ThemePatch({
   patch,
   shouldHaveBottomSeparator,
   themeName,
+  inModal,
 }: {
   patch: Patch;
   shouldHaveBottomSeparator: boolean;
   themeName: string;
+  inModal?: boolean;
 }) {
   const bottomSeparatorValue = shouldHaveBottomSeparator ? "standard" : "none";
 
@@ -35,7 +35,7 @@ export function ThemePatch({
         {patch.type === "slider" && (
           <SliderField
             bottomSeparator={bottomSeparatorValue}
-            label={modal ? patch.name : <PatchLabel name={patch.name} />}
+            label={inModal ? patch.name : <PatchLabel name={patch.name} />}
             min={0}
             max={patch.options.length - 1}
             value={selectedValueIndex}
@@ -53,7 +53,7 @@ export function ThemePatch({
         {patch.type === "checkbox" && (
           <ToggleField
             bottomSeparator={bottomSeparatorValue}
-            label={modal ? patch.name : <PatchLabel name={patch.name} />}
+            label={inModal ? patch.name : <PatchLabel name={patch.name} />}
             checked={patch.value === "Yes"}
             onChange={(value) => {
               // TODO: TEST THIS
@@ -65,7 +65,7 @@ export function ThemePatch({
         {patch.type === "dropdown" && (
           <DropdownItem
             bottomSeparator={bottomSeparatorValue}
-            label={modal ? patch.name : <PatchLabel name={patch.name} />}
+            label={inModal ? patch.name : <PatchLabel name={patch.name} />}
             menuLabel={patch.name}
             rgOptions={patch.options.map((option, index) => ({ label: option, data: index }))}
             selectedOption={selectedValueIndex}
@@ -76,7 +76,7 @@ export function ThemePatch({
         )}
         {patch.type === "none" && (
           <>
-            {modal ? (
+            {inModal ? (
               <span style={{ color: "#dcdedf" }}>{patch.name}</span>
             ) : (
               <PatchLabel name={patch.name} />

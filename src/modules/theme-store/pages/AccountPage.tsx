@@ -8,7 +8,7 @@ export function AccountPage() {
 
   return (
     <div>
-      <h1 className="cl_fullscrenroute_title">{apiFullToken ? "Your Account" : "Log In"}</h1>
+      <h1 className="cl_title">{apiFullToken ? "Your Account" : "Log In"}</h1>
       {apiFullToken ? <LoggedInSection /> : <LoggedOutSection />}
       <p>
         Logging in gives you access to star themes, saving them to their own page where you can
