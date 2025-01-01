@@ -52,7 +52,7 @@ export function QamThemeToggle({ theme }: { theme: Theme }) {
             description={`${updateStatus === "outdated" ? "Update Available" : theme.version} | ${
               theme.author
             }`}
-            onChange={async (switchValue: boolean) => {
+            onChange={(switchValue: boolean) => {
               toggleThemeWithModals(theme, switchValue, rerender);
             }}
           />

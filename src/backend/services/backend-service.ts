@@ -40,7 +40,7 @@ export class Backend {
     return await Backend.repository.call<[], Theme[]>("get_themes", []);
   }
   async getThemeErrors() {
-    return await Backend.repository.call<[], { fails: ThemeError[] }>("get_theme_errors", []);
+    return await Backend.repository.call<[], { fails: ThemeError[] }>("get_last_load_errors", []);
   }
   async setThemeState(
     themeName: string,

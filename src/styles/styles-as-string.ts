@@ -89,11 +89,20 @@ MARK: TAILWIND
   font-weight: bold !important;
 }
 
+.text-xs {
+  font-size: 0.75rem !important;
+}
+
 .absolute-center {
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
+}
+
+.cl_title {
+  font-size: 2rem !important;
+  font-weight: bold !important;
 }
 
 /*
@@ -104,11 +113,6 @@ MARK: Fullscreen Routes
   margin-top: 40px !important;
   height: calc(100% - 40px) !important;
   background: #0e141b !important;
-}
-
-.cl_fullscrenroute_title {
-  font-size: 2rem !important;
-  font-weight: bold !important;
 }
 
 /*
@@ -564,5 +568,16 @@ MARK: Author View Modal
 .cl_authorview_supportericoncontainer {
   margin-left: auto !important;
   transform: translateY(2px) !important;
+}
+
+/* 
+MARK: Theme Settings Modal
+*/
+
+.cl_themesettingsmodal_smallbutton {
+  width: fit-content !important;
+  min-width: fit-content !important;
+  height: fit-content !important;
+  padding: 10px 12px !important;
 }
 `;

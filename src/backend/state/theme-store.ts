@@ -303,8 +303,11 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const { fails: themeErrors } = await backend.getThemeErrors();
           set({ themeErrors });
           const themes = await backend.getThemes();
+          console.log(themes);
           set({ themes });
-        } catch (error) {}
+        } catch (error) {
+          console.error("Error Fetching Themes", error);
+        }
       },
       changePreset: async (presetName: string) => {
         try {
@@ -463,8 +466,12 @@ export const createCSSLoaderStore = (backend: Backend) =>
         enableDepValues?: boolean
       ) => {
         try {
+          console.log("call");
+
           await backend.setThemeState(theme.name, value, enableDeps, enableDepValues);
+          console.log("backend call");
           await get().getThemes();
+          console.log("get themes");
 
           if (!enableDeps && theme.dependencies.length > 0) {
             if (value) {
@@ -488,7 +495,9 @@ export const createCSSLoaderStore = (backend: Backend) =>
             await get().regenerateCurrentPreset();
             await get().getThemes();
           }
-        } catch (error) {}
+        } catch (error) {
+          console.error(error);
+        }
       },
       pinTheme: async (themeId: string) => {
         try {
