@@ -20,9 +20,9 @@ export function OptionalDepsModal({
     <Modal closeModal={closeModal} title={`Enable dependencies for ${theme.display_name}`}>
       <div className="flex flex-col gap-4">
         <p>
-          {theme.name} enables optional themes to enhance this theme. Disabling these may break the
-          theme, or make the theme look completely different. Specific optional themes can be
-          configured and or enabled/disabled anytime via the Quick Access Menu.
+          {theme.display_name} enables optional themes to enhance this theme. Disabling these may
+          break the theme, or make the theme look completely different. Specific optional themes can
+          be configured and or enabled/disabled anytime via the Quick Access Menu.
         </p>
         <p>
           <b>Enable without configuration</b> will enable optional themes but not overwrite their

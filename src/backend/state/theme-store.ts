@@ -547,11 +547,17 @@ export const createCSSLoaderStore = (backend: Backend) =>
       deleteTheme: async (themeId: string, refreshAfter: boolean = true) => {
         set({ isWorking: true });
         try {
-          const { themes } = get();
+          const { themes, unpinnedThemes } = get();
           // The python defs say theme name, just gonna assume it's this and not ID
           const themeName = themes.find((e) => e.id === themeId)?.name;
           if (!themeName) return;
           await backend.deleteTheme(themeName);
+
+          // This doesn't actually 'pin' the theme, it just removes it from the unpinned list so that if it's ever reinstalled it isn't hidden
+          if (unpinnedThemes.includes(themeId)) {
+            get().pinTheme(themeId);
+          }
+
           refreshAfter && (await get().getThemes());
         } catch (error) {}
         set({ isWorking: false });

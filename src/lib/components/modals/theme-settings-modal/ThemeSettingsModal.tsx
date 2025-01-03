@@ -21,7 +21,7 @@ export function ThemeSettingsModal({
         <Focusable className="flex flex-col gap-4 w-full">
           <Focusable className="flex flex-row justify-between items-center">
             <div className="flex flex-col">
-              <span className="cl_title">{theme.name}</span>
+              <span className="cl_title">{theme.display_name}</span>
               <span className="text-xs">
                 {theme.version} | {theme.author}
               </span>

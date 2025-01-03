@@ -16,7 +16,7 @@ export function PluginSettingsPage() {
   const setNavPatchState = useDeckyPatchStateAction("setNavPatchState");
   const setUnminifyModeState = useDeckyPatchStateAction("setUnminifyModeState");
   return (
-    <div>
+    <Focusable>
       <Focusable>
         <DropdownItem
           rgOptions={[
@@ -64,6 +64,6 @@ export function PluginSettingsPage() {
           onChange={(value) => setUnminifyModeState(value, true)}
         />
       </Focusable>
-    </div>
+    </Focusable>
   );
 }

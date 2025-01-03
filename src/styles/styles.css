@@ -616,9 +616,35 @@ MARK: Author View Modal
 MARK: Theme Settings Modal
 */
 
-.cl_themesettingsmodal_smallbutton {
+.cl_squaredialogbutton {
   width: fit-content !important;
   min-width: fit-content !important;
   height: fit-content !important;
   padding: 10px 12px !important;
+}
+
+/* 
+MARK: Settings Page
+*/
+
+.cl_themesettings_togglecontainer {
+  flex-grow: 1;
+  position: relative;
+}
+/* The actual element of the ToggleContainer with the BG */
+.cl_themesettings_togglecontainer > div {
+  background: rgba(255,255,255,.15);
+  border-radius: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 0;
+  margin-right: 0;
+  height: 1.25em !important;
+}
+
+.cl_themesettings_themelabel {
+  white-space: nowrap;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

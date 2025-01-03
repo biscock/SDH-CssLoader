@@ -17,10 +17,12 @@ export function ThemeSettingsModalActionButtons({
   // Update Check
   const updateStatuses = useCSSLoaderValue("updateStatuses");
   const installTheme = useCSSLoaderAction("installTheme");
+
   let updateStatus: LocalThemeStatus = "installed";
   const themeArrPlace = updateStatuses.find((f) => f[0] === theme.id);
   if (themeArrPlace) updateStatus = themeArrPlace[1];
   const isOutdated = updateStatus === "outdated";
+
   function handleUpdate() {
     void installTheme(theme.id);
   }
@@ -44,22 +46,18 @@ export function ThemeSettingsModalActionButtons({
         <DialogButton
           disabled={isWorking}
           onClick={handleUpdate}
-          className="cl_themesettingsmodal_smallbutton flex gap-1"
+          className="cl_squaredialogbutton flex gap-1"
         >
           <FaDownload />
           <span className="text-xs">Update</span>
         </DialogButton>
       )}
-      <DialogButton
-        disabled={isWorking}
-        className="cl_themesettingsmodal_smallbutton"
-        onClick={handlePinClick}
-      >
+      <DialogButton disabled={isWorking} className="cl_squaredialogbutton" onClick={handlePinClick}>
         {isPinned ? <FaEye /> : <FaEyeSlash />}
       </DialogButton>
       <DialogButton
         disabled={isWorking}
-        className="cl_themesettingsmodal_smallbutton"
+        className="cl_squaredialogbutton"
         onClick={() => {
           showModal(
             <DeleteConfirmationModal themesToBeDeleted={[theme.id]} onDeleteFinish={closeModal} />
