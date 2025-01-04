@@ -108,37 +108,37 @@ def generate_translations_from_local_file() -> dict[str, str]:
     Log(f"Using steam version {target_steam_version} for translations. Available versions for the {__get_target_branch()} branch: {same_branch_versions}")
 
     for _, (module_id, module_data) in enumerate(data['module_mappings'].items()):
-        module_name = (str(module_id) if module_data['name'] is None else module_data['name'])
-        for _, (class_name, class_mappings) in enumerate(module_data['classname_mappings'].items()):
+        module_name = ("_" + str(module_id) if module_data['name'] is None else module_data['name'])
+        for _, (webpack_name, class_mappings) in enumerate(module_data['classname_mappings'].items()):
             if target_steam_version in class_mappings:
                 class_target = class_mappings[target_steam_version]
             else:
                 prev = "9999999999999"
                 class_target = None
                 class_mapping_sorting = sorted(list(enumerate(class_mappings.items())), key=lambda x: int(x[0]), reverse=True)
-                for _, (class_mapping_name, class_mapping_value) in class_mapping_sorting:
+                for _, (steam_version, css_class) in class_mapping_sorting:
                     if target_steam_version not in same_branch_versions:
                         continue
 
-                    if int(prev) > int(target_steam_version) and int(class_mapping_name) < int(target_steam_version):
-                        class_target = class_mapping_value
+                    if int(prev) > int(target_steam_version) and int(steam_version) < int(target_steam_version):
+                        class_target = css_class
                         break
 
-                    prev = class_mapping_name
+                    prev = steam_version
                 
                 if class_target == None:
                     #Log(f"No suitable version found for mapping {module_id}_{class_name}. Using last")
                     failed_match_version += 1
                     class_target = class_mappings[list(class_mappings)[-1]]
                 
-            for class_mapping_value in class_mappings.values():
-                if class_mapping_value == class_target:
+            for css_class in class_mappings.values():
+                if css_class == class_target:
                     continue
                 
-                translations[class_mapping_value] = class_target
+                translations[css_class] = class_target
 
-            translations[f"{module_name}_{class_name}"] = class_target
-            translations[f"{module_id}_{class_name}"] = class_target
+            translations[f"{module_name}_{webpack_name}"] = class_target
+            translations[f"_{module_id}_{webpack_name}"] = class_target
     
     Log(f"Loaded {len(translations)} css translations from local file in {time.time() - timer:.1f}s. Failed to match version on {failed_match_version} translations.")
     return translations
