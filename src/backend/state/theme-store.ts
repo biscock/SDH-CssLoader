@@ -337,7 +337,10 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const { fails: themeErrors } = await backend.getThemeErrors();
           set({ themeErrors });
           const themes = await backend.getThemes();
-          set({ themes });
+          set({
+            themes,
+            selectedPreset: themes.find((e) => e.flags.includes(Flags.isPreset) && e.enabled),
+          });
         } catch (error) {
           console.error("Error Fetching Themes", error);
         }
