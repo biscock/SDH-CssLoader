@@ -20,7 +20,7 @@ export function DeleteConfirmationModal({
   }
 
   return (
-    <ConfirmModal title="Delete Themes" onConfirm={deleteThemes}>
+    <ConfirmModal title="Delete Themes" onConfirm={deleteThemes} closeModal={closeModal}>
       <div>
         Are you sure you want to delete{" "}
         {themesToBeDeleted.length === 1 ? `this theme` : `these ${themesToBeDeleted.length} themes`}

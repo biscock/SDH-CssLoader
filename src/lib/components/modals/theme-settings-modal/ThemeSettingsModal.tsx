@@ -16,7 +16,7 @@ export function ThemeSettingsModal({
   const theme = themes.find((theme) => theme.id === themeId);
 
   return (
-    <Modal>
+    <Modal closeModal={closeModal}>
       {!!theme ? (
         <Focusable className="flex flex-col gap-4 w-full">
           <Focusable className="flex flex-row justify-between items-center">

@@ -17,7 +17,7 @@ export function ThemeSettingsEntry({ theme }: { theme: Theme }) {
   const unpinTheme = useCSSLoaderAction("unpinTheme");
 
   return (
-    <div className="flex gap-1 items-center relative space-between">
+    <div className="relative">
       {updateStatus === "outdated" && (
         <div
           style={{

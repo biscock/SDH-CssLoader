@@ -631,8 +631,10 @@ MARK: Settings Page
 */
 
 .cl_themesettings_togglecontainer {
-  flex-grow: 1;
-  position: relative;
+  flex-grow: 1 !important;
+  position: relative !important;
+  display: flex !important;
+  gap: 0.25rem !important;
 }
 /* The actual element of the ToggleContainer with the BG */
 .cl_themesettings_togglecontainer > div {
@@ -643,6 +645,7 @@ MARK: Settings Page
   margin-left: 0;
   margin-right: 0;
   height: 1.25em !important;
+  flex: 1 1 0% !important;
 }
 
 .cl_themesettings_themelabel {

@@ -4,6 +4,7 @@ import { CreditsPage } from "./credits";
 import { DonatePage } from "./donate/DonatePage";
 import { PluginSettingsPage } from "./plugin";
 import { ProfileSettings } from "./profile";
+import { ThemeSettings } from "./theme";
 
 export function SettingsPageRouter() {
   return (
@@ -13,7 +14,7 @@ export function SettingsPageRouter() {
           title: "Themes",
           icon: <FaPaintRoller />,
           route: "/cssloader/settings/themes",
-          content: null,
+          content: <ThemeSettings />,
         },
         {
           title: "Profiles",
