@@ -18,19 +18,19 @@ export function ThemeDeleteMenu({
         <DialogCheckbox
           onChange={(checked) => {
             if (checked) {
-              setChoppingBlock([...choppingBlock, theme.name]);
+              setChoppingBlock([...choppingBlock, theme.id]);
             } else {
-              setChoppingBlock(choppingBlock.filter((f) => f !== theme.name));
+              setChoppingBlock(choppingBlock.filter((f) => f !== theme.id));
             }
           }}
-          checked={choppingBlock.includes(theme.name)}
+          checked={choppingBlock.includes(theme.id)}
           label={theme.display_name}
         />
       ))}
       <DialogButton
         onClick={() => {
           showModal(
-            <DeleteConfirmationModal themesToBeDeleted={choppingBlock} onDeleteFinish={onLeave} />
+            <DeleteConfirmationModal themeIdsToBeDeleted={choppingBlock} onDeleteFinish={onLeave} />
           );
         }}
       >

@@ -60,7 +60,7 @@ export function ThemeSettingsModalActionButtons({
         className="cl_squaredialogbutton"
         onClick={() => {
           showModal(
-            <DeleteConfirmationModal themesToBeDeleted={[theme.id]} onDeleteFinish={closeModal} />
+            <DeleteConfirmationModal themeIdsToBeDeleted={[theme.id]} onDeleteFinish={closeModal} />
           );
         }}
       >

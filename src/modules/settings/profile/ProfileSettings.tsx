@@ -12,7 +12,7 @@ export function ProfileSettings() {
   return (
     <Focusable>
       <PresetSelectionDropdown />
-      <Focusable className="flex flex-col gap-2">
+      <Focusable className="flex flex-col gap-2 mt-4">
         {profiles.map((profile) => (
           <ProfileEntry key={profile.id} data={profile} />
         ))}
@@ -35,7 +35,7 @@ function ProfileEntry({ data }: { data: Theme }) {
 
   return (
     <PanelSectionRow>
-      <div className="grid grid-cols-[1fr,2fr] items-center p-0 mt-4">
+      <div className="grid grid-cols-[1fr,2fr] items-center p-0">
         <span>{data.name}</span>
         <div>
           {isOutdated && (

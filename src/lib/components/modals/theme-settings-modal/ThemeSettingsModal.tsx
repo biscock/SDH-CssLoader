@@ -46,7 +46,7 @@ export function ThemeSettingsModal({
               ))}
             </Focusable>
           ) : null}
-          <Focusable className="flex flex-row justify-between items-center">
+          <Focusable className="flex flex-row gap-1 justify-between items-center">
             <DialogButton onClick={closeModal}>Close</DialogButton>
             <ThemeSettingsModalActionButtons theme={theme} closeModal={closeModal} />
           </Focusable>
