@@ -26,7 +26,7 @@ export function TitleView() {
     >
       <div style={{ marginRight: "auto" }}>CSS Loader</div>
       <DialogButton
-        className={cn("cl-title-view-button", themes.length > 0 && "cl-animate-onboarding")}
+        className={cn("cl-title-view-button", themes.length === 0 && "cl-animate-onboarding")}
         onClick={onStoreClick}
       >
         <FaDownload className="cl-title-view-button-icon" />

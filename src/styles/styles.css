@@ -652,6 +652,6 @@ MARK: Settings Page
   text-overflow: ellipsis;
 }
 
-.cl_squarebutton_icontranslate {
+.cl_squaredialogbutton_icontranslate {
   transform: translateY(-2px) !important;
 }

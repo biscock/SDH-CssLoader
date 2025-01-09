@@ -179,13 +179,13 @@ MARK: TitleView
 
 @keyframes onboardingButton {
   0% {
-    transform: scale(1) !important;
+    transform: scale(1);
   }
   50% {
-    transform: scale(1.1) !important;
+    transform: scale(1.1);
   }
   100% {
-    transform: scale(1) !important;
+    transform: scale(1);
   }
 }
 
@@ -653,5 +653,9 @@ MARK: Settings Page
   max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.cl_squaredialogbutton_icontranslate {
+  transform: translateY(-2px) !important;
 }
 `;
