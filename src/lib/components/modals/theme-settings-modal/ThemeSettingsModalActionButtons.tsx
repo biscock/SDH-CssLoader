@@ -48,12 +48,16 @@ export function ThemeSettingsModalActionButtons({
           onClick={handleUpdate}
           className="cl_squaredialogbutton flex gap-1"
         >
-          <FaDownload />
+          <FaDownload className="cl_squarebutton_icontranslate" />
           <span className="text-xs">Update</span>
         </DialogButton>
       )}
       <DialogButton disabled={isWorking} className="cl_squaredialogbutton" onClick={handlePinClick}>
-        {isPinned ? <FaEye /> : <FaEyeSlash />}
+        {isPinned ? (
+          <FaEye className="cl_squarebutton_icontranslate" />
+        ) : (
+          <FaEyeSlash className="cl_squarebutton_icontranslate" />
+        )}
       </DialogButton>
       <DialogButton
         disabled={isWorking}
@@ -64,7 +68,7 @@ export function ThemeSettingsModalActionButtons({
           );
         }}
       >
-        <FaTrash />
+        <FaTrash className="cl_squarebutton_icontranslate" />
       </DialogButton>
     </Focusable>
   );

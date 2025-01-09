@@ -59,7 +59,11 @@ export function ThemeSettingsEntry({ theme }: { theme: Theme }) {
             }
           }}
         >
-          {isPinned ? <FaEye /> : <FaEyeSlash />}
+          {isPinned ? (
+            <FaEye className="cl_squarebutton_icontranslate" />
+          ) : (
+            <FaEyeSlash className="cl_squarebutton_icontranslate" />
+          )}
         </DialogButton>
         <DialogButton
           disabled={isWorking}
@@ -68,7 +72,7 @@ export function ThemeSettingsEntry({ theme }: { theme: Theme }) {
             showModal(<ThemeSettingsModal themeId={theme.id} />);
           }}
         >
-          <BsGearFill />
+          <BsGearFill className="cl_squarebutton_icontranslate" />
         </DialogButton>
       </Focusable>
     </div>
