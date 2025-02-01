@@ -1,41 +1,19 @@
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
-import replace from "@rollup/plugin-replace";
-import typescript from "@rollup/plugin-typescript";
-import { defineConfig } from "rollup";
-import importAssets from "rollup-plugin-import-assets";
-import styles from "rollup-plugin-styles";
+import deckyPlugin from "@decky/rollup";
+import alias from "@rollup/plugin-alias";
 
-import { name } from "./plugin.json";
-
-export default defineConfig({
-  input: "./src/index.tsx",
+export default deckyPlugin({
   plugins: [
-    commonjs(),
-    nodeResolve(),
-    typescript(),
-    json(),
-    styles(),
-    replace({
-      preventAssignment: false,
-      "process.env.NODE_ENV": JSON.stringify("production"),
-    }),
-    importAssets({
-      publicPath: `http://127.0.0.1:1337/plugins/${name}/`,
+    alias({
+      entries: [
+        { find: "@zusteebles", replacement: `${import.meta.dirname}//src/zusteebles` },
+        { find: "@cssloader/backend", replacement: `${import.meta.dirname}//src/backend` },
+        { find: "@/backend", replacement: `${import.meta.dirname}/src/backend-impl` },
+        { find: "@/lib", replacement: `${import.meta.dirname}/src/lib` },
+        { find: "@/styles", replacement: `${import.meta.dirname}/src/styles` },
+        { find: "@/types", replacement: `${import.meta.dirname}/src/types` },
+        { find: "@/modules", replacement: `${import.meta.dirname}/src/modules` },
+        { find: "@/decky-patches", replacement: `${import.meta.dirname}/src/decky-patches` },
+      ],
     }),
   ],
-  context: "window",
-  external: ["react", "react-dom", "decky-frontend-lib"],
-  output: {
-    file: "dist/index.js",
-    globals: {
-      react: "SP_REACT",
-      "react-dom": "SP_REACTDOM",
-      "decky-frontend-lib": "DFL",
-    },
-    format: "iife",
-    exports: "default",
-    assetFileNames: "[name]-[hash][extname]",
-  },
 });

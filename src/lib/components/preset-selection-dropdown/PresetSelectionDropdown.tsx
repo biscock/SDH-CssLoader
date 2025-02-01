@@ -1,0 +1,59 @@
+import { DropdownItem, PanelSectionRow } from "@decky/ui";
+import { Flags } from "@/types";
+import { useMemo } from "react";
+import { FiPlusCircle } from "react-icons/fi";
+import { useForcedRerender } from "../../hooks";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
+
+export function PresetSelectionDropdown() {
+  const { themes, selectedPreset } = useCSSLoaderValues();
+  const { changePreset } = useCSSLoaderActions();
+  const presets = themes.filter((e) => e.flags.includes(Flags.isPreset));
+  const hasInvalidPresetState = presets.filter((e) => e.enabled).length > 1;
+
+  const [render, rerender] = useForcedRerender();
+
+  return (
+    <>
+      {render && (
+        <PanelSectionRow>
+          <DropdownItem
+            label="Selected Profile"
+            selectedOption={
+              hasInvalidPresetState ? "Invalid State" : selectedPreset?.name || "None"
+            }
+            rgOptions={[
+              ...(hasInvalidPresetState ? [{ data: "Invalid State", label: "Invalid State" }] : []),
+              { data: "None", label: "None" },
+              ...presets.map((e) => ({ label: e.display_name, data: e.name })),
+              {
+                data: "New Profile",
+                label: (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "start",
+                      gap: "1em",
+                    }}
+                  >
+                    <FiPlusCircle />
+                    <span>New Profile</span>
+                  </div>
+                ),
+              },
+            ]}
+            onChange={async ({ data }) => {
+              if (data === "New Profile") {
+                // showModal(<CreatePresetModalRoot />);
+                rerender();
+                return;
+              }
+              await changePreset(data);
+            }}
+          />
+        </PanelSectionRow>
+      )}
+    </>
+  );
+}
