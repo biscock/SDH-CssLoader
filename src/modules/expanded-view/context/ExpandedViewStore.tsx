@@ -129,7 +129,7 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
           },
         });
       } catch (error) {
-        console.error(error);
+        console.error("CSSLoader - Error Starring Theme", error);
         const { toast } = getCSSLoaderState();
         toast("Error starring theme!");
       }

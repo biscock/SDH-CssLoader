@@ -111,6 +111,9 @@ export class Backend {
   ) {
     return Backend.repository.fetch<Return>(url, request, mode);
   }
+  async getMappings() {
+    return Backend.repository.call<[], object>("get_webpack_mappings", []);
+  }
 
   toast(title: string, body?: string) {
     Backend.repository.toast(title, body);

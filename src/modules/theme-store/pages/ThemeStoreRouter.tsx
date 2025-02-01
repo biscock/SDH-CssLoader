@@ -92,7 +92,6 @@ export function ThemeStoreRouter() {
       <Tabs
         activeTab={currentTab}
         onShowTab={(tab: string) => {
-          console.log("Setting tab", tab);
           setCurrentTab(tab);
         }}
         tabs={tabs}

@@ -127,7 +127,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
     async function getPatrons() {
       try {
         const data = await apiFetch<string>(
-          `${apiUrl}/patrons`,
+          "/patrons",
           {},
           {
             responseMode: "text",
@@ -137,7 +137,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
           return data.split("\n");
         }
       } catch (error) {
-        console.error(error);
+        console.error("CSSLoader - Error Fetching Patrons", error);
       }
       return [];
     }
@@ -191,6 +191,8 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const themePath = await backend.fetchThemePath();
           set({ themeRootPath: themePath });
 
+          console.log("HELLO TEST", await backend.getMappings());
+
           const unpinnedThemesStr = await backend.storeRead("unpinnedThemes");
           const unpinnedThemes: string[] = unpinnedThemesStr ? JSON.parse(unpinnedThemesStr) : [];
           const allThemeIds = themes.map((e) => e.id);
@@ -230,7 +232,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const patrons = await getPatrons();
           set({ patrons });
         } catch (error) {
-          console.log("Error During Initialzation", error);
+          console.log("CSSLoader - Error During Initialzation", error);
         }
       },
       deactivate: () => {
@@ -264,7 +266,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
           await backend.reset();
           await get().getThemes();
         } catch (error) {
-          console.error("Error Reloading Themes", error);
+          console.error("CSSLoader - Error Reloading Themes", error);
         }
       },
       logInWithShortToken: async (newToken?: string) => {
@@ -356,7 +358,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
             selectedPreset: themes.find((e) => e.flags.includes(Flags.isPreset) && e.enabled),
           });
         } catch (error) {
-          console.error("Error Fetching Themes", error);
+          console.error("CSSLoader - Error Fetching Themes", error);
         }
       },
       changePreset: async (presetName: string) => {
@@ -436,7 +438,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
 
               set({ nextUpdateCheckTime: new Date().valueOf() + 24 * 60 * 60 * 1000 });
             } catch (err) {
-              console.log("Error Checking For Theme Updates", err);
+              console.log("CSSLoader - Error Checking For Theme Updates", err);
             }
             recursiveCheck();
           }, 5 * 60 * 1000);
@@ -542,7 +544,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
             await get().getThemes();
           }
         } catch (error) {
-          console.error(error);
+          console.error("CSSLoader - Error Toggling Theme", error);
         }
       },
       pinTheme: async (themeId: string) => {

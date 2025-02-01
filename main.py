@@ -139,7 +139,7 @@ class Plugin:
         util_save_mappings(val)
         return Result(True).to_dict()
     
-    async def get_webpack_mappigns(self) -> dict:
+    async def get_webpack_mappings(self) -> dict:
         return generate_webpack_id_name_list_from_local_file()
 
     async def exit(self):
