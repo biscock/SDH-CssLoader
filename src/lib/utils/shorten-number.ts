@@ -23,7 +23,7 @@ export function shortenNumber(num: number) {
   var exponent;
   var size;
   var sign = num < 0 ? "-" : "";
-  var suffixes = {
+  var suffixes: Record<string, number> = {
     K: 6,
     M: 9,
     B: 12,
@@ -37,7 +37,6 @@ export function shortenNumber(num: number) {
   shortNumber = String(Math.round(10 * (num / Math.pow(10, exponent))) / 10);
 
   for (var suffix in suffixes) {
-    // @ts-ignore
     if (exponent < suffixes[suffix]) {
       shortNumber += suffix;
       break;

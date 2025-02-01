@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@decky/api':
-        specifier: ^1.0.6
-        version: 1.0.6
+        specifier: ^1.1.2
+        version: 1.1.2
       '@decky/rollup':
         specifier: ^1.0.1
         version: 1.0.1
       '@decky/ui':
-        specifier: ^4.4.0
-        version: 4.4.0
+        specifier: ^4.9.1
+        version: 4.9.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -70,14 +70,14 @@ packages:
     resolution: {integrity: sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==}
     engines: {node: '>=6.9.0'}
 
-  '@decky/api@1.0.6':
-    resolution: {integrity: sha512-pacO2qvAin7ZoB9AnCgQbevQS+6Wiy0t1C6QVEJPCWeQQdEgJaUm3KSeRjh2KNqsjKHsbV0j72Pv4X5Q44Lr7Q==}
+  '@decky/api@1.1.2':
+    resolution: {integrity: sha512-lTMqRpHOrGTCyH2c1jJvkmWhOq2dcnX5/ioHbfCVmyQOBik1OM1BnzF1uROsnNDC5GkRvl3J/ATqYp6vhYpRqw==}
 
   '@decky/rollup@1.0.1':
     resolution: {integrity: sha512-dx1VJwD7ul14PA/aZvOwAfY/GujHzqZJ+MFb4OIUVi63/z4KWMSuZrK6QWo0S4LrNW3RzB3ua6LT0WcJaNY9gw==}
 
-  '@decky/ui@4.4.0':
-    resolution: {integrity: sha512-w6hSoEdWQyXdvSk8cv4cGDJQ6/xoRx9LYrdNjTGPPj8hRmBcoRlThgZ+9vchmNsAJuOymwQ5hQXqHN6Y86eoOQ==}
+  '@decky/ui@4.9.1':
+    resolution: {integrity: sha512-vVDi5usqBBvEw+ij87GciuaCnysjjTfkNFjDaMM1EzDvNpquKXWHNxNbbsRBZzv4qcjXPxNHU9zZ6VaKpVPVRA==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1050,7 +1050,7 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  '@decky/api@1.0.6': {}
+  '@decky/api@1.1.2': {}
 
   '@decky/rollup@1.0.1':
     dependencies:
@@ -1067,7 +1067,7 @@ snapshots:
       tslib: 2.8.1
       typescript: 5.6.3
 
-  '@decky/ui@4.4.0': {}
+  '@decky/ui@4.9.1': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

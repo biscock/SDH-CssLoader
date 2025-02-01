@@ -37,9 +37,9 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@decky/api": "^1.0.6",
+    "@decky/api": "^1.1.2",
     "@decky/rollup": "^1.0.1",
-    "@decky/ui": "^4.4.0",
+    "@decky/ui": "^4.9.1",
     "clsx": "^2.1.1",
     "color": "^4.2.3",
     "lodash": "^4.17.21",
