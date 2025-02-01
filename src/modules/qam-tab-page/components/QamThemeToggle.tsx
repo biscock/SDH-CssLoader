@@ -1,4 +1,4 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import {
   ThemePatch,
   ThemeSettingsModal,
@@ -12,8 +12,8 @@ import { ButtonItem, Focusable, PanelSectionRow, ToggleField, showModal } from "
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 
 export function QamThemeToggle({ theme }: { theme: Theme }) {
-  const isWorking = useCSSLoaderValue("isWorking");
-  const installTheme = useCSSLoaderAction("installTheme");
+  const { isWorking } = useCSSLoaderValues();
+  const { installTheme } = useCSSLoaderActions();
 
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [render, rerender] = useForcedRerender();

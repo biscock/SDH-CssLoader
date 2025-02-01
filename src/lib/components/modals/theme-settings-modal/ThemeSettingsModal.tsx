@@ -1,4 +1,4 @@
-import { useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderValues } from "@/backend";
 import { Modal } from "../../../primitives";
 import { DialogButton, Focusable, Toggle } from "@decky/ui";
 import { toggleThemeWithModals } from "../../../utils";
@@ -12,7 +12,7 @@ export function ThemeSettingsModal({
   closeModal?: () => void;
   themeId: string;
 }) {
-  const themes = useCSSLoaderValue("themes");
+  const { themes } = useCSSLoaderValues();
   const theme = themes.find((theme) => theme.id === themeId);
 
   return (

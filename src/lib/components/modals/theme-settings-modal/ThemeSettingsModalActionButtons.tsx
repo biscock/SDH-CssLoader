@@ -1,4 +1,4 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { LocalThemeStatus, Theme } from "@/types";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { FaDownload, FaEye, FaEyeSlash, FaTrash } from "react-icons/fa6";
@@ -13,22 +13,17 @@ export function ThemeSettingsModalActionButtons({
   theme: Theme;
   closeModal?: () => void;
 }) {
-  const isWorking = useCSSLoaderValue("isWorking");
+  const { isWorking, unpinnedThemes } = useCSSLoaderValues();
+  const { installTheme, pinTheme, unpinTheme } = useCSSLoaderActions();
 
   // Update Check
-  const installTheme = useCSSLoaderAction("installTheme");
-
   const updateStatus = useThemeInstallState(theme);
   const isOutdated = updateStatus === "outdated";
-
   function handleUpdate() {
     void installTheme(theme.id);
   }
 
   // Pinning
-  const unpinnedThemes = useCSSLoaderValue("unpinnedThemes");
-  const pinTheme = useCSSLoaderAction("pinTheme");
-  const unpinTheme = useCSSLoaderAction("unpinTheme");
   const isPinned = !unpinnedThemes.includes(theme.id);
   function handlePinClick() {
     if (isPinned) {

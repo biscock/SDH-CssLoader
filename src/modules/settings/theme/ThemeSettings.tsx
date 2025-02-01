@@ -1,4 +1,4 @@
-import { useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderValues } from "@/backend";
 import { ThemeErrorCard } from "@/lib";
 import { Flags } from "@/types";
 import { DialogButton, Focusable } from "@decky/ui";
@@ -9,9 +9,7 @@ import { ThemeDeleteMenu } from "./ThemeDeleteMenu";
 
 export function ThemeSettings() {
   const [deleteMode, setDeleteMode] = useState(false);
-  const themes = useCSSLoaderValue("themes");
-  const unpinnedThemes = useCSSLoaderValue("unpinnedThemes");
-  const themeErrors = useCSSLoaderValue("themeErrors");
+  const { themes, unpinnedThemes, themeErrors } = useCSSLoaderValues();
 
   // This sorts the themes as pinned first, then unpinned, but it freezes it so that if you pin a theme the list doesn't jump around
   const sortedList = useMemo(() => {

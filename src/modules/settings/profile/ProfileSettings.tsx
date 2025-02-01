@@ -1,4 +1,4 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { PresetSelectionDropdown, useThemeInstallState } from "@/lib";
 import { Flags, LocalThemeStatus, Theme } from "@/types";
 import { DialogButton, Focusable, PanelSectionRow } from "@decky/ui";
@@ -6,7 +6,7 @@ import { AiOutlineDownload } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
 
 export function ProfileSettings() {
-  const themes = useCSSLoaderValue("themes");
+  const { themes } = useCSSLoaderValues();
   const profiles = themes.filter((e) => e.flags.includes(Flags.isPreset));
 
   return (
@@ -22,13 +22,11 @@ export function ProfileSettings() {
 }
 
 function ProfileEntry({ data }: { data: Theme }) {
-  const isWorking = useCSSLoaderValue("isWorking");
+  const { isWorking } = useCSSLoaderValues();
+  const { installTheme, deleteTheme } = useCSSLoaderActions();
 
   const updateStatus = useThemeInstallState(data);
   const isOutdated = updateStatus === "outdated";
-
-  const installTheme = useCSSLoaderAction("installTheme");
-  const deleteTheme = useCSSLoaderAction("deleteTheme");
 
   return (
     <PanelSectionRow>

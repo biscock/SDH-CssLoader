@@ -1,5 +1,5 @@
 import { ThemePatchComponent } from "@/types";
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { ButtonItem, ColorPickerModal, PanelSectionRow, showModal } from "@decky/ui";
 import { FaFolder } from "react-icons/fa";
 import { FileSelectionType, openFilePicker } from "@decky/api";
@@ -20,9 +20,8 @@ export function ThemePatchComponent({
 }) {
   const bottomSeparatorValue = shouldHaveBottomSeparator ? "standard" : "none";
 
-  const setComponentValue = useCSSLoaderAction("setComponentValue");
-  const themeRootPath = useCSSLoaderValue("themeRootPath");
-  const toast = useCSSLoaderAction("toast");
+  const { setComponentValue, toast } = useCSSLoaderActions();
+  const { themeRootPath } = useCSSLoaderValues();
   if (currentPatchValue !== component.on) return null;
 
   function onValueChange(value: string) {
@@ -30,7 +29,6 @@ export function ThemePatchComponent({
   }
 
   async function handleImagePicker() {
-    // TODO: GATE BY FILE EXTENSION
     try {
       const filePickerRes = await openFilePicker(FileSelectionType.FILE, themeRootPath);
       if (!filePickerRes.path.includes(themeRootPath)) {

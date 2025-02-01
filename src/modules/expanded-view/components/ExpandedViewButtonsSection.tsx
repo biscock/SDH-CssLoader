@@ -3,7 +3,7 @@ import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { useEffect, useRef, useState } from "react";
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { ImCog } from "react-icons/im";
 
 export function ExpandedViewButtonsSection() {
@@ -11,13 +11,10 @@ export function ExpandedViewButtonsSection() {
   const isStarred = useExpandedViewValue("isStarred");
   const toggleStar = useExpandedViewAction("toggleStar");
 
-  const apiFullToken = useCSSLoaderValue("apiFullToken");
+  const { apiFullToken, isWorking } = useCSSLoaderValues();
+  const { installTheme } = useCSSLoaderActions();
   // Because this is an action handled by the expanded view store and not the backend theme store, we can't just use the backend's isWorking
   const [starButtonBlurred, setStarButtonBlurred] = useState<boolean>(false);
-
-  const isWorking = useCSSLoaderValue("isWorking");
-
-  const installTheme = useCSSLoaderAction("installTheme");
 
   const installStatus = useThemeInstallState(data);
 

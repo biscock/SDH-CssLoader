@@ -1,10 +1,10 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { DialogButton } from "@decky/ui";
 import { FaDownload } from "react-icons/fa6";
 
 export function UpdateAllThemesButton() {
-  const updateStatuses = useCSSLoaderValue("updateStatuses");
-  const installTheme = useCSSLoaderAction("installTheme");
+  const { updateStatuses } = useCSSLoaderValues();
+  const { installTheme } = useCSSLoaderActions();
 
   async function updateAll() {
     const outdatedThemes = updateStatuses.filter((f) => f[1] === "outdated").map((f) => f[0]);

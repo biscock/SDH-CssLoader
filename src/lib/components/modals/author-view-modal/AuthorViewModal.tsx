@@ -1,7 +1,7 @@
 import { Modal } from "../../../primitives";
 import { PartialCSSThemeInfo, ThemeQueryResponse, UserInfo } from "@/types";
 import { useEffect, useRef, useState } from "react";
-import { useCSSLoaderAction } from "@/backend";
+import { useCSSLoaderActions } from "@/backend";
 import { SupporterIcon } from "./SupporterIcon";
 import { ImSpinner5 } from "react-icons/im";
 import { Focusable } from "@decky/ui";
@@ -16,7 +16,7 @@ export function AuthorViewModal({
   authorData: UserInfo;
   onThemeClick?: (themeId: string) => void;
 }) {
-  const apiFetch = useCSSLoaderAction("apiFetch");
+  const { apiFetch } = useCSSLoaderActions();
 
   const [loaded, setLoaded] = useState<boolean>(false);
   const [themes, setThemes] = useState<PartialCSSThemeInfo[]>([]);

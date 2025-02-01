@@ -1,6 +1,6 @@
 import { PartialCSSThemeInfo } from "@/types";
 import { forwardRef } from "react";
-import { useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderValues } from "@/backend";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Focusable } from "@decky/ui";
 import { FaBullseye, FaDownload, FaStar } from "react-icons/fa6";
@@ -14,7 +14,7 @@ interface ThemeCardProps {
 }
 
 export const ThemeCard = forwardRef<HTMLDivElement, ThemeCardProps>(({ theme, onClick }, ref) => {
-  const apiUrl = useCSSLoaderValue("apiUrl");
+  const { apiUrl } = useCSSLoaderValues();
   const installStatus = useThemeInstallState(theme);
 
   const imageUrl =

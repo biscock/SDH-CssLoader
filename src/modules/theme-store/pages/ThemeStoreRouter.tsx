@@ -2,21 +2,21 @@ import { Tabs } from "@decky/ui";
 import { ThemeBrowserPage } from "../components";
 import {
   ThemeBrowserStoreProvider,
-  useThemeBrowserSharedAction,
-  useThemeBrowserSharedValue,
+  useThemeBrowserSharedActions,
+  useThemeBrowserSharedValues,
 } from "../context";
 import { AccountPage } from "./AccountPage";
-import { useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderValues } from "@/backend";
 import { Permissions } from "@/types";
 import { ThemeCardCSSVariableProvider } from "@/lib";
 
 // TODO: Make the tab definition a constant so that it isn't re-generated every page load
 
 export function ThemeStoreRouter() {
-  const currentTab = useThemeBrowserSharedValue("currentTab");
-  const setCurrentTab = useThemeBrowserSharedAction("setCurrentTab");
+  const { currentTab } = useThemeBrowserSharedValues();
+  const { setCurrentTab } = useThemeBrowserSharedActions();
 
-  const apiMeData = useCSSLoaderValue("apiMeData");
+  const { apiMeData } = useCSSLoaderValues();
 
   const tabs = [
     {
@@ -102,7 +102,7 @@ export function ThemeStoreRouter() {
 }
 
 function BrowserCardSizeVariableProvider() {
-  const browserCardSize = useThemeBrowserSharedValue("browserCardSize");
+  const { browserCardSize } = useThemeBrowserSharedValues();
 
   return <ThemeCardCSSVariableProvider cardSize={browserCardSize} />;
 }

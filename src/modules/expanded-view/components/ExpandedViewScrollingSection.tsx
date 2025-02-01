@@ -1,7 +1,7 @@
 import { DialogButton, Focusable, Navigation, ScrollPanelGroup, showModal } from "@decky/ui";
 import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { ExpandedViewImageContainer } from "./ExpandedViewImageContainer";
-import { useThemeBrowserSharedAction } from "@/modules/theme-store/context";
+import { useThemeBrowserSharedActions } from "@/modules/theme-store/context";
 import { AuthorViewModal } from "@/lib";
 
 export function ExpandedViewScrollingSection() {
@@ -9,7 +9,7 @@ export function ExpandedViewScrollingSection() {
   const close = useExpandedViewAction("close");
   const openTheme = useExpandedViewAction("openTheme");
 
-  const setTargetOverride = useThemeBrowserSharedAction("setTargetOverride");
+  const { setTargetOverride } = useThemeBrowserSharedActions();
 
   return (
     <ScrollPanelGroup

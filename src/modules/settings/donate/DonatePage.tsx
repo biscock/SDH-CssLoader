@@ -1,9 +1,9 @@
-import { useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderValues } from "@/backend";
 import { Focusable, Navigation, PanelSection } from "@decky/ui";
 import { SiKofi, SiPatreon } from "react-icons/si";
 
 export function DonatePage() {
-  const patrons = useCSSLoaderValue("patrons");
+  const { patrons } = useCSSLoaderValues();
   return (
     <Focusable>
       <p>

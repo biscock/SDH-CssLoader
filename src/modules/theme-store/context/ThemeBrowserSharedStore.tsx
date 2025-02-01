@@ -2,6 +2,7 @@
 
 import { createStore, useStore } from "zustand";
 import { ColumnNumbers } from "../../../lib/components/theme-card";
+import { generateStoreSelector } from "@zusteebles";
 
 interface ThemeBrowserSharedStoreValues {
   browserCardSize: ColumnNumbers;
@@ -32,13 +33,7 @@ export const themeBrowserSharedStore = createStore<IThemeBrowserSharedStore>((se
 
 export const getThemeBrowserSharedState = () => themeBrowserSharedStore.getState();
 
-const useThemeBrowserSharedState = (fn: (state: IThemeBrowserSharedStore) => any) =>
-  useStore(themeBrowserSharedStore, fn);
-
-export const useThemeBrowserSharedValue = <T extends keyof ThemeBrowserSharedStoreValues>(
-  key: T
-): IThemeBrowserSharedStore[T] => useThemeBrowserSharedState((state) => state[key]);
-
-export const useThemeBrowserSharedAction = <T extends keyof ThemeBrowserSharedStoreActions>(
-  key: T
-): IThemeBrowserSharedStore[T] => useThemeBrowserSharedState((state) => state[key]);
+export const useThemeBrowserSharedValues =
+  generateStoreSelector<ThemeBrowserSharedStoreValues>(themeBrowserSharedStore);
+export const useThemeBrowserSharedActions =
+  generateStoreSelector<ThemeBrowserSharedStoreActions>(themeBrowserSharedStore);

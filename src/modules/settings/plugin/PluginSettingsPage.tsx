@@ -1,15 +1,10 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useDeckyPatchStateAction, useDeckyPatchStateValue } from "@/decky-patches";
 import { DropdownItem, Focusable, ToggleField } from "@decky/ui";
 
 export function PluginSettingsPage() {
-  const serverState = useCSSLoaderValue("serverState");
-  const watchState = useCSSLoaderValue("watchState");
-  const translationsBranch = useCSSLoaderValue("translationsBranch");
-
-  const setServerState = useCSSLoaderAction("setServerState");
-  const setWatchState = useCSSLoaderAction("setWatchState");
-  const setTranslationBranch = useCSSLoaderAction("setTranslationBranch");
+  const { serverState, watchState, translationsBranch } = useCSSLoaderValues();
+  const { setServerState, setWatchState, setTranslationBranch } = useCSSLoaderActions();
 
   const unminifyModeOn = useDeckyPatchStateValue("unminifyModeOn");
   const navPatchInstance = useDeckyPatchStateValue("navPatchInstance");

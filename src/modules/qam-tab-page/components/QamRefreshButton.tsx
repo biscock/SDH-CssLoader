@@ -1,10 +1,10 @@
 import { ButtonItem, PanelSectionRow } from "@decky/ui";
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useEffect, useRef } from "react";
 
 export function QamRefreshButton() {
-  const reloadPlugin = useCSSLoaderAction("reloadPlugin");
-  const isWorking = useCSSLoaderValue("isWorking");
+  const { reloadPlugin } = useCSSLoaderActions();
+  const { isWorking } = useCSSLoaderValues();
 
   const refreshButtonRef = useRef<HTMLButtonElement>(null);
 

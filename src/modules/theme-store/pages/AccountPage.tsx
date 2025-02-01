@@ -1,10 +1,10 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { DialogButton, Focusable, TextField } from "@decky/ui";
 import { useState } from "react";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 
 export function AccountPage() {
-  const apiFullToken = useCSSLoaderValue("apiFullToken");
+  const { apiFullToken } = useCSSLoaderValues();
 
   return (
     <div>
@@ -22,8 +22,8 @@ export function AccountPage() {
   );
 }
 function LoggedInSection() {
-  const apiMeData = useCSSLoaderValue("apiMeData");
-  const logOut = useCSSLoaderAction("logOut");
+  const { apiMeData } = useCSSLoaderValues();
+  const { logOut } = useCSSLoaderActions();
   return (
     <Focusable className="flex items-center justify-between">
       <span className="font-bold">
@@ -37,9 +37,8 @@ function LoggedInSection() {
 }
 
 function LoggedOutSection() {
-  const apiFullToken = useCSSLoaderValue("apiFullToken");
-  const logInWithShortToken = useCSSLoaderAction("logInWithShortToken");
-  const apiShortToken = useCSSLoaderValue("apiShortToken");
+  const { apiFullToken, apiShortToken } = useCSSLoaderValues();
+  const { logInWithShortToken } = useCSSLoaderActions();
 
   const [shortTokenInterimValue, setShortTokenIntValue] = useState(apiShortToken);
 

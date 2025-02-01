@@ -1,4 +1,4 @@
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { ThemeSettingsModal, toggleThemeWithModals, useThemeInstallState } from "@/lib";
 import { Theme } from "@/types";
 import { DialogButton, Focusable, showModal, ToggleField } from "@decky/ui";
@@ -6,15 +6,11 @@ import { BsGearFill } from "react-icons/bs";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export function ThemeSettingsEntry({ theme }: { theme: Theme }) {
-  const unpinnedThemes = useCSSLoaderValue("unpinnedThemes");
-  const isWorking = useCSSLoaderValue("isWorking");
+  const { unpinnedThemes, isWorking } = useCSSLoaderValues();
+  const { installTheme, pinTheme, unpinTheme } = useCSSLoaderActions();
   const isPinned = !unpinnedThemes.includes(theme.id);
   const updateStatus = useThemeInstallState(theme);
   const isOutdated = updateStatus === "outdated";
-
-  const installTheme = useCSSLoaderAction("installTheme");
-  const pinTheme = useCSSLoaderAction("pinTheme");
-  const unpinTheme = useCSSLoaderAction("unpinTheme");
 
   return (
     <div className="relative">

@@ -1,4 +1,4 @@
-import { useCSSLoaderAction } from "@/backend";
+import { useCSSLoaderActions } from "@/backend";
 import { ConfirmModal } from "../../../primitives";
 
 export function DeleteConfirmationModal({
@@ -10,7 +10,7 @@ export function DeleteConfirmationModal({
   themeIdsToBeDeleted: string[];
   onDeleteFinish?: () => void;
 }) {
-  const deleteTheme = useCSSLoaderAction("deleteTheme");
+  const { deleteTheme } = useCSSLoaderActions();
   async function deleteThemes() {
     for (let i = 0; i < themeIdsToBeDeleted.length; i++) {
       await deleteTheme(themeIdsToBeDeleted[i], i === themeIdsToBeDeleted.length - 1);

@@ -1,5 +1,5 @@
 import { Patch } from "@/types";
-import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useState } from "react";
 import { DropdownItem, PanelSectionRow, SliderField, ToggleField } from "@decky/ui";
 import { ThemePatchComponent } from "./ThemePatchComponent";
@@ -17,7 +17,7 @@ export function ThemePatch({
 }) {
   const bottomSeparatorValue = shouldHaveBottomSeparator ? "standard" : "none";
 
-  const setPatchValue = useCSSLoaderAction("setPatchValue");
+  const { setPatchValue } = useCSSLoaderActions();
 
   const [selectedValueIndex, setSelectedValueIndex] = useState(patch.options.indexOf(patch.value));
 

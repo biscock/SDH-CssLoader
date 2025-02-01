@@ -6,18 +6,12 @@ import {
 } from "@cssloader/backend";
 import { backend } from "./decky-backend-service";
 import { useStore } from "zustand";
+import { generateStoreSelector } from "@zusteebles";
 
 export const cssLoaderStore = createCSSLoaderStore(backend);
 
-const useCSSLoaderStore = (fn: (state: ICSSLoaderState) => any) => useStore(cssLoaderStore, fn);
-
-export const useCSSLoaderValue = <T extends keyof CSSLoaderStateValues>(
-  key: T
-): ICSSLoaderState[T] => useCSSLoaderStore((state) => state[key]);
-
-export const useCSSLoaderAction = <T extends keyof CSSLoaderStateActions>(
-  key: T
-): ICSSLoaderState[T] => useCSSLoaderStore((state) => state[key]);
+export const useCSSLoaderValues = generateStoreSelector<CSSLoaderStateValues>(cssLoaderStore);
+export const useCSSLoaderActions = generateStoreSelector<CSSLoaderStateActions>(cssLoaderStore);
 
 export const getCSSLoaderState = () => cssLoaderStore.getState();
 export const setCSSLoaderState = <T extends keyof ICSSLoaderState>(

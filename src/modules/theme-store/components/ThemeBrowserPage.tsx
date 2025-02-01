@@ -1,7 +1,7 @@
 import { Focusable } from "@decky/ui";
 import { useThemeBrowserStoreAction, useThemeBrowserStoreValue } from "../context";
 import { BrowserSearchFields } from "./BrowserSearchFields";
-import { useCSSLoaderValue } from "@/backend";
+import { useCSSLoaderValues } from "@/backend";
 import { useEffect, useRef } from "react";
 import { ImSpinner5 } from "react-icons/im";
 import { LoadMoreButton } from "./LoadMoreButton";
@@ -13,7 +13,7 @@ export function ThemeBrowserPage() {
   const themes = useThemeBrowserStoreValue("themes");
   const loading = useThemeBrowserStoreValue("loading");
   const indexToSnapToOnLoad = useThemeBrowserStoreValue("indexToSnapToOnLoad");
-  const backendVersion = useCSSLoaderValue("backendVersion");
+  const { backendVersion } = useCSSLoaderValues();
 
   const openTheme = useExpandedViewAction("openTheme");
 
