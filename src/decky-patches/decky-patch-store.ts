@@ -4,6 +4,7 @@ import { createStore, useStore } from "zustand";
 import { disableNavPatch, enableNavPatch } from "./nav-patch";
 import { disableUnminifyMode, enableUnminifyMode } from "./unminify-mode";
 import { backend } from "@/backend";
+import { generateStoreSelector } from "@zusteebles";
 
 interface DeckyPatchStoreValues {
   unminifyModeOn: boolean;
@@ -71,12 +72,7 @@ const deckyPatchState = createDeckyPatchStore(backend);
 
 export const getDeckyPatchState = () => deckyPatchState.getState();
 
-const useDeckyPatchState = (fn: (state: IDeckyPatchState) => any) => useStore(deckyPatchState, fn);
-
-export const useDeckyPatchStateValue = <T extends keyof DeckyPatchStoreValues>(
-  key: T
-): IDeckyPatchState[T] => useDeckyPatchState((state) => state[key]);
-
-export const useDeckyPatchStateAction = <T extends keyof DeckyPatchStoreActions>(
-  key: T
-): IDeckyPatchState[T] => useDeckyPatchState((state) => state[key]);
+export const useDeckyPatchStateValues =
+  generateStoreSelector<DeckyPatchStoreValues>(deckyPatchState);
+export const useDeckyPatchStateActions =
+  generateStoreSelector<DeckyPatchStoreActions>(deckyPatchState);

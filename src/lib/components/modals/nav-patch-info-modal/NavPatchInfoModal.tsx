@@ -1,8 +1,8 @@
-import { useDeckyPatchStateAction } from "@/decky-patches";
+import { useDeckyPatchStateActions } from "@/decky-patches";
 import { ConfirmModal } from "../../../primitives";
 
 export function NavPatchInfoModal({ closeModal }: { closeModal?: () => void }) {
-  const setNavPatchState = useDeckyPatchStateAction("setNavPatchState");
+  const { setNavPatchState } = useDeckyPatchStateActions();
   return (
     <ConfirmModal
       title="Enable Nav Patch"
