@@ -104,7 +104,11 @@ export class Backend {
   async deleteTheme(themeName: string) {
     return await Backend.repository.call<[string], void>("delete_theme", [themeName]);
   }
-  async fetch<Return>(url: string, request: RequestInit = {}, mode: "json" | "text" = "json") {
+  async fetch<Return>(
+    url: string,
+    request: RequestInit = {},
+    mode: "json" | "text" | "void" = "json"
+  ) {
     return Backend.repository.fetch<Return>(url, request, mode);
   }
 

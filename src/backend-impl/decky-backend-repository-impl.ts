@@ -14,13 +14,15 @@ class DeckyBackendRepository implements IBackendRepository {
       );
     }
   }
-  async fetch<Return>(url: string, request: RequestInit, mode: "json" | "text" = "json") {
+  async fetch<Return>(url: string, request: RequestInit, mode: "json" | "text" | "void" = "json") {
     try {
       console.debug("CSSLOADER FETCH", url, request);
       const res = await fetchNoCors(url, request);
       if (!res.ok) {
         throw new Error(`Res Not Okay - Code ${res.status}`);
       }
+      // TODO: Potentially handle void mode better
+      if (mode === "void") return undefined as Return;
       if (mode === "text") {
         return res.text() as Return;
       }

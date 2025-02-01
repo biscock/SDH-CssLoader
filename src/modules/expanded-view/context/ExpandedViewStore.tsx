@@ -84,7 +84,7 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
         const starResponse = await apiFetch<{ starred: boolean }>(
           `/users/me/stars/${themeId}`,
           {},
-          true
+          { requiresAuth: true }
         );
         if (!starResponse) {
           // Silently error
@@ -110,7 +110,10 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
           {
             method: isStarred ? "DELETE" : "POST",
           },
-          true
+          {
+            requiresAuth: true,
+            responseMode: "void",
+          }
         );
         const newIsStarred = !isStarred;
         set({

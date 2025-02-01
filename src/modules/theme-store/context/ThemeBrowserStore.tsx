@@ -118,7 +118,9 @@ export function ThemeBrowserStoreProvider({
           const response = await apiFetch<FilterQueryResponse>(
             `${filterPath}?type=${typeMapping[themeType]}`,
             {},
-            requiresAuth
+            {
+              requiresAuth,
+            }
           );
           if (response.filters) {
             set({ filterOptions: response });
@@ -147,7 +149,9 @@ export function ThemeBrowserStoreProvider({
           const response = await apiFetch<ThemeQueryResponse>(
             `${themePath}?${generateParamStr(searchOpts, themeType)}`,
             {},
-            requiresAuth
+            {
+              requiresAuth,
+            }
           );
           if (response.items) {
             set({ themeTotal: response.total });

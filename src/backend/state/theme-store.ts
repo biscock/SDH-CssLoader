@@ -50,11 +50,7 @@ export interface CSSLoaderStateActions {
   reloadPlugin: () => Promise<void>;
   reloadThemes: () => Promise<void>;
   refreshToken: () => Promise<string | undefined>;
-  apiFetch: <Return>(
-    url: string,
-    request?: RequestInit,
-    requiresAuth?: boolean | string
-  ) => Promise<Return>;
+  apiFetch: <Return>(url: string, request?: RequestInit, options?: FetchOptions) => Promise<Return>;
   logInWithShortToken: (newToken?: string) => Promise<void>;
   logOut: () => void;
   getThemes: () => Promise<void>;
@@ -87,6 +83,12 @@ export interface CSSLoaderStateActions {
   setWatchState: (state: boolean) => Promise<void>;
 }
 
+export interface FetchOptions {
+  requiresAuth?: boolean;
+  customAuthToken?: string;
+  responseMode?: "json" | "text" | "void";
+}
+
 export interface ICSSLoaderState extends CSSLoaderStateValues, CSSLoaderStateActions {}
 
 export const createCSSLoaderStore = (backend: Backend) =>
@@ -94,23 +96,26 @@ export const createCSSLoaderStore = (backend: Backend) =>
     async function apiFetch<Return>(
       fetchPath: string,
       request?: RequestInit,
-      // Can be a boolean (to automatically fetch token), or a string (to use a custom token)
-      requiresAuth?: boolean | string
+      options?: FetchOptions
     ) {
       try {
         const { refreshToken } = get();
         let authToken = undefined;
-        if (requiresAuth) {
-          authToken = typeof requiresAuth === "string" ? requiresAuth : await refreshToken();
+        if (options?.requiresAuth) {
+          authToken = options?.customAuthToken ?? (await refreshToken());
         }
-        return await backend.fetch<Return>(`${apiUrl}${fetchPath}`, {
-          method: "GET",
-          ...request,
-          headers: {
-            ...(request?.headers || {}),
-            Authorization: `Bearer ${authToken}`,
+        return await backend.fetch<Return>(
+          `${apiUrl}${fetchPath}`,
+          {
+            method: "GET",
+            ...request,
+            headers: {
+              ...(request?.headers || {}),
+              Authorization: `Bearer ${authToken}`,
+            },
           },
-        });
+          options?.responseMode ?? "json"
+        );
       } catch (error) {
         if (error instanceof FetchError) {
           throw error;
@@ -121,7 +126,13 @@ export const createCSSLoaderStore = (backend: Backend) =>
 
     async function getPatrons() {
       try {
-        const data = await backend.fetch<string>(`${apiUrl}/patrons`, {}, "text");
+        const data = await apiFetch<string>(
+          `${apiUrl}/patrons`,
+          {},
+          {
+            responseMode: "text",
+          }
+        );
         if (data) {
           return data.split("\n");
         }
@@ -157,7 +168,8 @@ export const createCSSLoaderStore = (backend: Backend) =>
       hiddenMotdId: "",
       serverState: false,
       watchState: false,
-      translationsBranch: "-1",
+      // Not entirely sure why but unless I manually type this it errors
+      translationsBranch: "-1" as "-1",
       patrons: [],
 
       initializeStore: async () => {
@@ -282,7 +294,9 @@ export const createCSSLoaderStore = (backend: Backend) =>
             apiFullToken: json.token,
             apiTokenExpireDate: new Date().valueOf() + 1000 * 10 * 60,
           });
-          const meJson = await apiFetch<FullAccountData>("/auth/me", undefined, true);
+          const meJson = await apiFetch<FullAccountData>("/auth/me", undefined, {
+            requiresAuth: true,
+          });
           if (meJson) {
             set({ apiMeData: meJson });
           }
