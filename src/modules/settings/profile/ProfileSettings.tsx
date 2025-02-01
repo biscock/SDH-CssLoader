@@ -1,5 +1,5 @@
 import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
-import { PresetSelectionDropdown } from "@/lib";
+import { PresetSelectionDropdown, useThemeInstallState } from "@/lib";
 import { Flags, LocalThemeStatus, Theme } from "@/types";
 import { DialogButton, Focusable, PanelSectionRow } from "@decky/ui";
 import { AiOutlineDownload } from "react-icons/ai";
@@ -23,11 +23,8 @@ export function ProfileSettings() {
 
 function ProfileEntry({ data }: { data: Theme }) {
   const isWorking = useCSSLoaderValue("isWorking");
-  const updateStatuses = useCSSLoaderValue("updateStatuses");
 
-  let updateStatus: LocalThemeStatus = "installed";
-  const themeArrPlace = updateStatuses.find((f) => f[0] === data.id);
-  if (themeArrPlace) updateStatus = themeArrPlace[1];
+  const updateStatus = useThemeInstallState(data);
   const isOutdated = updateStatus === "outdated";
 
   const installTheme = useCSSLoaderAction("installTheme");

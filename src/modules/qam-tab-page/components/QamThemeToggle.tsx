@@ -1,21 +1,24 @@
 import { useCSSLoaderAction, useCSSLoaderValue } from "@/backend";
-import { ThemePatch, ThemeSettingsModal, toggleThemeWithModals, useForcedRerender } from "@/lib";
+import {
+  ThemePatch,
+  ThemeSettingsModal,
+  toggleThemeWithModals,
+  useForcedRerender,
+  useThemeInstallState,
+} from "@/lib";
 import { useEffect, useState } from "react";
 import { LocalThemeStatus, Theme } from "@/types";
 import { ButtonItem, Focusable, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 
 export function QamThemeToggle({ theme }: { theme: Theme }) {
-  const updateStatuses = useCSSLoaderValue("updateStatuses");
   const isWorking = useCSSLoaderValue("isWorking");
   const installTheme = useCSSLoaderAction("installTheme");
 
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [render, rerender] = useForcedRerender();
 
-  let updateStatus: LocalThemeStatus = "installed";
-  const themeArrPlace = updateStatuses.find((f) => f[0] === theme.id);
-  if (themeArrPlace) updateStatus = themeArrPlace[1];
+  const updateStatus = useThemeInstallState(theme);
   const isOutdated = updateStatus === "outdated";
 
   // Re-collapse the theme when the theme is updated

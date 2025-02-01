@@ -4,7 +4,6 @@ import { FaDownload } from "react-icons/fa6";
 
 export function UpdateAllThemesButton() {
   const updateStatuses = useCSSLoaderValue("updateStatuses");
-  const themes = useCSSLoaderValue("themes");
   const installTheme = useCSSLoaderAction("installTheme");
 
   async function updateAll() {

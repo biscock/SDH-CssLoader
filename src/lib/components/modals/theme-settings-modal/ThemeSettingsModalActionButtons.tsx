@@ -3,6 +3,7 @@ import { LocalThemeStatus, Theme } from "@/types";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { FaDownload, FaEye, FaEyeSlash, FaTrash } from "react-icons/fa6";
 import { DeleteConfirmationModal } from "../delete-confirmation-modal";
+import { useThemeInstallState } from "../../../hooks";
 
 // TODO: Re-add star status to this modal
 export function ThemeSettingsModalActionButtons({
@@ -15,12 +16,9 @@ export function ThemeSettingsModalActionButtons({
   const isWorking = useCSSLoaderValue("isWorking");
 
   // Update Check
-  const updateStatuses = useCSSLoaderValue("updateStatuses");
   const installTheme = useCSSLoaderAction("installTheme");
 
-  let updateStatus: LocalThemeStatus = "installed";
-  const themeArrPlace = updateStatuses.find((f) => f[0] === theme.id);
-  if (themeArrPlace) updateStatus = themeArrPlace[1];
+  const updateStatus = useThemeInstallState(theme);
   const isOutdated = updateStatus === "outdated";
 
   function handleUpdate() {
