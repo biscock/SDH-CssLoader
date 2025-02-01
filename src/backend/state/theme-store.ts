@@ -564,7 +564,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
       deleteTheme: async (themeId: string, refreshAfter: boolean = true) => {
         set({ isWorking: true });
         try {
-          const { themes, unpinnedThemes } = get();
+          const { themes, unpinnedThemes, updateStatuses } = get();
           // The python defs say theme name, just gonna assume it's this and not ID
           const themeName = themes.find((e) => e.id === themeId)?.name;
           if (!themeName) return;
@@ -574,6 +574,8 @@ export const createCSSLoaderStore = (backend: Backend) =>
           if (unpinnedThemes.includes(themeId)) {
             get().pinTheme(themeId);
           }
+
+          set({ updateStatuses: updateStatuses.filter((e) => e[0] !== themeId) });
 
           refreshAfter && (await get().getThemes());
         } catch (error) {}

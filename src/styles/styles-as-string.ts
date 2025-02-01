@@ -656,6 +656,6 @@ MARK: Settings Page
 }
 
 .cl_squaredialogbutton_icontranslate {
-  transform: translateY(-2px) !important;
+  transform: translateY(2px) !important;
 }
 `;
