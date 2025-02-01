@@ -37,7 +37,7 @@ jobs:
           mv "./SDH-CssLoader" ./upload
 
       - name: Upload package artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SDH-CSSLoader-Decky
           path: ./upload
@@ -68,7 +68,7 @@ jobs:
         run: pyinstaller --noconfirm --noconsole --onefile --add-data "./assets;/assets" --name "CssLoader-Standalone-Headless" ./main.py ./css_win_tray.py
 
       - name: Upload package artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SDH-CSSLoader-Win-Standalone
           path: |

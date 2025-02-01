@@ -105,9 +105,13 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
         const { data, isStarred } = get();
         const { apiFetch, apiFullToken } = getCSSLoaderState();
         if (!apiFullToken && !data.id) return;
-        await apiFetch(`/users/me/stars/${data.id}`, {
-          method: isStarred ? "DELETE" : "POST",
-        });
+        await apiFetch(
+          `/users/me/stars/${data.id}`,
+          {
+            method: isStarred ? "DELETE" : "POST",
+          },
+          true
+        );
         const newIsStarred = !isStarred;
         set({
           isStarred: newIsStarred,
@@ -122,7 +126,9 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
           },
         });
       } catch (error) {
-        // TODO: (potentially) handle error
+        console.error(error);
+        const { toast } = getCSSLoaderState();
+        toast("Error starring theme!");
       }
     },
     close: () => {
