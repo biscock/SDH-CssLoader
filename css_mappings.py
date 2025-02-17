@@ -2,152 +2,195 @@ import os, asyncio, aiohttp, json, time
 from css_utils import Log, get_theme_path, get_steam_version
 from css_settings import setting_beta_mappings
 from css_browserhook import ON_WEBSOCKET_CONNECT
+import traceback
 
 STARTED_FETCHING_TRANSLATIONS = False
 SUCCESSFUL_FETCH_THIS_RUN = False
 CLASS_MAPPINGS = {}
 
-def __get_target_branch() -> str:
-    is_beta = setting_beta_mappings()
-    return "beta" if is_beta else "stable"
+class Module:
+    def __init__(self, id : str, data : dict, root):
+        self.id = id
+        self.ids = data["ids"]
+        self.name = data["name"] if data["name"] else f"_{id}"
+        self.mappings = data["classname_mappings"]
+        self.ignore_webpack_keys = data["ignore_webpack_keys"]
+        self.root = root
+        self.current_version_id = None
+        self.failed_to_match = 0
 
-def __get_same_branch_versions(data : dict) -> list[str]:
-    target_branch = __get_target_branch()
-    versions = sorted([x for x in data['versions'] if data['versions'][x] == target_branch], key=lambda x : int(x), reverse=True)
-    return versions
+        version = root.get_closest_from_steam_version_dict(self.ids)
 
-def __get_target_steam_version(data : dict) -> str|None:
-    local_steam_version = get_steam_version()
+        if version:
+            self.current_version_id = version[1]
 
-    if local_steam_version and local_steam_version in data['versions'] and data['versions'][local_steam_version] == __get_target_branch():
-        target_steam_version = local_steam_version
-    else:
-        target_steam_version = None
-        prev = "9999999999999"
-        for version in __get_same_branch_versions(data):
-            if local_steam_version == None:
-                target_steam_version = version
-                break
-
-            if int(prev) > int(local_steam_version) and int(version) < int(local_steam_version):
-                target_steam_version = version
-                break
-
-            prev = version
-        
-        if target_steam_version not in data['versions']:
-            Log("Cannot find suitable version for translation.")
-            return None
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name, 
+            "ignore": self.ignore_webpack_keys
+        }
     
-    return target_steam_version
+    def generate_mappings(self) -> dict:
+        final_data = {}
 
-def generate_webpack_id_name_list_from_local_file() -> dict[str, dict]:
-    name_list = {}
-    path = os.path.join(get_theme_path(), "css_translations.json")
+        def add_to_final_data(key, value):
+            if (key in final_data and value != final_data[key]):
+                Log(f"Warning: Mapping with key {key} has 2 different values: '{final_data[key]}' and '{value}'. The latter will be used.")
 
-    try:
-        with open(path, 'r', encoding="utf-8") as fp:
-            data = json.load(fp)
-    except Exception as e:
-        Log(f"Error while loading translations: {str(e)}.")
-        return name_list 
+            final_data[key] = value
 
-    target_steam_version = __get_target_steam_version(data)
-    same_branch_versions = __get_same_branch_versions(data)
-    if target_steam_version == None:
-        return name_list
+        for (webpack_name, class_mappings) in self.mappings.items():
+            closest = self.root.get_closest_from_steam_version_dict(class_mappings)
 
-    for _, (module_id, module_data) in enumerate(data['module_mappings'].items()):
-        if target_steam_version in module_data['ids']:
-            new_module_id = module_data['ids'][target_steam_version]
-        else: 
-            prev = "9999999999999"
-            new_module_id = None
-            mapping_sorted = sorted(list(enumerate(module_data['ids'].items())), key=lambda x: int(x[0]), reverse=True)
-            for _, (steam_version, module_id_of_steam_version) in mapping_sorted:
-                if target_steam_version not in same_branch_versions:
-                    continue
+            if not closest:
+                #Log(f"Warning: Mapping with webpack name [{self.id}]{webpack_name} have no relevant version mapped. Using latest.")
+                self.failed_to_match += 1
+                closest = (0, list(class_mappings.values())[-1])
 
-                if int(prev) > int(target_steam_version) and int(steam_version) < int(target_steam_version):
-                    new_module_id = module_id_of_steam_version
-                    break
+            value = closest[1]
 
-                prev = steam_version
-                
-        if new_module_id == None:
-            # Assuming module doesn't exist in this steam version
-            continue
-            
-        name_list[new_module_id] = {"name": str(module_id) if module_data['name'] is None else module_data['name'], "ignore": module_data['ignore_webpack_keys']}
-    
-    return name_list
-
-def generate_translations_from_local_file() -> dict[str, str]:
-    translations = {}
-    timer = time.time()
-    failed_match_version = 0
-
-    path = os.path.join(get_theme_path(), "css_translations.json")
-
-    if not os.path.exists(path):
-        Log("Translations file does not exist.")
-        return translations
-    
-    try:
-        with open(path, 'r', encoding="utf-8") as fp:
-            data = json.load(fp)
-    except Exception as e:
-        Log(f"Error while loading translations: {str(e)}.")
-        return translations
-    
-    target_steam_version = __get_target_steam_version(data)
-    same_branch_versions = __get_same_branch_versions(data)
-    if target_steam_version == None:
-        return translations
-    
-    Log(f"Using steam version {target_steam_version} for translations. Available versions for the {__get_target_branch()} branch: {same_branch_versions}")
-
-    for _, (module_id, module_data) in enumerate(data['module_mappings'].items()):
-        module_name = ("_" + str(module_id) if module_data['name'] is None else module_data['name'])
-        for _, (webpack_name, class_mappings) in enumerate(module_data['classname_mappings'].items()):
-            if target_steam_version in class_mappings:
-                class_target = class_mappings[target_steam_version]
-            else:
-                prev = "9999999999999"
-                class_target = None
-                class_mapping_sorting = sorted(list(enumerate(class_mappings.items())), key=lambda x: int(x[0]), reverse=True)
-                for _, (steam_version, css_class) in class_mapping_sorting:
-                    if target_steam_version not in same_branch_versions:
-                        continue
-
-                    if int(prev) > int(target_steam_version) and int(steam_version) < int(target_steam_version):
-                        class_target = css_class
-                        break
-
-                    prev = steam_version
-                
-                if class_target == None:
-                    #Log(f"No suitable version found for mapping {module_id}_{class_name}. Using last")
-                    failed_match_version += 1
-                    class_target = class_mappings[list(class_mappings)[-1]]
-                
             for css_class in class_mappings.values():
-                if css_class == class_target:
+                if value == css_class:
                     continue
                 
-                translations[css_class] = class_target
+                add_to_final_data(css_class, value)
+        
+            add_to_final_data(f"{self.name}_{webpack_name}", value)
+            add_to_final_data(f"_{self.id}_{webpack_name}", value)
+        
+        return final_data
 
-            translations[f"{module_name}_{webpack_name}"] = class_target
-            translations[f"_{module_id}_{webpack_name}"] = class_target
+class Mappings:
+    def __init__(self):
+        self.path = os.path.join(get_theme_path(), "css_translations.json")
+        self.use_beta_mappings = setting_beta_mappings()
+        self.versions = {}
+        self.same_branch_versions = []
+        self.target_steam_version = None
+        self.local_version = get_steam_version()
+        self.target_version = None
+        self.modules : list[Module] = []
+        self.mappings = {}
+        self.timestamp = None
     
-    Log(f"Loaded {len(translations)} css translations from local file in {time.time() - timer:.1f}s. Failed to match version on {failed_match_version} translations.")
-    return translations
+    def load(self) -> bool:
+        timer = time.time()
+
+        try:
+            with open(self.path, 'r', encoding="utf-8") as fp:
+                self.data = json.load(fp)
+        except Exception as e:
+            Log(f"Error while loading translations: {str(e)}.")
+            return False 
+        
+        if "generated" in self.data:
+            self.timestamp = self.data["generated"]
+        try:
+            if 'versions' not in self.data or not self.__load_steam_versions(self.data['versions']):
+                Log(f"Cannot find suitable version for translation. Local steam version: {self.local_version}. Available versions: {self.same_branch_versions}.")
+                return False
+
+            if not self.__load_modules(self.data["module_mappings"]):
+                Log("Failed to parse modules.")
+                return False
+            
+        except Exception as e:
+            Log(traceback.format_exc())
+            Log(f"Failed to load translations: {str(e)}")
+            return False
+
+        Log(f"Loaded {len(self.mappings)} css translations from local file in {time.time() - timer:.1f}s. Failed to map {sum(x.failed_to_match for x in self.modules)} translations.")
+        return True
+    
+    def generate_webpack_id_name_list(self) -> dict:
+        data = {}
+
+        for x in self.modules:
+            if x.current_version_id != None:
+                data[x.current_version_id] = x.to_dict()
+
+        return data
+
+    def __load_modules(self, module_mappings : dict[str, dict]) -> bool:
+        self.mappings = {}
+
+        for (module_id, module_data) in module_mappings.items():
+            module = Module(module_id, module_data, self)
+            self.modules.append(module)
+
+            mappings = module.generate_mappings()
+
+            for (class_name, new_class_name) in mappings.items():
+                if (class_name in self.mappings and new_class_name != self.mappings[class_name]):
+                    Log(f"Warning: Mapping with key {class_name} has 2 different values from 2 different modules: '{self.mappings[class_name]}' and '{new_class_name}'. The latter will be used.")
+
+                self.mappings[class_name] = new_class_name
+        
+        return True
+
+    def __load_steam_versions(self, versions : dict[str, str]) -> bool:
+        if versions is None:
+            return False
+        
+        target_branch = "beta" if self.use_beta_mappings else "stable"
+        self.versions = versions
+        self.same_branch_versions = [x for x in versions if target_branch in self.versions[x]]
+
+        self.target_version = self.local_version if self.local_version else "99999999999999"
+        result = self.get_closest_from_steam_version_dict(self.versions)
+
+        if not result:
+            return False
+
+        self.target_version = result[0]
+        Log(f"Using steam version {self.target_version} for translations. Available versions for the {target_branch} branch: {self.same_branch_versions}.")
+        return True
+
+    def get_closest_from_steam_version_dict(self, dict : dict[str, None], use_same_branch_search : bool = True) -> tuple[str, None]|None:
+        if self.target_version in dict:
+            return (self.target_version, dict[self.target_version])
+
+        mapping_sorted = sorted(list(dict.items()), key=lambda x: int(x[0]), reverse=True)
+        for (key, value) in mapping_sorted:
+            if use_same_branch_search and key not in self.same_branch_versions:
+                continue
+
+            if int(key) < int(self.target_version):
+                return (key, value)
+
+        return None
+
+__local_mappings : Mappings = None
+
+def get_mappings_timestamp() -> str|None:
+    global __local_mappings
+
+    if not __local_mappings:
+        return None
+
+    return __local_mappings.timestamp
+
+def generate_webpack_id_name_list() -> dict:
+    global __local_mappings
+
+    if not __local_mappings:
+        return {}
+
+    return __local_mappings.generate_webpack_id_name_list()
 
 def load_global_translations():
+    global __local_mappings
+
+    __local_mappings = Mappings()
+
+    if not __local_mappings.load():
+        Log("Failed to load translations.")
+        return
+
     CLASS_MAPPINGS.clear()
 
     try:
-        for _, (k, v) in enumerate(generate_translations_from_local_file().items()):
+        for (k, v) in __local_mappings.mappings.items():
             CLASS_MAPPINGS[k] = v
     except Exception as e:
         Log(f"Error while loading global translations: {str(e)}")

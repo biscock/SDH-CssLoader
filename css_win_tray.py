@@ -1,4 +1,4 @@
-import pystray, css_theme, css_utils, os, webbrowser, subprocess
+import pystray, css_theme, css_utils, os, webbrowser, subprocess, asyncio
 from PIL import Image, ImageDraw
 
 ICON = None
@@ -7,14 +7,14 @@ LOOP = None
 DEV_MODE_STATE = False
 
 def reset():
-    LOOP.create_task(MAIN.reset(MAIN))
+    LOOP.create_task(MAIN.reset())
 
 def open_theme_dir():
     theme_dir = css_utils.get_theme_path()
     os.startfile(theme_dir)
 
 def exit():
-    LOOP.create_task(MAIN.exit(MAIN))
+    LOOP.create_task(MAIN.exit())
 
 def get_dev_mode_state(x) -> bool:
     return DEV_MODE_STATE
@@ -22,7 +22,8 @@ def get_dev_mode_state(x) -> bool:
 def toggle_dev_mode_state():
     global DEV_MODE_STATE
     DEV_MODE_STATE = not DEV_MODE_STATE
-    LOOP.create_task(MAIN.toggle_watch_state(MAIN, get_dev_mode_state(None)))
+    LOOP.call_soon_threadsafe(lambda : LOOP.create_task(MAIN.toggle_watch_state(get_dev_mode_state(None))))
+    
 
 def check_if_symlink_exists():
     return os.path.exists(os.path.join(css_utils.get_steam_path(), "steamui", "themes_custom"))
@@ -59,8 +60,8 @@ def start_icon(main, loop):
         pystray.MenuItem("Open Desktop App", action=open_desktop, enabled=get_desktop_install_path() != None, default=True),
         pystray.MenuItem("Live CSS Editing", toggle_dev_mode_state, checked=get_dev_mode_state),
         pystray.MenuItem("Open Themes Folder", open_theme_dir),
-        pystray.MenuItem("Reload Themes", reset),
-        pystray.MenuItem("Exit", exit)
+        pystray.MenuItem("Reload Themes", lambda : LOOP.call_soon_threadsafe(reset)),
+        pystray.MenuItem("Exit", lambda : LOOP.call_soon_threadsafe(exit))
     ))
     ICON.run_detached()
 

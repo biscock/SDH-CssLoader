@@ -14,12 +14,18 @@ from css_settings import setting_redirect_logs, setting_watch_files, set_setting
 from css_server import start_server
 from css_browserhook import initialize
 from css_loader import Loader
-from css_mappings import force_fetch_translations, start_fetch_translations, load_global_translations, generate_webpack_id_name_list_from_local_file
-
+from css_mappings import force_fetch_translations, start_fetch_translations, load_global_translations, generate_webpack_id_name_list, get_mappings_timestamp
 
 ALWAYS_RUN_SERVER = False
 IS_STANDALONE = False
 GOOGLE_PING_COUNT = 0
+
+if __name__ == '__main__':
+    ALWAYS_RUN_SERVER = True
+    IS_STANDALONE = True
+
+if IS_STANDALONE:
+    import css_win_tray
 
 try:
     if setting_redirect_logs():
@@ -50,6 +56,9 @@ class FileChangeHandler(FileSystemEventHandler):
         
 
 class Plugin:
+    def __init__(self):
+        self.observer = None
+
     async def is_standalone(self) -> bool:
         return IS_STANDALONE
     
@@ -140,7 +149,10 @@ class Plugin:
         return Result(True).to_dict()
     
     async def get_webpack_mappings(self) -> dict:
-        return generate_webpack_id_name_list_from_local_file()
+        return generate_webpack_id_name_list()
+    
+    async def get_mappings_version(self) -> str:
+        return get_mappings_timestamp()
 
     async def exit(self):
         try:
@@ -189,14 +201,15 @@ class Plugin:
         Log(f"Initialized css loader. Found {len(self.loader.themes)} themes. Total {len(ALL_INJECTS)} injects, {len([x for x in ALL_INJECTS if x.enabled])} injected")
         
         if (ALWAYS_RUN_SERVER or setting_run_server()):
-            await self.enable_server(self)
+            await self.enable_server()
 
         start_fetch_translations(self.loader)
         await initialize()
 
+        if IS_STANDALONE:
+            css_win_tray.start_icon(self, asyncio.get_event_loop())
+
 if __name__ == '__main__':
-    ALWAYS_RUN_SERVER = True
-    IS_STANDALONE = True
     import logging
 
     logging.basicConfig(
@@ -212,26 +225,12 @@ if __name__ == '__main__':
 
     asyncio.set_event_loop(asyncio.new_event_loop())
 
-    class A:
-        async def run(self):
-            count = 0
-            while count < 5:
-                try:
-                    instance = Plugin()
-                    task = asyncio.create_task(instance._main())
-                    await asyncio.shield(task)
-                except asyncio.CancelledError as e:
-                    print(str(e))
-                except Exception as e:
-                    print(str(e))
-                
-                count += 1
-
-    asyncio.get_event_loop().run_until_complete(A().run())
-
-    import css_win_tray
+    async def initialize_standalone():
+        instance = Plugin()
+        task = asyncio.create_task(instance._main())
+        await asyncio.shield(task)
     
-    css_win_tray.start_icon(Plugin, asyncio.get_event_loop())
+    asyncio.get_event_loop().run_until_complete(initialize_standalone())
 
     try:
         asyncio.get_event_loop().run_forever()

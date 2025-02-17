@@ -269,8 +269,8 @@ class BrowserHook:
             while await_response:
                 result = await queue.get()
 
-                if (start_time + 5) < time.time():
-                    Result(False, f"Request for {method} took more than 5s. Assuming it failed ({len(self.connected_tabs)})")
+                if (start_time + 2) < time.time():
+                    Result(False, f"Request for {method} took more than 2s. Assuming it failed ({len(self.connected_tabs)})")
                     self.ws_response.remove(queue)
                     del queue
                     return None

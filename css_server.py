@@ -9,7 +9,7 @@ async def handle(request : aiohttp.web.BaseRequest):
 
     # This is very cool decky code
     try:
-        request_result["res"] = await getattr(PLUGIN_CLASS, data["method"])(PLUGIN_CLASS, **data["args"])
+        request_result["res"] = await getattr(PLUGIN_CLASS, data["method"])(**data["args"])
     except Exception as e:
         request_result["res"] = str(e)
         request_result["success"] = False
