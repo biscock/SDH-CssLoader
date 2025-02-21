@@ -191,8 +191,6 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const themePath = await backend.fetchThemePath();
           set({ themeRootPath: themePath });
 
-          console.log("HELLO TEST", await backend.getMappings());
-
           const unpinnedThemesStr = await backend.storeRead("unpinnedThemes");
           const unpinnedThemes: string[] = unpinnedThemesStr ? JSON.parse(unpinnedThemesStr) : [];
           const allThemeIds = themes.map((e) => e.id);

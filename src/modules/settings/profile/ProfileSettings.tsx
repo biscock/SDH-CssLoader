@@ -32,7 +32,7 @@ function ProfileEntry({ data }: { data: Theme }) {
     <PanelSectionRow>
       <div className="grid grid-cols-[1fr,2fr] items-center p-0">
         <span>{data.name}</span>
-        <div>
+        <div className="flex">
           {isOutdated && (
             <DialogButton
               style={{

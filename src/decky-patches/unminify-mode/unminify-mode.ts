@@ -1,11 +1,11 @@
-import { classHashMap, initializeClassHashMap } from "./class-hash-map";
 import { getRootElements } from "./steam-tab-elements-finder";
+import { unminificationMap } from "./unminification-map";
 
 export function unminifyElement(element: Element) {
   if (element.classList.length === 0) return;
 
   const classList = Array.from(element.classList);
-  const unminifiedClassList = classList.map((c) => classHashMap.get(c) || c);
+  const unminifiedClassList = classList.map((c) => unminificationMap.get(c) || c);
   element.setAttribute("unminified-class", unminifiedClassList.join(" "));
 }
 
@@ -52,7 +52,6 @@ export function setUpMutationObserver(rootElement: any) {
 
 export function enableUnminifyMode() {
   if (mutationObservers.length > 0) disconnectMutationObservers();
-  initializeClassHashMap();
   const roots = getRootElements();
   roots.forEach(initialUnminification);
   roots.forEach(setUpMutationObserver);

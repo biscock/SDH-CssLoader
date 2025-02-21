@@ -5,6 +5,7 @@ import { disableNavPatch, enableNavPatch } from "./nav-patch";
 import { disableUnminifyMode, enableUnminifyMode } from "./unminify-mode";
 import { backend } from "@/backend";
 import { generateStoreSelector } from "@zusteebles";
+import { initializeUnminificationMap, PythonMappings } from "./unminify-mode/unminification-map";
 
 interface DeckyPatchStoreValues {
   unminifyModeOn: boolean;
@@ -14,7 +15,7 @@ interface DeckyPatchStoreActions {
   initializeStore: () => Promise<void>;
   deactivate: () => Promise<void>;
   setNavPatchState: (value: boolean, shouldToast?: boolean) => void;
-  setUnminifyModeState: (value: boolean, shouldToast?: boolean) => void;
+  setUnminifyModeState: (value: boolean, shouldToast?: boolean) => Promise<void>;
 }
 
 export interface IDeckyPatchState extends DeckyPatchStoreActions, DeckyPatchStoreValues {}
@@ -57,8 +58,12 @@ const createDeckyPatchStore = (backend: Backend) =>
       shouldToast && backend.toast("Nav Patch", enabled ? "Enabled" : "Disabled");
       backend.storeWrite("enableNavPatch", enabled + "");
     },
-    setUnminifyModeState: (enabled: boolean, shouldToast: boolean = false) => {
+    setUnminifyModeState: async (enabled: boolean, shouldToast: boolean = false) => {
       if (enabled) {
+        const mappings = await backend.getMappings();
+        if (mappings) {
+          initializeUnminificationMap(mappings as PythonMappings);
+        }
         enableUnminifyMode();
       } else {
         disableUnminifyMode();
