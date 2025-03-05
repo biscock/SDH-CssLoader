@@ -1,8 +1,11 @@
+import { Focusable, Navigation, ScrollPanelGroup } from "@decky/ui";
+import { Selectable } from "../../../lib/primitives";
+
 export function CreditsPage() {
   return (
     <div>
       <div className="flex flex-col">
-        <div>
+        <Selectable className="flex flex-col">
           <span className="text-2xl font-bold">Developers</span>
           <ul>
             <li>
@@ -15,24 +18,36 @@ export function CreditsPage() {
               <span>EMERALD - github.com/EMERALD0874</span>
             </li>
           </ul>
-        </div>
-        <div>
+        </Selectable>
+        <Selectable className="flex flex-col">
           <span className="text-2xl font-bold">Support</span>
           <span>
             See the DeckThemes Discord server for support.
             <br />
-            deckthemes.com/discord
+            <span
+              onClick={() => {
+                Navigation.NavigateToExternalWeb("https://deckthemes.com/discord");
+              }}
+            >
+              deckthemes.com/discord
+            </span>
           </span>
-        </div>
-        <div>
+        </Selectable>
+        <Selectable className="flex flex-col">
           <span className="text-2xl font-bold">Create and Submit Your Own Theme</span>
           <span>
             Instructions for theme creation/submission are available DeckThemes' documentation
             website.
             <br />
-            docs.deckthemes.com
+            <span
+              onClick={() => {
+                Navigation.NavigateToExternalWeb("https://docs.deckthemes.com");
+              }}
+            >
+              docs.deckthemes.com
+            </span>
           </span>
-        </div>
+        </Selectable>
       </div>
     </div>
   );

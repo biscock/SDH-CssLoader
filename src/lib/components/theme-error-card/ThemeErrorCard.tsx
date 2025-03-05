@@ -1,13 +1,10 @@
 import { ThemeError } from "@/types";
 import { Focusable } from "@decky/ui";
+import { Selectable } from "../../primitives";
 
 export function ThemeErrorCard({ error }: { error: ThemeError }) {
   return (
-    <Focusable
-      focusWithinClassName="gpfocuswithin"
-      onActivate={() => {}}
-      className="w-full m-0 p-0"
-    >
+    <Selectable className="w-full m-0 p-0">
       <div
         className="flex flex-col gap-2"
         style={{
@@ -19,6 +16,6 @@ export function ThemeErrorCard({ error }: { error: ThemeError }) {
         </span>
         <span>{error[1]}</span>
       </div>
-    </Focusable>
+    </Selectable>
   );
 }

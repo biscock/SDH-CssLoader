@@ -1,6 +1,7 @@
 import { useCSSLoaderValues } from "@/backend";
-import { Focusable, Navigation, PanelSection } from "@decky/ui";
+import { Focusable, Navigation, PanelSection, ScrollPanelGroup } from "@decky/ui";
 import { SiKofi, SiPatreon } from "react-icons/si";
+import { Selectable } from "../../../lib/primitives";
 
 export function DonatePage() {
   const { patrons } = useCSSLoaderValues();
@@ -53,9 +54,9 @@ export function DonatePage() {
         <div className="mt-4 mb-4">
           <span className="text-2xl font-bold">Patreon Supporters</span>
           {patrons.map((patron) => (
-            <Focusable onActivate={() => {}} focusWithinClassName="gpfocuswithin">
+            <Selectable>
               <p className="m-0">{patron}</p>
-            </Focusable>
+            </Selectable>
           ))}
         </div>
       )}

@@ -3,6 +3,7 @@ import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { ExpandedViewImageContainer } from "./ExpandedViewImageContainer";
 import { useThemeBrowserSharedActions } from "@/modules/theme-store/context";
 import { AuthorViewModal } from "@/lib";
+import { Selectable } from "../../../lib/primitives";
 
 export function ExpandedViewScrollingSection() {
   const data = useExpandedViewValue("data");
@@ -52,18 +53,14 @@ export function ExpandedViewScrollingSection() {
             <span>Last Updated {new Date(data.updated).toLocaleDateString()}</span>
           </Focusable>
           {/* Description */}
-          <Focusable
-            focusWithinClassName="gpfocuswihtin"
-            className="flex flex-col gap-1"
-            onActivate={() => {}}
-          >
+          <Selectable className="flex flex-col gap-1">
             <span className="font-bold">Description</span>
             <span className={data.description.length > 400 ? "text-sm" : ""}>
               {data.description || (
                 <i className="cl_expandedview_graytext">No description provided.</i>
               )}
             </span>
-          </Focusable>
+          </Selectable>
           {/* Targets */}
           <Focusable className="flex flex-col gap-1">
             <span className="font-bold">Targets</span>

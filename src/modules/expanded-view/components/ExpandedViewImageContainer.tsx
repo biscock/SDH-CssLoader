@@ -1,5 +1,6 @@
 import { Focusable, ScrollPanelGroup } from "@decky/ui";
 import { useExpandedViewAction, useExpandedViewValue } from "../context";
+import { Selectable } from "../../../lib/primitives";
 
 export function ExpandedViewImageContainer() {
   const data = useExpandedViewValue("data");
@@ -23,13 +24,11 @@ export function ExpandedViewImageContainer() {
           className="cl_expandedview_imagecarouselcontainer"
         >
           {data.images.map((image) => (
-            <Focusable
+            <Selectable
               onFocus={() => {
                 setFocusedImage(image.id);
               }}
               className="cl_expandedview_imagecarouselentry"
-              focusWithinClassName="gpfocuswithin"
-              onActivate={() => {}}
             >
               <img
                 width={imageCarouselEntryWidth}
@@ -37,17 +36,13 @@ export function ExpandedViewImageContainer() {
                 style={{ objectFit: "contain" }}
                 src={`https://api.deckthemes.com/blobs/${image.id}`}
               />
-            </Focusable>
+            </Selectable>
           ))}
         </ScrollPanelGroup>
       )}
 
       {/* Selected Image Display */}
-      <Focusable
-        className="cl_expandedview_selectedimage"
-        focusWithinClassName="gpfocuswithin"
-        onActivate={() => {}}
-      >
+      <Selectable className="cl_expandedview_selectedimage">
         <img
           width={selectedImageWidth}
           height={selectedImageHeight}
@@ -65,7 +60,7 @@ export function ExpandedViewImageContainer() {
             </span>
           </div>
         )}
-      </Focusable>
+      </Selectable>
     </Focusable>
   );
 }
