@@ -1,4 +1,4 @@
-import { Patch } from "@decky/ui";
+import { classModuleMap, Patch } from "@decky/ui";
 import type { Backend } from "@cssloader/backend";
 import { createStore, useStore } from "zustand";
 import { disableNavPatch, enableNavPatch } from "./nav-patch";
@@ -16,6 +16,7 @@ interface DeckyPatchStoreActions {
   deactivate: () => Promise<void>;
   setNavPatchState: (value: boolean, shouldToast?: boolean) => void;
   setUnminifyModeState: (value: boolean, shouldToast?: boolean) => Promise<void>;
+  dumpMappings: () => Promise<void>;
 }
 
 export interface IDeckyPatchState extends DeckyPatchStoreActions, DeckyPatchStoreValues {}
@@ -69,6 +70,15 @@ const createDeckyPatchStore = (backend: Backend) =>
         disableUnminifyMode();
       }
       shouldToast && backend.toast("Unminify Mode", enabled ? "Enabled" : "Disabled");
+    },
+    dumpMappings: async () => {
+      try {
+        const map = classModuleMap;
+        const jsonStr = JSON.stringify(Object.fromEntries(map));
+        await backend.saveMappings(jsonStr);
+      } catch (error) {
+        console.error("ERROR SAVING MAPPINGS", error);
+      }
     },
   }));
 

@@ -1,13 +1,13 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useDeckyPatchStateActions, useDeckyPatchStateValues } from "@/decky-patches";
-import { DropdownItem, Focusable, ToggleField } from "@decky/ui";
+import { ButtonItem, DropdownItem, Focusable, ToggleField } from "@decky/ui";
 
 export function PluginSettingsPage() {
   const { serverState, watchState, translationsBranch } = useCSSLoaderValues();
   const { setServerState, setWatchState, setTranslationBranch } = useCSSLoaderActions();
 
   const { unminifyModeOn, navPatchInstance } = useDeckyPatchStateValues();
-  const { setNavPatchState, setUnminifyModeState } = useDeckyPatchStateActions();
+  const { setNavPatchState, setUnminifyModeState, dumpMappings } = useDeckyPatchStateActions();
   return (
     <Focusable>
       <Focusable>
@@ -56,6 +56,9 @@ export function PluginSettingsPage() {
           description="Adds unminified classnames to devtools view, resets on steam client restart"
           onChange={(value) => setUnminifyModeState(value, true)}
         />
+      </Focusable>
+      <Focusable>
+        <ButtonItem label="Dump Mappings" onClick={dumpMappings} />
       </Focusable>
     </Focusable>
   );

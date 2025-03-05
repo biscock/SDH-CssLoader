@@ -114,6 +114,9 @@ export class Backend {
   async getMappings() {
     return Backend.repository.call<[], object>("get_webpack_mappings", []);
   }
+  async saveMappings(string: string) {
+    return Backend.repository.call<[string], void>("save_mappings", [string]);
+  }
 
   toast(title: string, body?: string) {
     Backend.repository.toast(title, body);
