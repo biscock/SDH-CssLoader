@@ -107,6 +107,10 @@ MARK: TAILWIND
   margin-top: 1rem !important;
 }
 
+.mr-4 {
+  margin-right: 1rem !important;
+}
+
 .w-full {
   width: 100% !important;
 }

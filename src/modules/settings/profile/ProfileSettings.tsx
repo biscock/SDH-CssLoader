@@ -31,16 +31,11 @@ function ProfileEntry({ data }: { data: Theme }) {
   return (
     <PanelSectionRow>
       <div className="grid grid-cols-[1fr,2fr] items-center p-0">
-        <span>{data.name}</span>
-        <div className="flex">
+        <span>{data.display_name}</span>
+        <Focusable className="flex ml-auto gap-2">
           {isOutdated && (
             <DialogButton
-              style={{
-                marginRight: "8px",
-                minWidth: "calc(50% - 8px)",
-                maxWidth: "calc(50% - 8px)",
-                filter: "invert(6%) sepia(90%) saturate(200%) hue-rotate(160deg) contrast(122%)",
-              }}
+              className="cl_squaredialogbutton"
               onClick={() => installTheme(data.id)}
               disabled={isWorking}
             >
@@ -48,17 +43,13 @@ function ProfileEntry({ data }: { data: Theme }) {
             </DialogButton>
           )}
           <DialogButton
-            style={{
-              minWidth: "calc(50% - 8px)",
-              maxWidth: "calc(50% - 8px)",
-              marginLeft: "auto",
-            }}
+            className="cl_squaredialogbutton"
             onClick={() => deleteTheme(data.id)}
             disabled={isWorking}
           >
             <FaTrash />
           </DialogButton>
-        </div>
+        </Focusable>
       </div>
     </PanelSectionRow>
   );
