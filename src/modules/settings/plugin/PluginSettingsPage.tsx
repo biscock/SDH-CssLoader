@@ -18,8 +18,8 @@ export function PluginSettingsPage() {
             { data: "1", label: "Force Beta" },
           ]}
           selectedOption={translationsBranch}
-          label="SteamOS Branch"
-          description="Choose the version of SteamOS you are on. This allows us to provide the correct translations for your system."
+          label="Steam Client Branch"
+          description="Choose the version of the Steam client you are on. This allows us to provide the correct translations for your system."
           onChange={(data) => setTranslationBranch(data.data)}
         />
       </Focusable>
@@ -58,7 +58,13 @@ export function PluginSettingsPage() {
         />
       </Focusable>
       <Focusable>
-        <ButtonItem label="Dump Mappings" onClick={dumpMappings} />
+        <ButtonItem
+          label="Save Mappings"
+          description="Saves your Steam client version's CSS classnames to a file for analysis"
+          onClick={dumpMappings}
+        >
+          Save
+        </ButtonItem>
       </Focusable>
     </Focusable>
   );
