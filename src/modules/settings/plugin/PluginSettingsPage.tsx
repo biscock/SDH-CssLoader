@@ -19,7 +19,7 @@ export function PluginSettingsPage() {
           ]}
           selectedOption={translationsBranch}
           label="Steam Client Branch"
-          description="Choose the version of the Steam client you are on. This allows us to provide the correct translations for your system."
+          description="This allows us to provide the correct translations for your system."
           onChange={(data) => setTranslationBranch(data.data)}
         />
       </Focusable>
