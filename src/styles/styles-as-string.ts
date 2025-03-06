@@ -1,11 +1,6 @@
 import { gamepadDialogClasses } from "@decky/ui";
 
 export const styles = `
-/* THIS FILE IS NOT USED IN BUILD */
-/* ANY MODIFICATIONS HERE MUST BE COPY PASTED INTO styles-as-string.ts */
-/* THAT IS NEEDED FOR STATIC CLASS INJECTION */
-/* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
-
 /*
 MARK: TAILWIND
 */
@@ -32,6 +27,10 @@ MARK: TAILWIND
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
 .grid-cols-\\[1fr\\,2fr\\] {

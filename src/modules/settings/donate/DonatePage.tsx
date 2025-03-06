@@ -7,10 +7,12 @@ export function DonatePage() {
   const { patrons } = useCSSLoaderValues();
   return (
     <Focusable>
-      <p>
-        Donations help to cover the costs of hosting the store, as well as funding development for
-        CSS Loader and its related projects.
-      </p>
+      <Selectable>
+        <p>
+          Donations help to cover the costs of hosting the store, as well as funding development for
+          CSS Loader and its related projects.
+        </p>
+      </Selectable>
       <Focusable className="grid grid-cols-2 w-full gap-4">
         <Focusable
           onActivate={() => Navigation.NavigateToExternalWeb("https://patreon.com/deckthemes")}
@@ -53,11 +55,13 @@ export function DonatePage() {
       {patrons.length > 0 && (
         <div className="mt-4 mb-4">
           <span className="text-2xl font-bold">Patreon Supporters</span>
-          {patrons.map((patron) => (
-            <Selectable>
-              <p className="m-0">{patron}</p>
-            </Selectable>
-          ))}
+          <Focusable className="grid grid-cols-3 gap-2 w-full">
+            {patrons.map((patron) => (
+              <Selectable>
+                <p className="m-0">{patron}</p>
+              </Selectable>
+            ))}
+          </Focusable>
         </div>
       )}
     </Focusable>
