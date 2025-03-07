@@ -3,8 +3,10 @@ import {
   FullAccountData,
   MinimalCSSThemeInfo,
   Motd,
+  PartialCSSThemeInfo,
   Theme,
   ThemeError,
+  ThemeQueryResponse,
   UpdateStatus,
 } from "../../types";
 import { createStore } from "zustand";
@@ -35,6 +37,7 @@ export interface CSSLoaderStateValues {
   // Plugin Settings
   dummyFunctionResult: boolean;
   backendVersion: number;
+  mappingsVersionStr: string;
   motd: Motd | undefined;
   hiddenMotdId: string;
   serverState: boolean;
@@ -81,6 +84,8 @@ export interface CSSLoaderStateActions {
   setTranslationBranch: (branch: "-1" | "0" | "1") => Promise<void>;
   setServerState: (state: boolean) => Promise<void>;
   setWatchState: (state: boolean) => Promise<void>;
+  getUploadedThemes: () => Promise<PartialCSSThemeInfo[]>;
+  publishProfile: (profileName: string, isPublic: boolean) => Promise<void>;
 }
 
 export interface FetchOptions {
@@ -163,6 +168,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
 
       // Plugin Settings
       dummyFunctionResult: false,
+      mappingsVersionStr: "",
       backendVersion: 9,
       motd: undefined,
       hiddenMotdId: "",
@@ -222,6 +228,8 @@ export const createCSSLoaderStore = (backend: Backend) =>
               ? (translationsBranch as "-1" | "0" | "1")
               : "-1",
           });
+          const mappingsVersionStr = await backend.getMappingsVersion();
+          set({ mappingsVersionStr });
 
           const { bulkThemeUpdateCheck, scheduleBulkThemeUpdateCheck } = get();
           await bulkThemeUpdateCheck();
@@ -255,6 +263,8 @@ export const createCSSLoaderStore = (backend: Backend) =>
             set({ dummyFunctionResult });
             await reloadThemes();
             await bulkThemeUpdateCheck();
+            const mappingsVersionStr = await backend.getMappingsVersion();
+            set({ mappingsVersionStr });
           }
         } catch (error) {}
         set({ isWorking: false });
@@ -294,7 +304,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
             apiFullToken: json.token,
             apiTokenExpireDate: new Date().valueOf() + 1000 * 10 * 60,
           });
-          const meJson = await apiFetch<FullAccountData>("/auth/me", undefined, {
+          const meJson = await apiFetch<FullAccountData>("/auth/me_full", undefined, {
             requiresAuth: true,
           });
           if (meJson) {
@@ -608,6 +618,62 @@ export const createCSSLoaderStore = (backend: Backend) =>
           const newValue = await backend.getWatchState();
           set({ watchState: newValue });
         } catch (error) {}
+      },
+      async getUploadedThemes() {
+        try {
+          if (!get().apiShortToken) {
+            return [];
+          }
+          const publicThemesRes = await apiFetch<ThemeQueryResponse>(
+            "/users/me/themes?filters=CSS",
+            {},
+            { requiresAuth: true }
+          );
+          const privateThemesRes = await apiFetch<ThemeQueryResponse>(
+            "/users/me/themes/private?filters=CSS",
+            {},
+            { requiresAuth: true }
+          );
+          return [...publicThemesRes.items, ...privateThemesRes.items].sort((a, b) => {
+            const dateA = new Date(a.updated);
+            const dateB = new Date(b.updated);
+            return dateB.getTime() - dateA.getTime();
+          });
+        } catch {
+          return [];
+        }
+      },
+      async publishProfile(profileName: string, isPublic: boolean) {
+        try {
+          if (!get().themes.some((e) => e.name === profileName)) return;
+          const refreshedToken = await get().refreshToken();
+          if (!refreshedToken) return;
+
+          const blobRes = await backend.uploadThemeBlob(profileName, apiUrl, refreshedToken);
+          if (!blobRes?.success) return;
+
+          const submissionRes = await apiFetch(
+            "/submissions/css_zip",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                blob: blobRes.message.id,
+                meta: {
+                  imageBlobs: [],
+                  description: "Uploaded from Decky CSS Loader",
+                  privateSubmission: !isPublic,
+                },
+              }),
+            },
+            { requiresAuth: true }
+          );
+          console.log(submissionRes);
+        } catch (error) {
+          console.log(error);
+        }
       },
     };
   });

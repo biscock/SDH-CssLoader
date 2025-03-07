@@ -26,8 +26,7 @@ export function ThemeSettings() {
   }, [themes.length]);
 
   return (
-    <Focusable>
-      <span className="text-2xl font-bold">{deleteMode ? "Delete" : "Installed"} Themes</span>
+    <Focusable className="cl_settingspage_container">
       <Focusable className="flex gap-4 mb-4">
         <DialogButton
           className="CSSLoader_InstalledThemes_ModeButton"

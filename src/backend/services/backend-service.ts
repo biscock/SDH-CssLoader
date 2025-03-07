@@ -1,4 +1,4 @@
-import { Theme, ThemeError } from "../../types";
+import { APIBlob, BlobType, Theme, ThemeError } from "../../types";
 import { IBackendRepository } from "../repositories";
 
 export class Backend {
@@ -114,8 +114,17 @@ export class Backend {
   async getMappings() {
     return Backend.repository.call<[], object>("get_webpack_mappings", []);
   }
+  async getMappingsVersion() {
+    return Backend.repository.call<[], string>("get_mappings_version", []);
+  }
   async saveMappings(string: string) {
     return Backend.repository.call<[string], void>("save_mappings", [string]);
+  }
+  async uploadThemeBlob(themeName: string, apiBaseUrl: string, authToken: string) {
+    return Backend.repository.call<
+      [string, string, string],
+      { success: boolean; message: APIBlob }
+    >("upload_theme", [themeName, apiBaseUrl, authToken]);
   }
 
   toast(title: string, body?: string) {

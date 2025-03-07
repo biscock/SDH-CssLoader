@@ -3,7 +3,7 @@ import { Selectable } from "../../../lib/primitives";
 
 export function CreditsPage() {
   return (
-    <div>
+    <Focusable className="cl_settingspage_container">
       <div className="flex flex-col gap-4">
         <Selectable className="flex flex-col">
           <span className="text-2xl font-bold">Developers</span>
@@ -49,6 +49,6 @@ export function CreditsPage() {
           </span>
         </Selectable>
       </div>
-    </div>
+    </Focusable>
   );
 }

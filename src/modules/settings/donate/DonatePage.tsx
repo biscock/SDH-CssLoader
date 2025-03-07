@@ -6,7 +6,7 @@ import { Selectable } from "../../../lib/primitives";
 export function DonatePage() {
   const { patrons } = useCSSLoaderValues();
   return (
-    <Focusable>
+    <Focusable className="cl_settingspage_container">
       <Selectable>
         <p>
           Donations help to cover the costs of hosting the store, as well as funding development for

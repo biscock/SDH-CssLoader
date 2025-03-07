@@ -1,6 +1,11 @@
 import { gamepadDialogClasses } from "@decky/ui";
 
 export const styles = `
+/* THIS FILE IS NOT USED IN BUILD */
+/* ANY MODIFICATIONS HERE MUST BE COPY PASTED INTO styles-as-string.ts */
+/* THAT IS NEEDED FOR STATIC CLASS INJECTION */
+/* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
+
 /*
 MARK: TAILWIND
 */
@@ -81,6 +86,16 @@ MARK: TAILWIND
   padding: 0 !important;
 }
 
+.py-0 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.px-\\[5px\\] {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+
 .pl-4 {
   padding-left: 1rem !important;
 }
@@ -105,6 +120,10 @@ MARK: TAILWIND
   margin-top: 1rem !important;
 }
 
+.mr-4 {
+  margin-right: 1rem !important;
+}
+
 .w-full {
   width: 100% !important;
 }
@@ -121,8 +140,16 @@ MARK: TAILWIND
   font-weight: bold !important;
 }
 
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
+}
+
 .text-xs {
   font-size: 0.75rem !important;
+}
+
+.text-sm {
+  font-size: 0.875rem !important;
 }
 
 .text-lg {
@@ -514,7 +541,7 @@ MARK: Expanded View
   font-weight: bold !important;
 }
 
-.cl_expandedview_graytext {
+.cl_graytext {
   color: rgb(124, 142, 163) !important;
 }
 
@@ -629,6 +656,10 @@ MARK: Theme Settings Modal
 MARK: Settings Page
 */
 
+.cl_settingspage_container {
+  margin-bottom: 100px !important;
+}
+
 .cl_themesettings_togglecontainer {
   flex-grow: 1 !important;
   position: relative !important;
@@ -656,5 +687,27 @@ MARK: Settings Page
 
 .cl_squaredialogbutton_icontranslate {
   transform: translateY(2px) !important;
+}
+
+.cl_divider {
+  height: 1px !important;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 100px !important;
+  width: 100% !important;
+}
+
+.cl_profileentry_backdrop {
+  width: 100% !important;
+  flex: 1 1 0% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.cl_profileentry_actionbutton {
+  width: fit-content !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
 }
 `;

@@ -5,7 +5,7 @@ import { FiPlusCircle } from "react-icons/fi";
 import { useForcedRerender } from "../../hooks";
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 
-export function PresetSelectionDropdown() {
+export function PresetSelectionDropdown({ noBottomSeparator }: { noBottomSeparator?: boolean }) {
   const { themes, selectedPreset } = useCSSLoaderValues();
   const { changePreset } = useCSSLoaderActions();
   const presets = themes.filter((e) => e.flags.includes(Flags.isPreset));
@@ -18,6 +18,7 @@ export function PresetSelectionDropdown() {
       {render && (
         <PanelSectionRow>
           <DropdownItem
+            bottomSeparator={noBottomSeparator ? "none" : "standard"}
             label="Selected Profile"
             selectedOption={
               hasInvalidPresetState ? "Invalid State" : selectedPreset?.name || "None"

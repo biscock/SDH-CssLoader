@@ -35,7 +35,7 @@ export function ExpandedViewScrollingSection() {
             <span className="cl_expandedview_version">{data.version}</span>
           </div>
           {/* Author / Modified Date */}
-          <Focusable className="flex gap-1 cl_expandedview_graytext">
+          <Focusable className="flex gap-1 cl_graytext">
             <Focusable
               onOKActionDescription="View Profile"
               focusClassName="gpfocuswithin"
@@ -56,9 +56,7 @@ export function ExpandedViewScrollingSection() {
           <Selectable className="flex flex-col gap-1">
             <span className="font-bold">Description</span>
             <span className={data.description.length > 400 ? "text-sm" : ""}>
-              {data.description || (
-                <i className="cl_expandedview_graytext">No description provided.</i>
-              )}
+              {data.description || <i className="cl_graytext">No description provided.</i>}
             </span>
           </Selectable>
           {/* Targets */}

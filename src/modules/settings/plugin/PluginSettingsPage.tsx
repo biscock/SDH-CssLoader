@@ -1,28 +1,16 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useDeckyPatchStateActions, useDeckyPatchStateValues } from "@/decky-patches";
 import { ButtonItem, DropdownItem, Focusable, ToggleField } from "@decky/ui";
+import { Selectable } from "../../../lib/primitives";
 
 export function PluginSettingsPage() {
-  const { serverState, watchState, translationsBranch } = useCSSLoaderValues();
+  const { serverState, watchState, translationsBranch, mappingsVersionStr } = useCSSLoaderValues();
   const { setServerState, setWatchState, setTranslationBranch } = useCSSLoaderActions();
 
   const { unminifyModeOn, navPatchInstance } = useDeckyPatchStateValues();
   const { setNavPatchState, setUnminifyModeState, dumpMappings } = useDeckyPatchStateActions();
   return (
-    <Focusable>
-      <Focusable>
-        <DropdownItem
-          rgOptions={[
-            { data: "-1", label: "Auto-Detect" },
-            { data: "0", label: "Force Stable" },
-            { data: "1", label: "Force Beta" },
-          ]}
-          selectedOption={translationsBranch}
-          label="Steam Client Branch"
-          description="This allows us to provide the correct translations for your system."
-          onChange={(data) => setTranslationBranch(data.data)}
-        />
-      </Focusable>
+    <Focusable className="cl_settingspage_container">
       <Focusable>
         <ToggleField
           checked={serverState}
@@ -66,6 +54,24 @@ export function PluginSettingsPage() {
           Save
         </ButtonItem>
       </Focusable>
+      <Focusable>
+        <DropdownItem
+          rgOptions={[
+            { data: "-1", label: "Auto-Detect" },
+            { data: "0", label: "Force Stable" },
+            { data: "1", label: "Force Beta" },
+          ]}
+          selectedOption={translationsBranch}
+          label="Steam Client Branch"
+          description="This allows us to provide the correct translations for your system."
+          onChange={(data) => setTranslationBranch(data.data)}
+        />
+      </Focusable>
+      <Selectable className="mt-4">
+        <span>
+          <b>Mappings Version:</b> <span className="font-mono">{mappingsVersionStr}</span>
+        </span>
+      </Selectable>
     </Focusable>
   );
 }
