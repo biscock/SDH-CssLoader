@@ -1,8 +1,8 @@
 import { backend } from "@/backend";
 import type { Backend } from "@cssloader/backend";
 import { classModuleMap, Patch } from "@decky/ui";
-import { generateStoreSelector } from "@zusteebles";
 import { createStore } from "zustand";
+import { generateStoreSelector } from "zusteebles";
 import { disableNavPatch, enableNavPatch } from "./nav-patch";
 import { disableUnminifyMode, enableUnminifyMode } from "./unminify-mode";
 import { initializeUnminificationMap, PythonMappings } from "./unminify-mode/unminification-map";

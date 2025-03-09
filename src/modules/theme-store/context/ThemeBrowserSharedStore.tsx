@@ -1,7 +1,7 @@
 // This is for things that are shared across the entire Theme Browser page and all tabs.
 
-import { generateStoreSelector } from "@zusteebles";
 import { createStore } from "zustand";
+import { generateStoreSelector } from "zusteebles";
 import { ColumnNumbers } from "../../../lib/components/theme-card";
 
 interface ThemeBrowserSharedStoreValues {

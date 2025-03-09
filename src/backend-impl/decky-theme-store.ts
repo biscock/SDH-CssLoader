@@ -4,7 +4,7 @@ import {
   ICSSLoaderState,
   createCSSLoaderStore,
 } from "@cssloader/backend";
-import { generateStoreSelector } from "@zusteebles";
+import { generateStoreSelector } from "zusteebles";
 import { backend } from "./decky-backend-service";
 
 export const cssLoaderStore = createCSSLoaderStore(backend);
