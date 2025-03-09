@@ -15,6 +15,7 @@ export function LoggedOutView() {
           ))}
         </Focusable>
       </Focusable>
+      <div className="cl_divider" />
       <Focusable className="flex flex-col gap-2">
         <SectionTitle>Your Profiles</SectionTitle>
         <Focusable className="flex flex-col gap-1">

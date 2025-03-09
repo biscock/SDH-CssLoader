@@ -14,7 +14,7 @@ export function ProfileInstalledEntry({ data }: { data: Theme }) {
 
   return (
     <PanelSectionRow>
-      <Focusable className="flex gap-2 py-0 px-[5px]">
+      <Focusable className="flex gap-2 p-0">
         <div className="cl_profileentry_backdrop">
           <span>{data.display_name}</span>
         </div>

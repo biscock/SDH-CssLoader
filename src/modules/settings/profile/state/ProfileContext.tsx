@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 const ProfileContext = createContext<IProfileContext>({} as IProfileContext);
 
 // TODO: Potentially this should be moved to @cssloader as it isn't decky dependent
+// TODO: Also, this should be zustand using .subscribe on the cssloader store, I just was lazy implementing it this way here
 interface IProfileContextValues {
   displayMode: "offline" | "loggedout" | "loggedin";
   downloadedProfiles: Theme[];
