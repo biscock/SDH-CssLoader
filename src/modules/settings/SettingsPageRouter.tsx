@@ -3,8 +3,8 @@ import { FaFolder, FaGear, FaGithub, FaHeart, FaPaintRoller } from "react-icons/
 import { CreditsPage } from "./credits";
 import { DonatePage } from "./donate/DonatePage";
 import { PluginSettingsPage } from "./plugin";
-import { ProfileSettings } from "./profile";
-import { ThemeSettings, ThemeSettingsPage } from "./theme";
+import { ProfileSettingsPage } from "./profile";
+import { ThemeSettingsPage } from "./theme";
 
 export function SettingsPageRouter() {
   return (
@@ -20,7 +20,7 @@ export function SettingsPageRouter() {
           title: "Profiles",
           icon: <FaFolder />,
           route: "/cssloader/settings/profiles",
-          content: <ProfileSettings />,
+          content: <ProfileSettingsPage />,
         },
         {
           title: "Settings",
