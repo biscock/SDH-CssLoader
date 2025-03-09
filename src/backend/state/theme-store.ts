@@ -47,23 +47,19 @@ export interface CSSLoaderStateValues {
 }
 
 export interface CSSLoaderStateActions {
+  // Store utils
   initializeStore: () => Promise<void>;
   deactivate: () => void;
-  toast: (message: string) => void;
+
+  // Basic functions
   reloadPlugin: () => Promise<void>;
-  reloadThemes: () => Promise<void>;
-  refreshToken: () => Promise<string | undefined>;
-  apiFetch: <Return>(url: string, request?: RequestInit, options?: FetchOptions) => Promise<Return>;
-  logInWithShortToken: (newToken?: string) => Promise<void>;
-  logOut: () => void;
-  getThemes: () => Promise<void>;
-  changePreset: (presetName: string) => Promise<void>;
   testBackend: () => Promise<void>;
-  bulkThemeUpdateCheck: () => Promise<void>;
-  scheduleBulkThemeUpdateCheck: () => void;
-  getMotd: () => Promise<void>;
-  hideMotd: () => Promise<void>;
-  regenerateCurrentPreset: () => Promise<void>;
+  toast: (message: string) => void;
+  apiFetch: <Return>(url: string, request?: RequestInit, options?: FetchOptions) => Promise<Return>;
+
+  // Theme actions
+  reloadThemes: () => Promise<void>;
+  getThemes: () => Promise<void>;
   setPatchValue: (themeName: string, patchName: string, value: string) => Promise<void>;
   setComponentValue: (
     themeName: string,
@@ -71,7 +67,6 @@ export interface CSSLoaderStateActions {
     componentName: string,
     value: string
   ) => Promise<void>;
-  installTheme: (themeId: string) => Promise<void>;
   toggleTheme: (
     theme: Theme,
     value: boolean,
@@ -81,11 +76,32 @@ export interface CSSLoaderStateActions {
   pinTheme: (themeId: string) => Promise<void>;
   unpinTheme: (themeId: string) => Promise<void>;
   deleteTheme: (themeId: string, refreshAfter?: boolean) => Promise<void>;
+
+  // Profile actions
+  changePreset: (presetName: string) => Promise<void>;
+  regenerateCurrentPreset: () => Promise<void>;
+  createPreset: (presetName: string) => Promise<void>;
+
+  // Account actions
+  refreshToken: () => Promise<string | undefined>;
+  logInWithShortToken: (newToken?: string) => Promise<void>;
+  logOut: () => void;
+
+  // Theme store actions
+  bulkThemeUpdateCheck: () => Promise<void>;
+  scheduleBulkThemeUpdateCheck: () => void;
+  installTheme: (themeId: string) => Promise<void>;
+
+  // Other api methods
+  getMotd: () => Promise<void>;
+  hideMotd: () => Promise<void>;
+  getUploadedThemes: () => Promise<PartialCSSThemeInfo[]>;
+  publishProfile: (profileName: string, isPublic: boolean) => Promise<void>;
+
+  // Settings related actions
   setTranslationBranch: (branch: "-1" | "0" | "1") => Promise<void>;
   setServerState: (state: boolean) => Promise<void>;
   setWatchState: (state: boolean) => Promise<void>;
-  getUploadedThemes: () => Promise<PartialCSSThemeInfo[]>;
-  publishProfile: (profileName: string, isPublic: boolean) => Promise<void>;
 }
 
 export interface FetchOptions {
@@ -178,7 +194,8 @@ export const createCSSLoaderStore = (backend: Backend) =>
       translationsBranch: "-1" as "-1",
       patrons: [],
 
-      initializeStore: async () => {
+      // MARK: Store utils
+      async initializeStore() {
         try {
           const dummyFunctionResult = await backend.dummyFunction();
           set({ dummyFunctionResult });
@@ -241,14 +258,13 @@ export const createCSSLoaderStore = (backend: Backend) =>
           console.log("CSSLoader - Error During Initialzation", error);
         }
       },
-      deactivate: () => {
+      deactivate() {
         const { updateCheckTimeout } = get();
         if (updateCheckTimeout) clearTimeout(updateCheckTimeout);
       },
-      toast: (message: string) => {
-        backend.toast("CSS Loader", message);
-      },
-      reloadPlugin: async () => {
+
+      // MARK: Basic functions
+      async reloadPlugin() {
         set({ isWorking: true });
         try {
           const { reloadThemes, initializeStore, bulkThemeUpdateCheck, dummyFunctionResult } =
@@ -269,7 +285,21 @@ export const createCSSLoaderStore = (backend: Backend) =>
         } catch (error) {}
         set({ isWorking: false });
       },
-      reloadThemes: async () => {
+      async testBackend() {
+        try {
+          const dummyFunctionResult = await backend.dummyFunction();
+          set({ dummyFunctionResult });
+        } catch (error) {
+          set({ dummyFunctionResult: false });
+        }
+      },
+      toast(message: string) {
+        backend.toast("CSS Loader", message);
+      },
+      apiFetch: apiFetch,
+
+      // MARK: Theme actions
+      async reloadThemes() {
         try {
           await backend.reset();
           await get().getThemes();
@@ -277,7 +307,185 @@ export const createCSSLoaderStore = (backend: Backend) =>
           console.error("CSSLoader - Error Reloading Themes", error);
         }
       },
-      logInWithShortToken: async (newToken?: string) => {
+      async getThemes() {
+        try {
+          const { fails: themeErrors } = await backend.getThemeErrors();
+          set({ themeErrors });
+          const themes = await backend.getThemes();
+          set({
+            themes,
+            selectedPreset: themes.find((e) => e.flags.includes(Flags.isPreset) && e.enabled),
+          });
+        } catch (error) {
+          console.error("CSSLoader - Error Fetching Themes", error);
+        }
+      },
+      async setPatchValue(themeName: string, patchName: string, value: string) {
+        try {
+          await backend.setPatchOfTheme(themeName, patchName, value);
+          const { selectedPreset, regenerateCurrentPreset } = get();
+          if (selectedPreset && selectedPreset.dependencies.includes(themeName)) {
+            await regenerateCurrentPreset();
+          }
+        } catch (error) {}
+      },
+      async setComponentValue(
+        themeName: string,
+        patchName: string,
+        componentName: string,
+        value: string
+      ) {
+        try {
+          await backend.setComponentOfThemePatch(themeName, patchName, componentName, value);
+          const { selectedPreset, regenerateCurrentPreset, getThemes } = get();
+          if (selectedPreset && selectedPreset.dependencies.includes(themeName)) {
+            await regenerateCurrentPreset();
+          }
+          // TODO: POTENTIALLY NOT NEEDED
+          await getThemes();
+        } catch (error) {}
+      },
+      async toggleTheme(
+        theme: Theme,
+        value: boolean,
+        enableDeps?: boolean,
+        enableDepValues?: boolean
+      ) {
+        try {
+          await backend.setThemeState(theme.name, value, enableDeps, enableDepValues);
+          await get().getThemes();
+
+          if (!enableDeps && theme.dependencies.length > 0) {
+            if (value) {
+              backend.toast(
+                `${theme.display_name} enabled other themes`,
+                `${theme.dependencies.length} other theme${
+                  theme.dependencies.length === 1 ? " is" : "s are"
+                } required by ${theme.display_name}`
+              );
+            } else if (!theme.flags.includes(Flags.dontDisableDeps)) {
+              backend.toast(
+                `${theme.display_name} disabled other themes`,
+                `${theme.dependencies.length} other theme${
+                  theme.dependencies.length === 1 ? " was" : "s were"
+                } originally enabled by ${theme.display_name}`
+              );
+            }
+          }
+          const { selectedPreset } = get();
+          if (selectedPreset) {
+            await get().regenerateCurrentPreset();
+            await get().getThemes();
+          }
+        } catch (error) {
+          console.error("CSSLoader - Error Toggling Theme", error);
+        }
+      },
+      async pinTheme(themeId: string) {
+        try {
+          const { unpinnedThemes } = get();
+          const unpinnedClone = unpinnedThemes.filter((e) => e !== themeId);
+          set({ unpinnedThemes: unpinnedClone });
+          backend.storeWrite("unpinnedThemes", JSON.stringify(unpinnedClone));
+        } catch (error) {}
+      },
+      async unpinTheme(themeId: string) {
+        try {
+          const { unpinnedThemes } = get();
+          const unpinnedClone = [...unpinnedThemes, themeId];
+          set({ unpinnedThemes: unpinnedClone });
+          backend.storeWrite("unpinnedThemes", JSON.stringify(unpinnedClone));
+        } catch (error) {}
+      },
+      async deleteTheme(themeId: string, refreshAfter: boolean = true) {
+        set({ isWorking: true });
+        try {
+          const { themes, unpinnedThemes, updateStatuses } = get();
+          // The python defs say theme name, just gonna assume it's this and not ID
+          const themeName = themes.find((e) => e.id === themeId)?.name;
+          if (!themeName) return;
+          await backend.deleteTheme(themeName);
+
+          // This doesn't actually 'pin' the theme, it just removes it from the unpinned list so that if it's ever reinstalled it isn't hidden
+          if (unpinnedThemes.includes(themeId)) {
+            get().pinTheme(themeId);
+          }
+
+          set({ updateStatuses: updateStatuses.filter((e) => e[0] !== themeId) });
+
+          refreshAfter && (await get().getThemes());
+        } catch (error) {}
+        set({ isWorking: false });
+      },
+
+      // MARK: Profile actions
+      async changePreset(presetName: string) {
+        try {
+          const { selectedPreset, themes } = get();
+
+          if (selectedPreset) {
+            // If you already have a preset enabled, disabling the preset disables all of it's dependencies with it.
+            await backend.setThemeState(selectedPreset.name, false);
+          } else {
+            // If you don't have a preset, you need to disable all currently enabled themes and THEN enable the preset
+            await Promise.all(
+              themes.filter((e) => e.enabled).map((e) => backend.setThemeState(e.name, false))
+            );
+          }
+          // Actually enabling the preset itself
+          if (presetName !== "None") {
+            await backend.setThemeState(presetName, true);
+          }
+          await get().getThemes();
+        } catch (error) {}
+      },
+      async regenerateCurrentPreset() {
+        try {
+          const { selectedPreset, themes } = get();
+          if (!selectedPreset) return;
+          await backend.generatePresetThemeFromThemeNames(
+            selectedPreset.name,
+            // This will handle if you just toggles/un-toggled a theme, as well as if you changed a patch/component
+            themes.filter((e) => e.enabled && !e.flags.includes(Flags.isPreset)).map((e) => e.name)
+          );
+        } catch (error) {}
+      },
+      async createPreset(presetName: string) {},
+
+      // MARK: Account actions
+      async refreshToken() {
+        const { apiFullToken, apiTokenExpireDate } = get();
+        if (!apiFullToken) {
+          return undefined;
+        }
+        if (apiTokenExpireDate === undefined || new Date().valueOf() < apiTokenExpireDate) {
+          return apiFullToken;
+        }
+        try {
+          const json = await backend.fetch<{ token: string }>(`${apiUrl}/auth/refresh_token`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiFullToken}`,
+            },
+          });
+
+          if (!json.token) {
+            throw new FetchError(
+              "Token Refresh Failed",
+              `${apiUrl}/auth/refresh_token`,
+              "No Token in Response"
+            );
+          }
+          set({
+            apiFullToken: json.token,
+            apiTokenExpireDate: new Date().valueOf() + 1000 * 10 * 60,
+          });
+          return json.token;
+        } catch (error) {
+          throw error;
+        }
+      },
+      async logInWithShortToken(newToken?: string) {
         try {
           const token = newToken ?? get().apiShortToken;
           if (!token) {
@@ -314,7 +522,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
           backend.toast("CSSLoader", "Failed to log in");
         }
       },
-      logOut: () => {
+      logOut() {
         set({
           apiShortToken: "",
           apiFullToken: "",
@@ -323,81 +531,9 @@ export const createCSSLoaderStore = (backend: Backend) =>
         });
         backend.storeWrite("shortToken", "");
       },
-      refreshToken: async (): Promise<string | undefined> => {
-        const { apiFullToken, apiTokenExpireDate } = get();
-        if (!apiFullToken) {
-          return undefined;
-        }
-        if (apiTokenExpireDate === undefined || new Date().valueOf() < apiTokenExpireDate) {
-          return apiFullToken;
-        }
-        try {
-          const json = await backend.fetch<{ token: string }>(`${apiUrl}/auth/refresh_token`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiFullToken}`,
-            },
-          });
 
-          if (!json.token) {
-            throw new FetchError(
-              "Token Refresh Failed",
-              `${apiUrl}/auth/refresh_token`,
-              "No Token in Response"
-            );
-          }
-          set({
-            apiFullToken: json.token,
-            apiTokenExpireDate: new Date().valueOf() + 1000 * 10 * 60,
-          });
-          return json.token;
-        } catch (error) {
-          throw error;
-        }
-      },
-      apiFetch: apiFetch,
-      getThemes: async () => {
-        try {
-          const { fails: themeErrors } = await backend.getThemeErrors();
-          set({ themeErrors });
-          const themes = await backend.getThemes();
-          set({
-            themes,
-            selectedPreset: themes.find((e) => e.flags.includes(Flags.isPreset) && e.enabled),
-          });
-        } catch (error) {
-          console.error("CSSLoader - Error Fetching Themes", error);
-        }
-      },
-      changePreset: async (presetName: string) => {
-        try {
-          const { selectedPreset, themes } = get();
-
-          if (selectedPreset) {
-            // If you already have a preset enabled, disabling the preset disables all of it's dependencies with it.
-            await backend.setThemeState(selectedPreset.name, false);
-          } else {
-            // If you don't have a preset, you need to disable all currently enabled themes and THEN enable the preset
-            await Promise.all(
-              themes.filter((e) => e.enabled).map((e) => backend.setThemeState(e.name, false))
-            );
-          }
-          // Actually enabling the preset itself
-          if (presetName !== "None") {
-            await backend.setThemeState(presetName, true);
-          }
-          await get().getThemes();
-        } catch (error) {}
-      },
-      testBackend: async () => {
-        try {
-          const dummyFunctionResult = await backend.dummyFunction();
-          set({ dummyFunctionResult });
-        } catch (error) {
-          set({ dummyFunctionResult: false });
-        }
-      },
-      bulkThemeUpdateCheck: async () => {
+      // MARK: Theme store actions
+      async bulkThemeUpdateCheck() {
         const { themes } = get();
 
         async function fetchThemeIDS(idsToQuery: string[]): Promise<MinimalCSSThemeInfo[]> {
@@ -430,7 +566,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
         });
         set({ updateStatuses: updateStatusArr });
       },
-      scheduleBulkThemeUpdateCheck: () => {
+      scheduleBulkThemeUpdateCheck() {
         function recursiveCheck() {
           const timeout = setTimeout(async () => {
             // Putting this in the function as im not sure the value would update otherwise
@@ -455,59 +591,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
         set({ nextUpdateCheckTime: new Date().valueOf() + 24 * 60 * 60 * 1000 });
         recursiveCheck();
       },
-      getMotd: async () => {
-        try {
-          const value = await apiFetch<Motd>("/motd");
-          if (value) {
-            set({ motd: value });
-          }
-        } catch (error) {}
-      },
-      hideMotd: async () => {
-        try {
-          const { motd } = get();
-          if (!motd) return;
-          await backend.storeWrite("hiddenMotd", motd.id);
-          set({ hiddenMotdId: motd.id });
-        } catch (error) {}
-      },
-      regenerateCurrentPreset: async () => {
-        try {
-          const { selectedPreset, themes } = get();
-          if (!selectedPreset) return;
-          await backend.generatePresetThemeFromThemeNames(
-            selectedPreset.name,
-            // This will handle if you just toggles/un-toggled a theme, as well as if you changed a patch/component
-            themes.filter((e) => e.enabled && !e.flags.includes(Flags.isPreset)).map((e) => e.name)
-          );
-        } catch (error) {}
-      },
-      setPatchValue: async (themeName: string, patchName: string, value: string) => {
-        try {
-          await backend.setPatchOfTheme(themeName, patchName, value);
-          const { selectedPreset, regenerateCurrentPreset } = get();
-          if (selectedPreset && selectedPreset.dependencies.includes(themeName)) {
-            await regenerateCurrentPreset();
-          }
-        } catch (error) {}
-      },
-      setComponentValue: async (
-        themeName: string,
-        patchName: string,
-        componentName: string,
-        value: string
-      ) => {
-        try {
-          await backend.setComponentOfThemePatch(themeName, patchName, componentName, value);
-          const { selectedPreset, regenerateCurrentPreset, getThemes } = get();
-          if (selectedPreset && selectedPreset.dependencies.includes(themeName)) {
-            await regenerateCurrentPreset();
-          }
-          // TODO: POTENTIALLY NOT NEEDED
-          await getThemes();
-        } catch (error) {}
-      },
-      installTheme: async (themeId: string) => {
+      async installTheme(themeId: string) {
         set({ isWorking: true });
         try {
           await backend.downloadThemeFromUrl(themeId, apiUrl);
@@ -519,104 +603,22 @@ export const createCSSLoaderStore = (backend: Backend) =>
         } catch (error) {}
         set({ isWorking: false });
       },
-      toggleTheme: async (
-        theme: Theme,
-        value: boolean,
-        enableDeps?: boolean,
-        enableDepValues?: boolean
-      ) => {
-        try {
-          await backend.setThemeState(theme.name, value, enableDeps, enableDepValues);
-          await get().getThemes();
 
-          if (!enableDeps && theme.dependencies.length > 0) {
-            if (value) {
-              backend.toast(
-                `${theme.display_name} enabled other themes`,
-                `${theme.dependencies.length} other theme${
-                  theme.dependencies.length === 1 ? " is" : "s are"
-                } required by ${theme.display_name}`
-              );
-            } else if (!theme.flags.includes(Flags.dontDisableDeps)) {
-              backend.toast(
-                `${theme.display_name} disabled other themes`,
-                `${theme.dependencies.length} other theme${
-                  theme.dependencies.length === 1 ? " was" : "s were"
-                } originally enabled by ${theme.display_name}`
-              );
-            }
+      // MARK: Other api methods
+      async getMotd() {
+        try {
+          const value = await apiFetch<Motd>("/motd");
+          if (value) {
+            set({ motd: value });
           }
-          const { selectedPreset } = get();
-          if (selectedPreset) {
-            await get().regenerateCurrentPreset();
-            await get().getThemes();
-          }
-        } catch (error) {
-          console.error("CSSLoader - Error Toggling Theme", error);
-        }
-      },
-      pinTheme: async (themeId: string) => {
-        try {
-          const { unpinnedThemes } = get();
-          const unpinnedClone = unpinnedThemes.filter((e) => e !== themeId);
-          set({ unpinnedThemes: unpinnedClone });
-          backend.storeWrite("unpinnedThemes", JSON.stringify(unpinnedClone));
         } catch (error) {}
       },
-      unpinTheme: async (themeId: string) => {
+      async hideMotd() {
         try {
-          const { unpinnedThemes } = get();
-          const unpinnedClone = [...unpinnedThemes, themeId];
-          set({ unpinnedThemes: unpinnedClone });
-          backend.storeWrite("unpinnedThemes", JSON.stringify(unpinnedClone));
-        } catch (error) {}
-      },
-      deleteTheme: async (themeId: string, refreshAfter: boolean = true) => {
-        set({ isWorking: true });
-        try {
-          const { themes, unpinnedThemes, updateStatuses } = get();
-          // The python defs say theme name, just gonna assume it's this and not ID
-          const themeName = themes.find((e) => e.id === themeId)?.name;
-          if (!themeName) return;
-          await backend.deleteTheme(themeName);
-
-          // This doesn't actually 'pin' the theme, it just removes it from the unpinned list so that if it's ever reinstalled it isn't hidden
-          if (unpinnedThemes.includes(themeId)) {
-            get().pinTheme(themeId);
-          }
-
-          set({ updateStatuses: updateStatuses.filter((e) => e[0] !== themeId) });
-
-          refreshAfter && (await get().getThemes());
-        } catch (error) {}
-        set({ isWorking: false });
-      },
-      setTranslationBranch: async (branch: "-1" | "0" | "1") => {
-        try {
-          await backend.storeWrite("beta_translations", branch);
-          const newValue = await backend.storeRead("beta_translations");
-          set({
-            translationsBranch: ["-1", "0", "1"].includes(newValue)
-              ? (newValue as "-1" | "0" | "1")
-              : "-1",
-          });
-        } catch (error) {}
-      },
-      setServerState: async (state: boolean) => {
-        try {
-          if (state) {
-            await backend.enableServer();
-          }
-          await backend.storeWrite("server", state ? "1" : "0");
-          const newValue = await backend.getServerState();
-          set({ serverState: newValue });
-        } catch (error) {}
-      },
-      setWatchState: async (state: boolean) => {
-        try {
-          await backend.toggleWatchState(state, false);
-          const newValue = await backend.getWatchState();
-          set({ watchState: newValue });
+          const { motd } = get();
+          if (!motd) return;
+          await backend.storeWrite("hiddenMotd", motd.id);
+          set({ hiddenMotdId: motd.id });
         } catch (error) {}
       },
       async getUploadedThemes() {
@@ -674,6 +676,36 @@ export const createCSSLoaderStore = (backend: Backend) =>
         } catch (error) {
           console.log(error);
         }
+      },
+
+      // MARK: Settings related actions
+      async setTranslationBranch(branch: "-1" | "0" | "1") {
+        try {
+          await backend.storeWrite("beta_translations", branch);
+          const newValue = await backend.storeRead("beta_translations");
+          set({
+            translationsBranch: ["-1", "0", "1"].includes(newValue)
+              ? (newValue as "-1" | "0" | "1")
+              : "-1",
+          });
+        } catch (error) {}
+      },
+      async setServerState(state: boolean) {
+        try {
+          if (state) {
+            await backend.enableServer();
+          }
+          await backend.storeWrite("server", state ? "1" : "0");
+          const newValue = await backend.getServerState();
+          set({ serverState: newValue });
+        } catch (error) {}
+      },
+      async setWatchState(state: boolean) {
+        try {
+          await backend.toggleWatchState(state, false);
+          const newValue = await backend.getWatchState();
+          set({ watchState: newValue });
+        } catch (error) {}
       },
     };
   });
