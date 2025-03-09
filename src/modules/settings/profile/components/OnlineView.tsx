@@ -1,9 +1,9 @@
 import { Focusable } from "@decky/ui";
-import { ProfileInstalledEntry } from "./ProfileInstalledEntry";
 import { useProfileContext } from "../state";
-import { SectionTitle } from "./SectionTitle";
-import { SectionSubtitle } from "./SectionSubtitle";
+import { ProfileInstalledEntry } from "./ProfileInstalledEntry";
 import { ProfileUploadedEntry } from "./ProfileUploadedEntry";
+import { SectionSubtitle } from "./SectionSubtitle";
+import { SectionTitle } from "./SectionTitle";
 
 export function OnlineView() {
   const { downloadedProfiles, localProfiles, uploadedProfiles } = useProfileContext();

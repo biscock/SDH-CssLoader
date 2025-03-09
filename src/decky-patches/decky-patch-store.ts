@@ -1,10 +1,10 @@
-import { classModuleMap, Patch } from "@decky/ui";
+import { backend } from "@/backend";
 import type { Backend } from "@cssloader/backend";
-import { createStore, useStore } from "zustand";
+import { classModuleMap, Patch } from "@decky/ui";
+import { generateStoreSelector } from "@zusteebles";
+import { createStore } from "zustand";
 import { disableNavPatch, enableNavPatch } from "./nav-patch";
 import { disableUnminifyMode, enableUnminifyMode } from "./unminify-mode";
-import { backend } from "@/backend";
-import { generateStoreSelector } from "@zusteebles";
 import { initializeUnminificationMap, PythonMappings } from "./unminify-mode/unminification-map";
 
 interface DeckyPatchStoreValues {

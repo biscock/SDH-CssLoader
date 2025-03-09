@@ -1,10 +1,10 @@
-import { shortenNumber, useThemeInstallState, ThemeSettingsModal } from "@/lib";
-import { useExpandedViewAction, useExpandedViewValue } from "../context";
-import { FaRegStar, FaStar } from "react-icons/fa";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
+import { shortenNumber, ThemeSettingsModal, useThemeInstallState } from "@/lib";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { useEffect, useRef, useState } from "react";
-import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
+import { FaRegStar, FaStar } from "react-icons/fa";
 import { ImCog } from "react-icons/im";
+import { useExpandedViewAction, useExpandedViewValue } from "../context";
 
 export function ExpandedViewButtonsSection() {
   const data = useExpandedViewValue("data");

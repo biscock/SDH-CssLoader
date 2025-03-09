@@ -1,11 +1,11 @@
-import { Modal } from "../../../primitives";
-import { PartialCSSThemeInfo, ThemeQueryResponse, UserInfo } from "@/types";
-import { useEffect, useRef, useState } from "react";
 import { useCSSLoaderActions } from "@/backend";
-import { SupporterIcon } from "./SupporterIcon";
-import { ImSpinner5 } from "react-icons/im";
+import { PartialCSSThemeInfo, ThemeQueryResponse, UserInfo } from "@/types";
 import { Focusable } from "@decky/ui";
+import { useEffect, useRef, useState } from "react";
+import { ImSpinner5 } from "react-icons/im";
+import { Modal } from "../../../primitives";
 import { ThemeCard, ThemeCardCSSVariableProvider } from "../../theme-card";
+import { SupporterIcon } from "./SupporterIcon";
 
 export function AuthorViewModal({
   closeModal,

@@ -1,8 +1,8 @@
-import { PartialCSSThemeInfo } from "@/types";
-import { forwardRef } from "react";
 import { useCSSLoaderValues } from "@/backend";
-import { AiOutlineDownload } from "react-icons/ai";
+import { PartialCSSThemeInfo } from "@/types";
 import { Focusable } from "@decky/ui";
+import { forwardRef } from "react";
+import { AiOutlineDownload } from "react-icons/ai";
 import { FaBullseye, FaDownload, FaStar } from "react-icons/fa6";
 import { useThemeInstallState } from "../../hooks";
 // Hard-coded path to prevent require cycle

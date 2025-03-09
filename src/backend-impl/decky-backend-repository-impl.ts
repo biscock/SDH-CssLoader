@@ -1,5 +1,5 @@
-import { callable, toaster, fetchNoCors } from "@decky/api";
 import { CallError, FetchError, type IBackendRepository } from "@cssloader/backend";
+import { callable, fetchNoCors, toaster } from "@decky/api";
 
 class DeckyBackendRepository implements IBackendRepository {
   async call<Args extends any[] = [], Return = void>(methodName: string, args: Args) {

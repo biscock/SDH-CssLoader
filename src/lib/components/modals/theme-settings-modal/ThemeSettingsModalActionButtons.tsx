@@ -1,9 +1,9 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
-import { LocalThemeStatus, Theme } from "@/types";
+import { Theme } from "@/types";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { FaDownload, FaEye, FaEyeSlash, FaTrash } from "react-icons/fa6";
-import { DeleteConfirmationModal } from "../delete-confirmation-modal";
 import { useThemeInstallState } from "../../../hooks";
+import { DeleteConfirmationModal } from "../delete-confirmation-modal";
 
 // TODO: Re-add star status to this modal
 export function ThemeSettingsModalActionButtons({

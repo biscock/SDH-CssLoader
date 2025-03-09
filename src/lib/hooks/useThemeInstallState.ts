@@ -1,5 +1,5 @@
-import { LocalThemeStatus, PartialCSSThemeInfo, Theme } from "@/types";
 import { useCSSLoaderValues } from "@/backend";
+import { LocalThemeStatus, PartialCSSThemeInfo, Theme } from "@/types";
 
 export function useThemeInstallState(theme: Theme | PartialCSSThemeInfo): LocalThemeStatus {
   const { updateStatuses } = useCSSLoaderValues();

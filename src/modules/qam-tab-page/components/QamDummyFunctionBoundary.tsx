@@ -1,5 +1,5 @@
 import { useCSSLoaderValues } from "@/backend";
-import { PanelSection, PanelSectionRow } from "@decky/ui";
+import { PanelSection } from "@decky/ui";
 
 export function QamDummyFunctionBoundary({ children }: { children: React.ReactNode }) {
   const { dummyFunctionResult } = useCSSLoaderValues();

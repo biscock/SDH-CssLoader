@@ -1,4 +1,4 @@
-import { APIBlob, BlobType, Theme, ThemeError } from "../../types";
+import { APIBlob, Theme, ThemeError } from "../../types";
 import { IBackendRepository } from "../repositories";
 
 export class Backend {

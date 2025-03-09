@@ -1,13 +1,13 @@
-import { createContext, useContext, useRef } from "react";
+import { getCSSLoaderState } from "@/backend";
 import {
   FilterQueryResponse,
   PartialCSSThemeInfo,
   ThemeQueryRequest,
   ThemeQueryResponse,
 } from "@/types";
-import { StoreApi, createStore, useStore } from "zustand";
-import { getCSSLoaderState } from "@/backend";
 import { isEqual } from "lodash";
+import { createContext, useContext, useRef } from "react";
+import { StoreApi, createStore, useStore } from "zustand";
 import { getThemeBrowserSharedState, themeBrowserSharedStore } from "./ThemeBrowserSharedStore";
 
 interface ThemeBrowserStoreValues {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // This should only be used to fix weird bugs with how valve's toggles/dropdowns/etc don't update state
 // If used, state why in a comment next to the invocation

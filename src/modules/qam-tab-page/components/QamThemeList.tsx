@@ -1,6 +1,6 @@
+import { Flags } from "@/types";
 import { Focusable } from "@decky/ui";
 import { useCSSLoaderValues } from "../../../backend-impl/decky-theme-store";
-import { Flags } from "@/types";
 import { QamThemeToggle } from "./QamThemeToggle";
 
 export function QamThemeList() {

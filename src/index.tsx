@@ -1,12 +1,12 @@
+import { getCSSLoaderState } from "@/backend";
 import { StyleProvider, TitleView } from "@/lib";
-import { RiPaintFill } from "react-icons/ri";
 import { QamTabPage } from "@/modules/qam-tab-page";
 import { definePlugin, routerHook } from "@decky/api";
-import { getCSSLoaderState } from "@/backend";
+import { RiPaintFill } from "react-icons/ri";
 import { getDeckyPatchState } from "./decky-patches";
-import { ThemeStoreRouter } from "./modules/theme-store";
 import { ExpandedViewPage } from "./modules/expanded-view";
 import { SettingsPageRouter } from "./modules/settings";
+import { ThemeStoreRouter } from "./modules/theme-store";
 
 export default definePlugin(() => {
   getCSSLoaderState().initializeStore();

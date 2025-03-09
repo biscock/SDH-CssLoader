@@ -3,9 +3,9 @@ import { ThemeErrorCard } from "@/lib";
 import { Flags } from "@/types";
 import { DialogButton, Focusable } from "@decky/ui";
 import { useMemo, useState } from "react";
-import { UpdateAllThemesButton } from "./UpdateAllThemesButton";
-import { ThemeSettingsEntry } from "./ThemeSettingsEntry";
 import { ThemeDeleteMenu } from "./ThemeDeleteMenu";
+import { ThemeSettingsEntry } from "./ThemeSettingsEntry";
+import { UpdateAllThemesButton } from "./UpdateAllThemesButton";
 
 export function ThemeSettingsPage() {
   const [deleteMode, setDeleteMode] = useState(false);

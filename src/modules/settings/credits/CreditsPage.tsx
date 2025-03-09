@@ -1,4 +1,4 @@
-import { Focusable, Navigation, ScrollPanelGroup } from "@decky/ui";
+import { Focusable, Navigation } from "@decky/ui";
 import { Selectable } from "../../../lib/primitives";
 
 export function CreditsPage() {

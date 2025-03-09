@@ -6,9 +6,9 @@ import {
   useForcedRerender,
   useThemeInstallState,
 } from "@/lib";
-import { useEffect, useState } from "react";
-import { LocalThemeStatus, Theme } from "@/types";
+import { Theme } from "@/types";
 import { ButtonItem, Focusable, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
+import { useEffect, useState } from "react";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 
 export function QamThemeToggle({ theme }: { theme: Theme }) {

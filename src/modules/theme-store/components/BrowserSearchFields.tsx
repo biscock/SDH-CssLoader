@@ -1,10 +1,3 @@
-import { useEffect, useMemo } from "react";
-import {
-  useThemeBrowserSharedActions,
-  useThemeBrowserSharedValues,
-  useThemeBrowserStoreAction,
-  useThemeBrowserStoreValue,
-} from "../context";
 import {
   DialogButton,
   Dropdown,
@@ -14,8 +7,15 @@ import {
   SliderField,
   TextField,
 } from "@decky/ui";
-import { FilterOptionLabel } from "./FilterOptionLabel";
+import { useMemo } from "react";
 import { FaRotate } from "react-icons/fa6";
+import {
+  useThemeBrowserSharedActions,
+  useThemeBrowserSharedValues,
+  useThemeBrowserStoreAction,
+  useThemeBrowserStoreValue,
+} from "../context";
+import { FilterOptionLabel } from "./FilterOptionLabel";
 
 export function BrowserSearchFields() {
   const { filters, order } = useThemeBrowserStoreValue("filterOptions");

@@ -1,6 +1,6 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useThemeInstallState } from "@/lib";
-import { PartialCSSThemeInfo, Theme } from "@/types";
+import { PartialCSSThemeInfo } from "@/types";
 import { DialogButton, Focusable, PanelSectionRow } from "@decky/ui";
 import { AiOutlineDownload } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";

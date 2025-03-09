@@ -1,10 +1,10 @@
+import { getCSSLoaderState } from "@/backend";
 import { Flags, Theme } from "@/types";
 import { showModal } from "@decky/ui";
-import { getCSSLoaderState } from "@/backend";
 import { getDeckyPatchState } from "../../decky-patches";
 // Hardcoded to prevent dep cycle
-import { OptionalDepsModal } from "../components/modals/optional-deps-modal";
 import { NavPatchInfoModal } from "../components/modals/nav-patch-info-modal";
+import { OptionalDepsModal } from "../components/modals/optional-deps-modal";
 
 export async function toggleThemeWithModals(theme: Theme, value: boolean, rerender?: () => void) {
   const { toggleTheme } = getCSSLoaderState();

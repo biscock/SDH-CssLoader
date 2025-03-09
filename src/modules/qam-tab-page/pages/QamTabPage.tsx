@@ -1,12 +1,12 @@
-import { PanelSection } from "@decky/ui";
+import { useCSSLoaderValues } from "@/backend";
 import { MOTDDisplay, PresetSelectionDropdown } from "@/lib";
+import { PanelSection } from "@decky/ui";
 import {
   QamDummyFunctionBoundary,
   QamHiddenThemesDisplay,
   QamRefreshButton,
   QamThemeList,
 } from "../components";
-import { useCSSLoaderValues } from "@/backend";
 
 export function QamTabPage() {
   const { themes } = useCSSLoaderValues();

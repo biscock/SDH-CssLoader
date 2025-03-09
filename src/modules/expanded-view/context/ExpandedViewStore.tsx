@@ -1,4 +1,4 @@
-import { cssLoaderStore, getCSSLoaderState } from "@/backend";
+import { getCSSLoaderState } from "@/backend";
 import { FullCSSThemeInfo } from "@/types";
 import { Navigation } from "@decky/ui";
 import { createStore, useStore } from "zustand";

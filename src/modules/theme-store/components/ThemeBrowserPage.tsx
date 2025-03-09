@@ -1,12 +1,12 @@
-import { Focusable } from "@decky/ui";
-import { useThemeBrowserStoreAction, useThemeBrowserStoreValue } from "../context";
-import { BrowserSearchFields } from "./BrowserSearchFields";
 import { useCSSLoaderValues } from "@/backend";
+import { ThemeCard } from "@/lib";
+import { useExpandedViewAction } from "@/modules/expanded-view";
+import { Focusable } from "@decky/ui";
 import { useEffect, useRef } from "react";
 import { ImSpinner5 } from "react-icons/im";
+import { useThemeBrowserStoreAction, useThemeBrowserStoreValue } from "../context";
+import { BrowserSearchFields } from "./BrowserSearchFields";
 import { LoadMoreButton } from "./LoadMoreButton";
-import { useExpandedViewAction } from "@/modules/expanded-view";
-import { ThemeCard } from "@/lib";
 
 export function ThemeBrowserPage() {
   const initializeStore = useThemeBrowserStoreAction("initializeStore");

@@ -1,9 +1,9 @@
-import { ThemePatchComponent } from "@/types";
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
-import { ButtonItem, ColorPickerModal, PanelSectionRow, showModal } from "@decky/ui";
-import { FaFolder } from "react-icons/fa";
+import { ThemePatchComponent } from "@/types";
 import { FileSelectionType, openFilePicker } from "@decky/api";
+import { ButtonItem, ColorPickerModal, PanelSectionRow, showModal } from "@decky/ui";
 import Color from "color";
+import { FaFolder } from "react-icons/fa";
 
 export function ThemePatchComponent({
   component,

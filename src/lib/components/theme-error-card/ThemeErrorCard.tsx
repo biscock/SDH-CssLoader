@@ -1,5 +1,4 @@
 import { ThemeError } from "@/types";
-import { Focusable } from "@decky/ui";
 import { Selectable } from "../../primitives";
 
 export function ThemeErrorCard({ error }: { error: ThemeError }) {

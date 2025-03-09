@@ -1,6 +1,6 @@
 import { Theme } from "@/types";
-import { Modal } from "../../../primitives";
 import { DialogButton, Focusable } from "@decky/ui";
+import { Modal } from "../../../primitives";
 
 export function OptionalDepsModal({
   closeModal,

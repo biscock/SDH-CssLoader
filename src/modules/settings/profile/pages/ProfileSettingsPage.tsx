@@ -1,8 +1,8 @@
 import { PresetSelectionDropdown } from "@/lib";
 import { Focusable } from "@decky/ui";
-import { ProfileContextProvider, useProfileContext } from "../state";
-import { OfflineView, OnlineView } from "../components";
 import { ImSpinner5 } from "react-icons/im";
+import { OfflineView, OnlineView } from "../components";
+import { ProfileContextProvider, useProfileContext } from "../state";
 
 export function ProfileSettingsPage() {
   return (

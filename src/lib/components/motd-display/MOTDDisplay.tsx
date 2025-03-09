@@ -1,7 +1,7 @@
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { DialogButton, Focusable, PanelSection } from "@decky/ui";
 import { useEffect, useMemo } from "react";
 import { FaTimes } from "react-icons/fa";
-import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 
 const SEVERITIES = {
   High: {

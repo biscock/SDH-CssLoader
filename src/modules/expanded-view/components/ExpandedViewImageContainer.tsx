@@ -1,6 +1,6 @@
 import { Focusable, ScrollPanelGroup } from "@decky/ui";
-import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { Selectable } from "../../../lib/primitives";
+import { useExpandedViewAction, useExpandedViewValue } from "../context";
 
 export function ExpandedViewImageContainer() {
   const data = useExpandedViewValue("data");

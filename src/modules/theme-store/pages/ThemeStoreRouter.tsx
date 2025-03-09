@@ -1,3 +1,6 @@
+import { useCSSLoaderValues } from "@/backend";
+import { ThemeCardCSSVariableProvider } from "@/lib";
+import { Permissions } from "@/types";
 import { Tabs } from "@decky/ui";
 import { ThemeBrowserPage } from "../components";
 import {
@@ -6,9 +9,6 @@ import {
   useThemeBrowserSharedValues,
 } from "../context";
 import { AccountPage } from "./AccountPage";
-import { useCSSLoaderValues } from "@/backend";
-import { Permissions } from "@/types";
-import { ThemeCardCSSVariableProvider } from "@/lib";
 
 // TODO: Make the tab definition a constant so that it isn't re-generated every page load
 

@@ -1,3 +1,4 @@
+import { createStore } from "zustand";
 import {
   Flags,
   FullAccountData,
@@ -9,9 +10,8 @@ import {
   ThemeQueryResponse,
   UpdateStatus,
 } from "../../types";
-import { createStore } from "zustand";
-import type { Backend } from "../services";
 import { FetchError } from "../errors";
+import type { Backend } from "../services";
 
 const apiUrl = "https://api.deckthemes.com";
 

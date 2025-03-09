@@ -1,6 +1,6 @@
 import { useCSSLoaderValues } from "@/backend";
-import { Modal } from "../../../primitives";
 import { DialogButton, Focusable, Toggle } from "@decky/ui";
+import { Modal } from "../../../primitives";
 import { toggleThemeWithModals } from "../../../utils";
 import { ThemePatch } from "../../theme-patch";
 import { ThemeSettingsModalActionButtons } from "./ThemeSettingsModalActionButtons";

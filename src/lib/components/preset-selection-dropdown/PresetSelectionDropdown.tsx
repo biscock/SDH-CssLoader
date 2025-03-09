@@ -1,9 +1,8 @@
-import { DropdownItem, PanelSectionRow } from "@decky/ui";
+import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { Flags } from "@/types";
-import { useMemo } from "react";
+import { DropdownItem, PanelSectionRow } from "@decky/ui";
 import { FiPlusCircle } from "react-icons/fi";
 import { useForcedRerender } from "../../hooks";
-import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 
 export function PresetSelectionDropdown({ noBottomSeparator }: { noBottomSeparator?: boolean }) {
   const { themes, selectedPreset } = useCSSLoaderValues();

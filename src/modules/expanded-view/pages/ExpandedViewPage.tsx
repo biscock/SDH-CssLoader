@@ -1,9 +1,9 @@
 import { Focusable } from "@decky/ui";
 import {
-  ExpandedViewLoadingPage,
-  ExpandedViewCssVariables,
-  ExpandedViewScrollingSection,
   ExpandedViewButtonsSection,
+  ExpandedViewCssVariables,
+  ExpandedViewLoadingPage,
+  ExpandedViewScrollingSection,
 } from "../components";
 import { useExpandedViewValue } from "../context";
 

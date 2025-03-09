@@ -1,7 +1,7 @@
-import { DialogButton, Navigation, Focusable, quickAccessMenuClasses } from "@decky/ui";
+import { useCSSLoaderValues } from "@/backend";
+import { DialogButton, Focusable, Navigation, quickAccessMenuClasses } from "@decky/ui";
 import { BsGearFill } from "react-icons/bs";
 import { FaDownload } from "react-icons/fa";
-import { useCSSLoaderValues } from "@/backend";
 import { cn } from "../../utils";
 
 export function TitleView() {

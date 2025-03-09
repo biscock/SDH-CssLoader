@@ -1,6 +1,6 @@
-import { ButtonItem, PanelSectionRow } from "@decky/ui";
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
-import { useEffect, useRef } from "react";
+import { ButtonItem, PanelSectionRow } from "@decky/ui";
+import { useRef } from "react";
 
 export function QamRefreshButton() {
   const { reloadPlugin } = useCSSLoaderActions();

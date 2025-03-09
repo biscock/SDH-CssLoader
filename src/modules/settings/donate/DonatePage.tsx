@@ -1,5 +1,5 @@
 import { useCSSLoaderValues } from "@/backend";
-import { Focusable, Navigation, PanelSection, ScrollPanelGroup } from "@decky/ui";
+import { Focusable, Navigation } from "@decky/ui";
 import { SiKofi, SiPatreon } from "react-icons/si";
 import { Selectable } from "../../../lib/primitives";
 

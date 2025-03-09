@@ -1,9 +1,9 @@
+import { AuthorViewModal } from "@/lib";
+import { useThemeBrowserSharedActions } from "@/modules/theme-store/context";
 import { DialogButton, Focusable, Navigation, ScrollPanelGroup, showModal } from "@decky/ui";
+import { Selectable } from "../../../lib/primitives";
 import { useExpandedViewAction, useExpandedViewValue } from "../context";
 import { ExpandedViewImageContainer } from "./ExpandedViewImageContainer";
-import { useThemeBrowserSharedActions } from "@/modules/theme-store/context";
-import { AuthorViewModal } from "@/lib";
-import { Selectable } from "../../../lib/primitives";
 
 export function ExpandedViewScrollingSection() {
   const data = useExpandedViewValue("data");
