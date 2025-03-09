@@ -17,7 +17,7 @@ export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
 
   return (
     <PanelSectionRow>
-      <Focusable className="flex gap-2 py-0 px-[5px]">
+      <Focusable className="flex gap-2 p-0">
         <div className="cl_profileentry_backdrop">
           <span>{data.displayName}</span>
         </div>
