@@ -7,7 +7,7 @@ import { UpdateAllThemesButton } from "./UpdateAllThemesButton";
 import { ThemeSettingsEntry } from "./ThemeSettingsEntry";
 import { ThemeDeleteMenu } from "./ThemeDeleteMenu";
 
-export function ThemeSettings() {
+export function ThemeSettingsPage() {
   const [deleteMode, setDeleteMode] = useState(false);
   const { themes, unpinnedThemes, themeErrors } = useCSSLoaderValues();
 

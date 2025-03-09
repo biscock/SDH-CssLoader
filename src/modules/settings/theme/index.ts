@@ -1,1 +1,1 @@
-export * from "./ThemeSettings";
+export * from "./ThemeSettingsPage";
