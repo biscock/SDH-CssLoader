@@ -9,6 +9,8 @@ export function ConfirmModal({
   description,
   confirmText,
   cancelText,
+  confirmDisabled,
+  cancelDisabled,
 }: {
   closeModal?: () => void;
   children: React.ReactNode;
@@ -17,6 +19,8 @@ export function ConfirmModal({
   description?: string;
   confirmText?: string;
   cancelText?: string;
+  confirmDisabled?: boolean;
+  cancelDisabled?: boolean;
 }) {
   return (
     <CM
@@ -27,6 +31,8 @@ export function ConfirmModal({
       onOK={onConfirm}
       onCancel={closeModal}
       onEscKeypress={closeModal}
+      bOKDisabled={confirmDisabled}
+      bCancelDisabled={cancelDisabled}
     >
       <StyleProvider>{children}</StyleProvider>
     </CM>

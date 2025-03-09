@@ -3,7 +3,7 @@ import { TextField } from "@decky/ui";
 import { useState } from "react";
 import { ConfirmModal } from "../../../primitives";
 
-export function CreatePresetModal({ closeModal }: { closeModal?: () => void }) {
+export function CreateProfileModal({ closeModal }: { closeModal?: () => void }) {
   const { themes } = useCSSLoaderValues();
   const { createPreset } = useCSSLoaderActions();
   const numOfEnabledThemes = themes.filter((e) => e.enabled).length;

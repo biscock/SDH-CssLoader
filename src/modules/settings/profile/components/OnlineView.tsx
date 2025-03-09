@@ -1,4 +1,5 @@
-import { Focusable } from "@decky/ui";
+import { UploadProfileModal } from "@/lib";
+import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { useProfileContext } from "../state";
 import { ProfileInstalledEntry } from "./ProfileInstalledEntry";
 import { ProfileUploadedEntry } from "./ProfileUploadedEntry";
@@ -47,6 +48,13 @@ export function OnlineView() {
           )}
         </Focusable>
       )}
+      <DialogButton
+        onClick={() => {
+          showModal(<UploadProfileModal eligibleProfiles={localProfiles} />);
+        }}
+      >
+        Upload Profile
+      </DialogButton>
     </Focusable>
   );
 }

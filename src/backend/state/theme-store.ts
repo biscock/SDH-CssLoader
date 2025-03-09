@@ -1,3 +1,4 @@
+import { sleep } from "@decky/ui";
 import { createStore } from "zustand";
 import {
   Flags,
@@ -5,6 +6,7 @@ import {
   MinimalCSSThemeInfo,
   Motd,
   PartialCSSThemeInfo,
+  TaskQueryResponse,
   Theme,
   ThemeError,
   ThemeQueryResponse,
@@ -96,7 +98,11 @@ export interface CSSLoaderStateActions {
   getMotd: () => Promise<void>;
   hideMotd: () => Promise<void>;
   getUploadedThemes: () => Promise<PartialCSSThemeInfo[]>;
-  publishProfile: (profileName: string, isPublic: boolean) => Promise<void>;
+  publishProfile: (
+    profileName: string,
+    isPublic: boolean,
+    description?: string
+  ) => Promise<{ success: boolean; message: string }>;
 
   // Settings related actions
   setTranslationBranch: (branch: "-1" | "0" | "1") => Promise<void>;
@@ -659,16 +665,22 @@ export const createCSSLoaderStore = (backend: Backend) =>
           return [];
         }
       },
-      async publishProfile(profileName: string, isPublic: boolean) {
+      async publishProfile(profileName: string, isPublic: boolean, description?: string) {
         try {
-          if (!get().themes.some((e) => e.name === profileName)) return;
+          if (!get().themes.some((e) => e.name === profileName)) {
+            throw new Error("Profile not found");
+          }
           const refreshedToken = await get().refreshToken();
-          if (!refreshedToken) return;
+          if (!refreshedToken) {
+            throw new Error("Couldn't refresh auth token");
+          }
 
           const blobRes = await backend.uploadThemeBlob(profileName, apiUrl, refreshedToken);
-          if (!blobRes?.success) return;
+          if (!blobRes?.success) {
+            throw new Error("Failed to upload blob");
+          }
 
-          const submissionRes = await apiFetch(
+          const submissionRes = await apiFetch<{ task: string }>(
             "/submissions/css_zip",
             {
               method: "POST",
@@ -679,16 +691,55 @@ export const createCSSLoaderStore = (backend: Backend) =>
                 blob: blobRes.message.id,
                 meta: {
                   imageBlobs: [],
-                  description: "Uploaded from Decky CSS Loader",
+                  description: description,
                   privateSubmission: !isPublic,
                 },
               }),
             },
             { requiresAuth: true }
           );
-          console.log(submissionRes);
+
+          if (!submissionRes?.task) {
+            throw new Error("No task returned");
+          }
+
+          let taskResult = null;
+          while (!taskResult) {
+            const currentTaskStatus = await apiFetch<TaskQueryResponse>(
+              `/tasks/${submissionRes.task}`,
+              {},
+              { requiresAuth: true }
+            );
+            if (currentTaskStatus?.status === "complete") {
+              taskResult = currentTaskStatus;
+            } else if (currentTaskStatus?.status === "failed") {
+              throw new Error(`Submission failed, ${currentTaskStatus?.status}`);
+            } else {
+              await sleep(1000);
+            }
+          }
+
+          return {
+            success: true,
+            message: taskResult.status,
+          };
         } catch (error) {
-          console.log(error);
+          if (error instanceof FetchError) {
+            return {
+              success: false,
+              message: JSON.stringify(error.getError()),
+            };
+          }
+          if (error instanceof Error) {
+            return {
+              success: false,
+              message: error.message,
+            };
+          }
+          return {
+            success: false,
+            message: "Unknown Error",
+          };
         }
       },
 
