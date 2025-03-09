@@ -23,7 +23,11 @@ interface IProfileContext extends IProfileContextValues, IProfileContextActions 
 export function ProfileContextProvider({ children }: { children: React.ReactNode }) {
   const { themes, updateStatuses, apiMeData } = useCSSLoaderValues();
   const { getUploadedThemes } = useCSSLoaderActions();
-  const profiles = themes.filter((e) => e.flags.includes(Flags.isPreset));
+  const profiles = themes
+    .filter((e) => e.flags.includes(Flags.isPreset))
+    .sort((a, b) => {
+      return a.display_name.localeCompare(b.display_name);
+    });
 
   const [displayMode, setDisplayMode] = useState<"offline" | "online">("offline");
   const [loading, setLoading] = useState(true);
@@ -32,17 +36,20 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
     PartialCSSThemeInfo[]
   >([]);
 
+  // All of these checks need to use name
+  // Because if you have a local profile and then you upload it, the server will give it a UUID but the local copy will remain with the name as id
   const localProfiles = profiles.filter((e) => {
     const isLocal = updateStatuses.find((status) => status[0] === e.id)?.[1] === "local";
     const isInUploaded = uploadedProfileRemoteEntries.some(
-      (uploadedProfile) => uploadedProfile.id === e.id
+      (uploadedProfile) => uploadedProfile.name === e.name
     );
     return isLocal && !isInUploaded;
   });
+
   const downloadedProfiles = profiles.filter((profile) => {
-    const isInLocal = localProfiles.some((localProfile) => localProfile.id === profile.id);
+    const isInLocal = localProfiles.some((localProfile) => localProfile.name === profile.name);
     const isInUploaded = uploadedProfileRemoteEntries.some(
-      (uploadedProfile) => uploadedProfile.id === profile.id
+      (uploadedProfile) => uploadedProfile.name === profile.name
     );
     return !isInLocal && !isInUploaded;
   });
@@ -61,9 +68,11 @@ export function ProfileContextProvider({ children }: { children: React.ReactNode
     setLoading(true);
     // Logged in mode, separate downloaded and local, and show uploaded profiles
     const uploadedThemes = await getUploadedThemes();
-    const uploadedProfileRemoteEntries = uploadedThemes.filter((theme) =>
-      theme.targets.includes("Profile")
-    );
+    const uploadedProfileRemoteEntries = uploadedThemes
+      .filter((theme) => theme.targets.includes("Profile"))
+      .sort((a, b) => {
+        return a.displayName.localeCompare(b.displayName);
+      });
     setUploadedProfileRemoteEntries(uploadedProfileRemoteEntries);
     setLoading(false);
   }

@@ -7,7 +7,7 @@ import { SectionSubtitle } from "./SectionSubtitle";
 import { SectionTitle } from "./SectionTitle";
 
 export function OnlineView() {
-  const { downloadedProfiles, localProfiles, uploadedProfiles } = useProfileContext();
+  const { downloadedProfiles, localProfiles, uploadedProfiles, initialize } = useProfileContext();
   return (
     <Focusable className="flex flex-col gap-4">
       {downloadedProfiles.length > 0 && (
@@ -50,7 +50,14 @@ export function OnlineView() {
       )}
       <DialogButton
         onClick={() => {
-          showModal(<UploadProfileModal eligibleProfiles={localProfiles} />);
+          showModal(
+            <UploadProfileModal
+              onUploadFinish={() => {
+                void initialize();
+              }}
+              eligibleProfiles={localProfiles}
+            />
+          );
         }}
       >
         Upload Profile

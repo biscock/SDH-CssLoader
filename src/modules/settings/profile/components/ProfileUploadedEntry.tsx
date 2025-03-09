@@ -10,7 +10,7 @@ export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
   const { isWorking } = useCSSLoaderValues();
   const { installTheme, deleteTheme } = useCSSLoaderActions();
 
-  const associatedLocalTheme = themes.find((theme) => theme.id === data.id);
+  const associatedLocalTheme = themes.find((theme) => theme.name === data.name);
 
   const updateStatus = useThemeInstallState(data);
   const isOutdated = updateStatus === "outdated";

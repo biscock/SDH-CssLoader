@@ -698,6 +698,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
             },
             { requiresAuth: true }
           );
+          console.log("SUBMISSION SUCCESSFUL", submissionRes);
 
           if (!submissionRes?.task) {
             throw new Error("No task returned");
@@ -705,15 +706,19 @@ export const createCSSLoaderStore = (backend: Backend) =>
 
           let taskResult = null;
           while (!taskResult) {
+            console.log("task status run");
             const currentTaskStatus = await apiFetch<TaskQueryResponse>(
               `/tasks/${submissionRes.task}`,
               {},
               { requiresAuth: true }
             );
-            if (currentTaskStatus?.status === "complete") {
-              taskResult = currentTaskStatus;
-            } else if (currentTaskStatus?.status === "failed") {
-              throw new Error(`Submission failed, ${currentTaskStatus?.status}`);
+            console.log("task status fetch done", currentTaskStatus);
+            if (!!currentTaskStatus?.completed) {
+              if (currentTaskStatus?.success) {
+                taskResult = currentTaskStatus;
+              } else {
+                throw new Error(`Submission failed, ${currentTaskStatus?.status}`);
+              }
             } else {
               await sleep(1000);
             }
