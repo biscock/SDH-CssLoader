@@ -6,6 +6,7 @@ export function ConfirmModal({
   children,
   onConfirm,
   title,
+  description,
   confirmText,
   cancelText,
 }: {
@@ -13,12 +14,14 @@ export function ConfirmModal({
   children: React.ReactNode;
   onConfirm: () => void;
   title?: string;
+  description?: string;
   confirmText?: string;
   cancelText?: string;
 }) {
   return (
     <CM
       strTitle={title}
+      strDescription={description}
       strOKButtonText={confirmText}
       strCancelButtonText={cancelText}
       onOK={onConfirm}

@@ -86,6 +86,9 @@ export class Backend {
       [themeName, patchName, componentName, value]
     );
   }
+  async generatePreset(presetName: string) {
+    return await Backend.repository.call<[string], void>("generate_preset_theme", [presetName]);
+  }
   async generatePresetThemeFromThemeNames(presetName: string, dependencies: string[]) {
     return await Backend.repository.call<[string, string[]], void>(
       "generate_preset_theme_from_theme_names",

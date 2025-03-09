@@ -1,8 +1,9 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { Flags } from "@/types";
-import { DropdownItem, PanelSectionRow } from "@decky/ui";
+import { DropdownItem, PanelSectionRow, showModal } from "@decky/ui";
 import { FiPlusCircle } from "react-icons/fi";
 import { useForcedRerender } from "../../hooks";
+import { CreatePresetModal } from "../modals";
 
 export function PresetSelectionDropdown({ noBottomSeparator }: { noBottomSeparator?: boolean }) {
   const { themes, selectedPreset } = useCSSLoaderValues();
@@ -45,7 +46,7 @@ export function PresetSelectionDropdown({ noBottomSeparator }: { noBottomSeparat
             ]}
             onChange={async ({ data }) => {
               if (data === "New Profile") {
-                // showModal(<CreatePresetModalRoot />);
+                showModal(<CreatePresetModal />);
                 rerender();
                 return;
               }

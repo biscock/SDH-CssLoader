@@ -311,7 +311,9 @@ export const createCSSLoaderStore = (backend: Backend) =>
         try {
           const { fails: themeErrors } = await backend.getThemeErrors();
           set({ themeErrors });
+          console.log("GET THEMES");
           const themes = await backend.getThemes();
+          console.log(get().themes, themes);
           set({
             themes,
             selectedPreset: themes.find((e) => e.flags.includes(Flags.isPreset) && e.enabled),
@@ -428,7 +430,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
             await backend.setThemeState(selectedPreset.name, false);
           } else {
             // If you don't have a preset, you need to disable all currently enabled themes and THEN enable the preset
-            await Promise.all(
+            await Promise.allSettled(
               themes.filter((e) => e.enabled).map((e) => backend.setThemeState(e.name, false))
             );
           }
@@ -450,7 +452,18 @@ export const createCSSLoaderStore = (backend: Backend) =>
           );
         } catch (error) {}
       },
-      async createPreset(presetName: string) {},
+      async createPreset(presetName: string) {
+        try {
+          if (presetName.length === 0) return;
+          await backend.generatePreset(presetName);
+          await get().reloadThemes();
+          await get().changePreset(presetName + ".profile");
+          const updateStatusesClone = get().updateStatuses;
+          set({
+            updateStatuses: [...updateStatusesClone, [presetName + ".profile", "local", false]],
+          });
+        } catch {}
+      },
 
       // MARK: Account actions
       async refreshToken() {
@@ -607,6 +620,7 @@ export const createCSSLoaderStore = (backend: Backend) =>
       // MARK: Other api methods
       async getMotd() {
         try {
+          // This 404s if there is no MOTD so the try catch is fine
           const value = await apiFetch<Motd>("/motd");
           if (value) {
             set({ motd: value });
