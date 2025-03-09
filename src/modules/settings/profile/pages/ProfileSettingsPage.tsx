@@ -1,45 +1,37 @@
-import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { PresetSelectionDropdown } from "@/lib";
-import { Flags, PartialCSSThemeInfo, Theme } from "@/types";
-import { DialogButton, Focusable } from "@decky/ui";
-import { useEffect, useMemo, useState } from "react";
+import { Focusable } from "@decky/ui";
 import { ProfileContextProvider, useProfileContext } from "../state";
-import { OfflineView } from "../components/OfflineView";
-import { LoggedInView } from "../components/LoggedInView";
-import { LoggedOutView } from "../components/LoggedOutView";
+import { OfflineView, OnlineView } from "../components";
+import { ImSpinner5 } from "react-icons/im";
 
 export function ProfileSettingsPage() {
   return (
     <ProfileContextProvider>
-      <Focusable className="cl_settingspage_container flex flex-col gap-4">
-        <PresetSelectionDropdown noBottomSeparator />
-        <div className="cl_divider" />
-        <ProfileSettingsContent />
-      </Focusable>
+      <ProfileSettingsPageContent />
     </ProfileContextProvider>
   );
 }
 
-function ProfileSettingsContent() {
+function ProfileSettingsPageContent() {
+  const { loading } = useProfileContext();
+  return (
+    <Focusable className="cl_settingspage_container flex flex-col gap-4">
+      <PresetSelectionDropdown noBottomSeparator />
+      <div className="cl_divider" />
+      <ProfileSettingsModeSwitcher />
+      {loading && (
+        <div className="h-full w-full flex items-center justify-center gap-4">
+          <ImSpinner5 className="cl_spinny" size={48} />
+        </div>
+      )}
+    </Focusable>
+  );
+}
+
+function ProfileSettingsModeSwitcher() {
   const { displayMode } = useProfileContext();
-  if (displayMode === "loggedin") {
-    return <LoggedInView />;
-  }
-  if (displayMode === "loggedout") {
-    return <LoggedOutView />;
+  if (displayMode === "online") {
+    return <OnlineView />;
   }
   return <OfflineView />;
 }
-
-// function UploadProfileButton() {
-//   const { publishProfile } = useCSSLoaderActions();
-//   return (
-//     <DialogButton
-//       onClick={() => {
-//         publishProfile("LCD Hero.profile", false);
-//       }}
-//     >
-//       Upload Profile
-//     </DialogButton>
-//   );
-// }
