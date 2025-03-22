@@ -5,10 +5,12 @@ export function DeleteConfirmationModal({
   closeModal,
   themeIdsToBeDeleted,
   onDeleteFinish,
+  type = "theme",
 }: {
   closeModal?: () => void;
   themeIdsToBeDeleted: string[];
   onDeleteFinish?: () => void;
+  type?: "theme" | "profile";
 }) {
   const { deleteTheme } = useCSSLoaderActions();
   async function deleteThemes() {
@@ -20,12 +22,16 @@ export function DeleteConfirmationModal({
   }
 
   return (
-    <ConfirmModal title="Delete Themes" onConfirm={deleteThemes} closeModal={closeModal}>
+    <ConfirmModal
+      title={`Delete ${type.charAt(0).toUpperCase() + type.slice(1)}s`}
+      onConfirm={deleteThemes}
+      closeModal={closeModal}
+    >
       <div>
         Are you sure you want to delete{" "}
         {themeIdsToBeDeleted.length === 1
-          ? `this theme`
-          : `these ${themeIdsToBeDeleted.length} themes`}
+          ? `this ${type}`
+          : `these ${themeIdsToBeDeleted.length} ${type}s`}
         ?
       </div>
     </ConfirmModal>
