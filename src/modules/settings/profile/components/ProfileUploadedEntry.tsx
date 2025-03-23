@@ -1,17 +1,22 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useThemeInstallState } from "@/lib";
-import { PartialCSSThemeInfo } from "@/types";
+import { PartialCSSThemeInfo, Theme } from "@/types";
 import { DialogButton, Focusable } from "@decky/ui";
 import { FaDownload } from "react-icons/fa6";
+import { ProfileInstalledEntry } from "./ProfileInstalledEntry";
 
 export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
-  const { isWorking } = useCSSLoaderValues();
+  const { isWorking, themes } = useCSSLoaderValues();
   const { installTheme } = useCSSLoaderActions();
 
   const updateStatus = useThemeInstallState(data);
 
+  if (!!themes.find((e) => e.name === data.name)) {
+    return <ProfileInstalledEntry data={themes.find((e) => e.name === data.name) as Theme} />;
+  }
+
   return (
-    <div className="relative">
+    <Focusable className="relative flex flex-row gap-1">
       {updateStatus === "outdated" && (
         <div
           style={{
@@ -46,6 +51,6 @@ export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
       >
         <FaDownload className="cl_squaredialogbutton_icontranslate" />
       </DialogButton>
-    </div>
+    </Focusable>
   );
 }

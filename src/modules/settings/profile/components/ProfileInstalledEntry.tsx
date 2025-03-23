@@ -12,7 +12,7 @@ export function ProfileInstalledEntry({ data }: { data: Theme }) {
   const isOutdated = updateStatus === "outdated";
 
   return (
-    <div className="relative">
+    <Focusable className="relative flex flex-row gap-1">
       {updateStatus === "outdated" && (
         <div
           style={{
@@ -57,6 +57,6 @@ export function ProfileInstalledEntry({ data }: { data: Theme }) {
       >
         <FaListUl className="cl_squaredialogbutton_icontranslate" />
       </DialogButton>
-    </div>
+    </Focusable>
   );
 }
