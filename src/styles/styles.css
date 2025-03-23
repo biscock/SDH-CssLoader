@@ -83,6 +83,10 @@ MARK: TAILWIND
   padding: 0 !important;
 }
 
+.p-2 {
+  padding: 0.5rem !important;
+}
+
 .py-0 {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -121,8 +125,32 @@ MARK: TAILWIND
   margin-right: 1rem !important;
 }
 
+.border-2 {
+  border-width: 2px !important;
+}
+
+.border-white {
+  border-color: white !important;
+}
+
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+.w-6 {
+  width: 1.5rem !important;
+}
+
+.h-6 {
+  height: 1.5rem !important;
+}
+
 .w-full {
   width: 100% !important;
+}
+
+.h-full {
+  height: 100% !important;
 }
 
 .max-w-1\/2 {
@@ -159,6 +187,10 @@ MARK: TAILWIND
 
 .text-2xl {
   font-size: 1.5rem !important;
+}
+
+.opacity-50 {
+  opacity: 0.5 !important;
 }
 
 .absolute-center {
@@ -691,6 +723,20 @@ MARK: Settings Page
   background-color: rgba(255,255,255,0.1);
   border-radius: 100px !important;
   width: 100% !important;
+}
+
+.cl_profilesettings_radiocontainer {
+  background: rgba(255,255,255,.15);
+  border-radius: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-left: 0;
+  margin-right: 0;
+  height: 1.25em !important;
+  flex: 1 1 0% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
 
 .cl_profileentry_backdrop {

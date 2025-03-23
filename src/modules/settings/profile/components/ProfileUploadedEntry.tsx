@@ -1,58 +1,51 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
 import { useThemeInstallState } from "@/lib";
 import { PartialCSSThemeInfo } from "@/types";
-import { DialogButton, Focusable, PanelSectionRow } from "@decky/ui";
-import { AiOutlineDownload } from "react-icons/ai";
-import { FaTrash } from "react-icons/fa";
+import { DialogButton, Focusable } from "@decky/ui";
+import { FaDownload } from "react-icons/fa6";
 
 export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
-  const { themes } = useCSSLoaderValues();
   const { isWorking } = useCSSLoaderValues();
-  const { installTheme, deleteTheme } = useCSSLoaderActions();
-
-  const associatedLocalTheme = themes.find((theme) => theme.name === data.name);
+  const { installTheme } = useCSSLoaderActions();
 
   const updateStatus = useThemeInstallState(data);
-  const isOutdated = updateStatus === "outdated";
 
   return (
-    <PanelSectionRow>
-      <Focusable className="flex gap-2 p-0">
-        <div className="cl_profileentry_backdrop">
-          <span>{data.displayName}</span>
-        </div>
-        {!!associatedLocalTheme ? (
-          // This means that it is installed
-          <>
-            {isOutdated && (
-              <DialogButton
-                // className="cl_squaredialogbutton"
-                onClick={() => installTheme(data.id)}
-                disabled={isWorking}
-              >
-                <AiOutlineDownload />
-                Update
-              </DialogButton>
-            )}
-            <DialogButton
-              className="cl_squaredialogbutton"
-              onClick={() => deleteTheme(data.id)}
-              disabled={isWorking}
-            >
-              <FaTrash />
-            </DialogButton>
-          </>
-        ) : (
-          <DialogButton
-            className="cl_profileentry_actionbutton"
-            onClick={() => installTheme(data.id)}
-            disabled={isWorking}
-          >
-            <AiOutlineDownload />
-            Download
-          </DialogButton>
-        )}
+    <div className="relative">
+      {updateStatus === "outdated" && (
+        <div
+          style={{
+            position: "absolute",
+            left: "-1em",
+            top: "50%",
+            transform: "translate(0,-50%)",
+            width: "0.5em",
+            height: "0.5em",
+            backgroundColor: "#fca904",
+            borderRadius: "100%",
+          }}
+        />
+      )}
+      <Focusable
+        focusWithinClassName="gpfocuswithin"
+        onOKActionDescription="Download Profile"
+        onActivate={() => {
+          installTheme(data.id);
+        }}
+        className="cl_profilesettings_radiocontainer opacity-50"
+      >
+        <span>{data.displayName}</span>
+        <span>Not Installed</span>
       </Focusable>
-    </PanelSectionRow>
+      <DialogButton
+        disabled={isWorking}
+        className="cl_squaredialogbutton"
+        onClick={() => {
+          installTheme(data.id);
+        }}
+      >
+        <FaDownload className="cl_squaredialogbutton_icontranslate" />
+      </DialogButton>
+    </div>
   );
 }
