@@ -18,8 +18,8 @@ export function ThemeSettingsModal({
   return (
     <Modal closeModal={closeModal}>
       {!!theme ? (
-        <Focusable className="flex flex-col gap-4 w-full">
-          <Focusable className="flex flex-row justify-between items-center">
+        <Focusable className="!flex !flex-col !gap-4 !w-full">
+          <Focusable className="!flex !flex-row !justify-between !items-center">
             <div className="flex flex-col">
               <span className="cl_title">{theme.display_name}</span>
               <span className="text-xs">
@@ -46,7 +46,7 @@ export function ThemeSettingsModal({
               ))}
             </Focusable>
           ) : null}
-          <Focusable className="flex flex-row gap-1 justify-between items-center">
+          <Focusable className="!flex !flex-row !gap-1 !justify-between !items-center">
             <DialogButton onClick={closeModal}>Close</DialogButton>
             <ThemeSettingsModalActionButtons theme={theme} closeModal={closeModal} />
           </Focusable>

@@ -31,7 +31,7 @@ export function QamThemeToggle({ theme }: { theme: Theme }) {
     <>
       <PanelSectionRow>
         <Focusable
-          className="w-full p-0 m-0 relative"
+          className="!w-full! p-0 !m-0 !relative"
           onOKActionDescription="Toggle Theme"
           onOptionsActionDescription="Expand Settings"
           onOptionsButton={() => {

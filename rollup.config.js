@@ -1,5 +1,6 @@
 import deckyPlugin from "@decky/rollup";
 import alias from "@rollup/plugin-alias";
+import css from "rollup-plugin-import-css";
 
 export default deckyPlugin({
   plugins: [
@@ -14,5 +15,6 @@ export default deckyPlugin({
         { find: "@/decky-patches", replacement: `${import.meta.dirname}/src/decky-patches` },
       ],
     }),
+    css(),
   ],
 });

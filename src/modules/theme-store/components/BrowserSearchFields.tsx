@@ -42,7 +42,7 @@ export function BrowserSearchFields() {
   return (
     <>
       <PanelSectionRow>
-        <Focusable className="flex justify-between">
+        <Focusable className="!flex !justify-between">
           <div className="cl-store-filter-field-container">
             <span className="DialogLabel">Sort</span>
             <Dropdown
@@ -72,7 +72,7 @@ export function BrowserSearchFields() {
         </Focusable>
       </PanelSectionRow>
       <PanelSectionRow>
-        <Focusable className="flex items-center justify-between">
+        <Focusable className="!flex !items-center !justify-between">
           <div className="cl-store-searchbar">
             <TextField
               label="Search"

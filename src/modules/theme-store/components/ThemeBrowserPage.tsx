@@ -33,7 +33,7 @@ export function ThemeBrowserPage() {
   return (
     <>
       <BrowserSearchFields />
-      <Focusable className="flex flex-wrap justify-center gap-2">
+      <Focusable className="!flex !flex-wrap !justify-center !gap-2">
         {loading ? (
           <div className="h-full w-full flex items-center justify-center gap-4">
             <ImSpinner5 className="cl_spinny" size={48} />

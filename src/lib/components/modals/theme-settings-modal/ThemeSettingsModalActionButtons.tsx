@@ -34,12 +34,12 @@ export function ThemeSettingsModalActionButtons({
   }
 
   return (
-    <Focusable className="flex flex-row gap-1">
+    <Focusable className="!flex !flex-row !gap-1">
       {isOutdated && (
         <DialogButton
           disabled={isWorking}
           onClick={handleUpdate}
-          className="cl_squaredialogbutton flex gap-1"
+          className="cl_squaredialogbutton !flex !gap-1"
         >
           <FaDownload className="cl_squaredialogbutton_icontranslate" />
           <span className="text-xs">Update</span>

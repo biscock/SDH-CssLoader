@@ -67,7 +67,7 @@ export function PluginSettingsPage() {
           onChange={(data) => setTranslationBranch(data.data)}
         />
       </Focusable>
-      <Selectable className="mt-4">
+      <Selectable className="!mt-4">
         <span>
           <b>Mappings Version:</b> <span className="font-mono">{mappingsVersionStr}</span>
         </span>

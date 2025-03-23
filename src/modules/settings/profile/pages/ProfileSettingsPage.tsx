@@ -15,7 +15,7 @@ export function ProfileSettingsPage() {
 function ProfileSettingsPageContent() {
   const { loading } = useProfileContext();
   return (
-    <Focusable className="cl_settingspage_container flex flex-col gap-4">
+    <Focusable className="cl_settingspage_container !flex !flex-col !gap-4">
       <PresetSelectionDropdown noBottomSeparator />
       <div className="cl_divider" />
       <ProfileSettingsModeSwitcher />

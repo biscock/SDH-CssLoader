@@ -1,197 +1,4 @@
-/* THIS FILE IS NOT USED IN BUILD */
-/* ANY MODIFICATIONS HERE MUST BE COPY PASTED INTO styles-as-string.ts */
-/* THAT IS NEEDED FOR STATIC CLASS INJECTION */
-/* LINT ERRORS ARE TO BE EXPECTED, BECAUSE THIS USES TEMPLATE LITERALS THAT WILL BE FILLED IN BY styles-as-string.ts */
-
-/*
-MARK: TAILWIND
-*/
-
-.flex {
-  display: flex !important;
-}
-
-.flex-col {
-  flex-direction: column !important;
-}
-
-.flex-wrap {
-  flex-wrap: wrap !important;
-}
-
-.flex-1 {
-  flex: 1 1 0% !important;
-}
-
-.grid {
-  display: grid !important;
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-}
-
-.grid-cols-\\[1fr\\,2fr\\] {
-  grid-template-columns: 1fr 2fr !important;
-}
-
-.gap-1 {
-  gap: 0.25rem !important;
-}
-
-.gap-2 {
-  gap: 0.5rem !important;
-}
-
-.gap-3 {
-  gap: 0.75rem !important;
-}
-
-.gap-4 {
-  gap: 1rem !important;
-}
-
-.gap-8 {
-  gap: 2rem !important;
-}
-
-.items-center {
-  align-items: center !important;
-}
-
-.items-stretch {
-  align-items: stretch !important;
-}
-
-.justify-center {
-  justify-content: center !important;
-}
-
-.justify-around {
-  justify-content: space-around !important;
-}
-
-.justify-between {
-  justify-content: space-between !important;
-}
-
-.p-0 {
-  padding: 0 !important;
-}
-
-.p-2 {
-  padding: 0.5rem !important;
-}
-
-.py-0 {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-.px-\\[5px\\] {
-  padding-left: 5px !important;
-  padding-right: 5px !important;
-}
-
-.pl-4 {
-  padding-left: 1rem !important;
-}
-
-.m-0 {
-  margin: 0 !important;
-}
-
-.ml-auto {
-  margin-left: auto !important;
-}
-
-.mb-0 {
-  margin-bottom: 0 !important;
-}
-
-.mb-4 {
-  margin-bottom: 1rem !important;
-}
-
-.mt-4 {
-  margin-top: 1rem !important;
-}
-
-.mr-4 {
-  margin-right: 1rem !important;
-}
-
-.border-2 {
-  border-width: 2px !important;
-}
-
-.border-white {
-  border-color: white !important;
-}
-
-.rounded-full {
-  border-radius: 9999px !important;
-}
-
-.w-6 {
-  width: 1.5rem !important;
-}
-
-.h-6 {
-  height: 1.5rem !important;
-}
-
-.w-full {
-  width: 100% !important;
-}
-
-.h-full {
-  height: 100% !important;
-}
-
-.max-w-1\/2 {
-  max-width: 50% !important;
-}
-
-.relative {
-  position: relative !important;
-}
-
-.font-bold {
-  font-weight: bold !important;
-}
-
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
-}
-
-.text-xs {
-  font-size: 0.75rem !important;
-}
-
-.text-sm {
-  font-size: 0.875rem !important;
-}
-
-.text-lg {
-  font-size: 1.125rem !important;
-}
-
-.text-xl {
-  font-size: 1.25rem !important;
-}
-
-.text-2xl {
-  font-size: 1.5rem !important;
-}
-
-.opacity-50 {
-  opacity: 0.5 !important;
-}
+@import "tailwindcss";
 
 .absolute-center {
   position: absolute !important;
@@ -218,7 +25,6 @@ MARK: Fullscreen Routes
 /*
 MARK: TitleView
 */
-
 
 .cl-title-view-button {
   height: 28px !important;
@@ -251,7 +57,6 @@ MARK: TitleView
 /*
 MARK: QAM Tab
 */
-
 
 .cl-qam-collapse-button-container > div > div > div > div > button {
   height: 10px !important;
@@ -314,22 +119,10 @@ MARK: QAM Tab
 MARK: Store
 */
 
-
 .cl-store-filter-field-container {
   display: flex !important;
   flex-direction: column !important;
   min-width: 49% !important;
-}
-
-
-.cl-store-dropdown-hide-spacer > button > div > div {
-  width: 100% !important;
-  display: flex !important;
-  align-items: start !important;
-}
-
-.cl-store-dropdown-hide-spacer > button > div > .${gamepadDialogClasses.Spacer} {
-  width: 0 !important;
 }
 
 .cl-store-searchbar {
@@ -351,14 +144,6 @@ MARK: Store
   align-items: center !important;
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
-}
-
-.cl-store-scale-slider {
-  min-width: 20% !important;
-}
-
-.cl-store-scale-slider > div > div > .${gamepadDialogClasses.FieldChildrenInner} {
-  min-width: 100% !important;
 }
 
 .cl-store-theme-grid-container {
@@ -390,12 +175,12 @@ MARK: Store
 .cl_storeitem_container {
   display: flex !important;
   flex-direction: column !important;
-  background-color: #ACB2C924 !important;
+  background-color: #acb2c924 !important;
   overflow: hidden !important;
   width: var(--cl-storeitem-width) !important;
 }
 .gpfocuswithin.cl_storeitem_container {
-  background-color: #ACB2C947 !important;
+  background-color: #acb2c947 !important;
 }
 .cl_storeitem_imagecontainer {
   overflow: hidden !important;
@@ -413,7 +198,7 @@ MARK: Store
   bottom: 0 !important;
   transform: translateY(100%) !important;
   opacity: 0 !important;
-  transition-property: transform,opacity !important;
+  transition-property: transform, opacity !important;
   transition-timing-function: cubic-bezier(0.17, 0.45, 0.14, 0.83) !important;
   transition-duration: 0.15s !important;
   font-size: var(--cl-storeitem-fontsize) !important;
@@ -433,7 +218,7 @@ MARK: Store
   width: 100%;
   height: 100%;
   object-fit: cover !important;
-  transition-property: filter,transform !important;
+  transition-property: filter, transform !important;
   transition-duration: 0.32s !important;
   transition-timing-function: cubic-bezier(0.17, 0.45, 0.14, 0.83) !important;
 }
@@ -445,7 +230,7 @@ MARK: Store
   transition-property: opacity !important;
   transition-duration: 0.65s !important;
   transition-timing-function: cubic-bezier(0.17, 0.45, 0.14, 0.83) !important;
-  background: linear-gradient(0deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 30%) !important;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 30%) !important;
   mix-blend-mode: multiply !important;
   width: var(--cl-storeitem-width) !important;
   height: var(--cl-storeitem-imgheight) !important;
@@ -472,7 +257,6 @@ MARK: Store
 MARK: Expanded View
 */
 
-
 @keyframes cl_spin {
   to {
     transform: rotate(360deg);
@@ -498,7 +282,7 @@ MARK: Expanded View
 .cl_expandedview_scrollpanel {
   display: flex !important;
   margin-bottom: 40px !important;
-  height: calc(100vh - 80px) !important
+  height: calc(100vh - 80px) !important;
 }
 
 .cl_expandedview_themedatacontainer {
@@ -531,7 +315,7 @@ MARK: Expanded View
 }
 
 .cl_expandedview_selectedimage {
-  position: relative !important; 
+  position: relative !important;
   width: var(--cl-ev-selected-image-width) !important;
   height: var(--cl-ev-selected-image-height) !important;
 }
@@ -697,7 +481,7 @@ MARK: Settings Page
 }
 /* The actual element of the ToggleContainer with the BG */
 .cl_themesettings_togglecontainer > div {
-  background: rgba(255,255,255,.15);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
   padding-left: 5px;
   padding-right: 5px;
@@ -720,13 +504,13 @@ MARK: Settings Page
 
 .cl_divider {
   height: 1px !important;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 100px !important;
   width: 100% !important;
 }
 
 .cl_profilesettings_radiocontainer {
-  background: rgba(255,255,255,.15);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
   padding-left: 5px;
   padding-right: 5px;

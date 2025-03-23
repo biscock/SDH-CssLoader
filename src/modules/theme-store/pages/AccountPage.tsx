@@ -25,7 +25,7 @@ function LoggedInSection() {
   const { apiMeData } = useCSSLoaderValues();
   const { logOut } = useCSSLoaderActions();
   return (
-    <Focusable className="flex items-center justify-between">
+    <Focusable className="!flex !items-center !justify-between">
       <span className="font-bold">
         {apiMeData ? `Logged in as ${apiMeData.username}` : "Loading..."}
       </span>
@@ -43,7 +43,7 @@ function LoggedOutSection() {
   const [shortTokenInterimValue, setShortTokenIntValue] = useState(apiShortToken);
 
   return (
-    <Focusable className="flex items-center justify-between gap-2">
+    <Focusable className="!flex !items-center !justify-between !gap-2">
       <div className="flex-1">
         <TextField
           disabled={!!apiFullToken}

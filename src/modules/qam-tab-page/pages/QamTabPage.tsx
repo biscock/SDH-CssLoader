@@ -1,6 +1,7 @@
 import { useCSSLoaderValues } from "@/backend";
 import { MOTDDisplay, PresetSelectionDropdown } from "@/lib";
 import { PanelSection } from "@decky/ui";
+import { ShowModalButton } from "../../../TestModal";
 import {
   QamDummyFunctionBoundary,
   QamHiddenThemesDisplay,
@@ -14,6 +15,7 @@ export function QamTabPage() {
   return (
     <>
       <MOTDDisplay />
+      <ShowModalButton />
       <QamDummyFunctionBoundary>
         <PanelSection title="Themes">
           {themes.length > 0 && <PresetSelectionDropdown />}

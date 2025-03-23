@@ -19,7 +19,7 @@ export function CreditsPage() {
             </li>
           </ul>
         </Selectable>
-        <Selectable className="flex flex-col">
+        <Selectable className="!flex !flex-col">
           <span className="text-2xl font-bold">Support</span>
           <span>
             See the DeckThemes Discord server for support.
@@ -33,7 +33,7 @@ export function CreditsPage() {
             </span>
           </span>
         </Selectable>
-        <Selectable className="flex flex-col">
+        <Selectable className="!flex !flex-col">
           <span className="text-2xl font-bold">Create and Submit Your Own Theme</span>
           <span>
             Instructions for theme creation/submission are available DeckThemes' documentation

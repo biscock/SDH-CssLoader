@@ -22,7 +22,7 @@ export function TitleView() {
       style={{
         boxShadow: "none",
       }}
-      className={`${quickAccessMenuClasses.Title} flex p-0 w-full items-center justify-between`}
+      className={`${quickAccessMenuClasses.Title} !flex !p-0 !w-full !items-center !justify-between`}
     >
       <div style={{ marginRight: "auto" }}>CSS Loader</div>
       <DialogButton

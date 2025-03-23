@@ -65,7 +65,7 @@ export function UploadProfileModal({
           )}
         </div>
       ) : (
-        <Focusable className="flex flex-col gap-4">
+        <Focusable className="!flex !flex-col !gap-4">
           <DropdownItem
             selectedOption={selectedProfileId}
             rgOptions={eligibleProfiles.map((e) => ({ data: e.id, label: e.display_name }))}

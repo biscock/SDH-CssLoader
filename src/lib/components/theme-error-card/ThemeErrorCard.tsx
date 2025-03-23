@@ -3,7 +3,7 @@ import { Selectable } from "../../primitives";
 
 export function ThemeErrorCard({ error }: { error: ThemeError }) {
   return (
-    <Selectable className="w-full m-0 p-0">
+    <Selectable className="!w-full !m-0 !p-0">
       <div
         className="flex flex-col gap-2"
         style={{

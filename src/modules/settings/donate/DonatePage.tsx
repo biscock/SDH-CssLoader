@@ -13,10 +13,10 @@ export function DonatePage() {
           CSS Loader and its related projects.
         </p>
       </Selectable>
-      <Focusable className="grid grid-cols-2 w-full gap-4">
+      <Focusable className="!grid !grid-cols-2 !w-full !gap-4">
         <Focusable
           onActivate={() => Navigation.NavigateToExternalWeb("https://patreon.com/deckthemes")}
-          className="flex flex-col gap-2"
+          className="!flex !flex-col !gap-2"
           focusWithinClassName="gpfocuswithin"
         >
           <div className="flex flex-col">
@@ -41,7 +41,7 @@ export function DonatePage() {
         </Focusable>
         <Focusable
           onActivate={() => Navigation.NavigateToExternalWeb("https://ko-fi.com/suchmememanyskill")}
-          className="flex flex-col"
+          className="!flex !flex-col"
           focusWithinClassName="gpfocuswithin"
         >
           <div className="flex gap-1">
@@ -55,7 +55,7 @@ export function DonatePage() {
       {patrons.length > 0 && (
         <div className="mt-4 mb-4">
           <span className="text-2xl font-bold">Patreon Supporters</span>
-          <Focusable className="grid grid-cols-3 gap-2 w-full">
+          <Focusable className="!grid !grid-cols-3 !gap-2 !w-full">
             {patrons.map((patron) => (
               <Selectable>
                 <p className="m-0">{patron}</p>

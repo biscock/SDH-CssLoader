@@ -35,7 +35,7 @@ export function ExpandedViewScrollingSection() {
             <span className="cl_expandedview_version">{data.version}</span>
           </div>
           {/* Author / Modified Date */}
-          <Focusable className="flex gap-1 cl_graytext">
+          <Focusable className="!flex !gap-1 cl_graytext">
             <Focusable
               onOKActionDescription="View Profile"
               focusClassName="gpfocuswithin"
@@ -53,14 +53,14 @@ export function ExpandedViewScrollingSection() {
             <span>Last Updated {new Date(data.updated).toLocaleDateString()}</span>
           </Focusable>
           {/* Description */}
-          <Selectable className="flex flex-col gap-1">
+          <Selectable className="!flex !flex-col !gap-1">
             <span className="font-bold">Description</span>
             <span className={data.description.length > 400 ? "text-sm" : ""}>
               {data.description || <i className="cl_graytext">No description provided.</i>}
             </span>
           </Selectable>
           {/* Targets */}
-          <Focusable className="flex flex-col gap-1">
+          <Focusable className="!flex !flex-col !gap-1">
             <span className="font-bold">Targets</span>
             <Focusable className="cl_expandedview_targetbuttonscontainer">
               {data.targets.map((target) => (

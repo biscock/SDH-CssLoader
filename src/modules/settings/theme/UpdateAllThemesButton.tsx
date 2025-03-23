@@ -16,7 +16,7 @@ export function UpdateAllThemesButton() {
   return (
     <>
       {updateStatuses.filter((e) => e[1] === "outdated").length > 0 && (
-        <DialogButton className="flex items-center justify-center gap-2" onClick={updateAll}>
+        <DialogButton className="!flex !items-center !justify-center !gap-2" onClick={updateAll}>
           <FaDownload />
           <span>Update All Themes</span>
         </DialogButton>

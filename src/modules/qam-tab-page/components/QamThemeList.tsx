@@ -11,7 +11,7 @@ export function QamThemeList() {
   }
 
   return (
-    <Focusable className="flex flex-col items-stretch w-full">
+    <Focusable className="!flex !flex-col !items-stretch !w-full">
       {themes
         .filter(
           (theme) => !unpinnedThemes.includes(theme.id) && !theme.flags.includes(Flags.isPreset)

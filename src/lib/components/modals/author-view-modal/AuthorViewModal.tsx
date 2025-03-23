@@ -56,7 +56,7 @@ export function AuthorViewModal({
               <SupporterIcon authorData={authorData} />
             </div>
           </div>
-          <Focusable className="flex flex-wrap justify-center gap-2">
+          <Focusable className="!flex !flex-wrap !justify-center !gap-2">
             {themes.map((theme, i) => {
               return (
                 <ThemeCard

@@ -27,7 +27,7 @@ export function ThemeSettingsPage() {
 
   return (
     <Focusable className="cl_settingspage_container">
-      <Focusable className="flex gap-4 mb-4">
+      <Focusable className="!flex !gap-4 !mb-4">
         <DialogButton
           className="CSSLoader_InstalledThemes_ModeButton"
           onClick={() => setDeleteMode(!deleteMode)}
@@ -39,7 +39,7 @@ export function ThemeSettingsPage() {
       {deleteMode ? (
         <ThemeDeleteMenu sortedThemeList={sortedList} onLeave={() => setDeleteMode(false)} />
       ) : (
-        <Focusable className="flex flex-col gap-1">
+        <Focusable className="!flex !flex-col !gap-1">
           {sortedList.map((theme) => (
             <ThemeSettingsEntry key={theme.id} theme={theme} />
           ))}
@@ -48,7 +48,7 @@ export function ThemeSettingsPage() {
       {themeErrors.length > 0 && (
         <Focusable>
           <span className="text-2xl font-bold">Theme Errors</span>
-          <Focusable className="grid grid-cols-2 gap-4">
+          <Focusable className="!grid !grid-cols-2 !gap-4">
             {themeErrors.map((e) => (
               <ThemeErrorCard key={e[0]} error={e} />
             ))}
