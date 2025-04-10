@@ -1,7 +1,8 @@
 import { useCSSLoaderActions, useCSSLoaderValues } from "@/backend";
-import { ProfileDetailsModal, useThemeInstallState } from "@/lib";
+import { cn, ProfileDetailsModal, useThemeInstallState } from "@/lib";
 import { Theme } from "@/types";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
+import { useState } from "react";
 import { FaListUl } from "react-icons/fa6";
 
 export function ProfileInstalledEntry({
@@ -18,6 +19,8 @@ export function ProfileInstalledEntry({
   const isOutdated = updateStatus === "outdated";
 
   const isSelected = selectedPreset?.id === data.id;
+
+  const [isChanging, setIsChanging] = useState(false);
 
   return (
     <Focusable className="relative flex flex-row gap-1">
@@ -38,9 +41,11 @@ export function ProfileInstalledEntry({
       <Focusable
         ref={passthroughRef}
         focusWithinClassName="gpfocuswithin"
-        onActivate={() => {
-          if (isSelected) return;
-          changePreset(data.name);
+        onActivate={async () => {
+          if (isSelected || isChanging) return;
+          setIsChanging(true);
+          await changePreset(data.name);
+          setIsChanging(false);
         }}
         onOKActionDescription="Select Profile"
         onOptionsActionDescription="View Details"
@@ -49,7 +54,7 @@ export function ProfileInstalledEntry({
         }}
         onSecondaryActionDescription={isOutdated ? "Update Profile" : undefined}
         onSecondaryButton={isOutdated ? () => installTheme(data.id) : undefined}
-        className="cl_profilesettings_radiocontainer"
+        className={cn("cl_profilesettings_radiocontainer", isChanging && "opacity-50")}
       >
         <span>{data.display_name}</span>
         <div className="border-2 border-white rounded-full flex items-center justify-center w-4 h-4 p-1">
