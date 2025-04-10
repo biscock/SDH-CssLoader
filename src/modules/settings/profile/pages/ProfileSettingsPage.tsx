@@ -1,12 +1,34 @@
-import { Focusable } from "@decky/ui";
+import { DialogButton, Focusable } from "@decky/ui";
+import { useState } from "react";
 import { ImSpinner5 } from "react-icons/im";
-import { OfflineView, OnlineView } from "../components";
+import {
+  DisableProfileButton,
+  OfflineView,
+  OnlineView,
+  ProfileDeleteMenu,
+  UpdateAllProfilesButton,
+} from "../components";
 import { ProfileContextProvider, useProfileContext } from "../state";
 
 export function ProfileSettingsPage() {
+  const [deleteMode, setDeleteMode] = useState(false);
   return (
     <ProfileContextProvider>
-      <ProfileSettingsPageContent />
+      <Focusable className="flex gap-4 mb-4">
+        <DisableProfileButton />
+        <DialogButton
+          className="CSSLoader_InstalledThemes_ModeButton"
+          onClick={() => setDeleteMode(!deleteMode)}
+        >
+          {deleteMode ? "Go Back" : "Delete Profiles"}
+        </DialogButton>
+        <UpdateAllProfilesButton />
+      </Focusable>
+      {deleteMode ? (
+        <ProfileDeleteMenu disableDeleteMode={() => setDeleteMode(false)} />
+      ) : (
+        <ProfileSettingsPageContent />
+      )}
     </ProfileContextProvider>
   );
 }

@@ -1,14 +1,16 @@
-import { DeleteConfirmationModal } from "@/lib";
 import { Theme } from "@/types";
 import { DialogButton, DialogCheckbox, Focusable, showModal } from "@decky/ui";
 import { useState } from "react";
+import { DeleteConfirmationModal } from "../modals";
 
-export function ThemeDeleteMenu({
+export function DeleteMenu({
   sortedThemeList,
   onLeave,
+  type = "theme",
 }: {
   sortedThemeList: Theme[];
   onLeave: () => void;
+  type?: "theme" | "profile";
 }) {
   const [choppingBlock, setChoppingBlock] = useState<string[]>([]);
 
@@ -30,7 +32,11 @@ export function ThemeDeleteMenu({
       <DialogButton
         onClick={() => {
           showModal(
-            <DeleteConfirmationModal themeIdsToBeDeleted={choppingBlock} onDeleteFinish={onLeave} />
+            <DeleteConfirmationModal
+              themeIdsToBeDeleted={choppingBlock}
+              onDeleteFinish={onLeave}
+              type={type}
+            />
           );
         }}
       >

@@ -1,9 +1,8 @@
 import { useCSSLoaderValues } from "@/backend";
-import { ThemeErrorCard } from "@/lib";
+import { DeleteMenu, ThemeErrorCard } from "@/lib";
 import { Flags } from "@/types";
 import { DialogButton, Focusable } from "@decky/ui";
 import { useMemo, useState } from "react";
-import { ThemeDeleteMenu } from "./ThemeDeleteMenu";
 import { ThemeSettingsEntry } from "./ThemeSettingsEntry";
 import { UpdateAllThemesButton } from "./UpdateAllThemesButton";
 
@@ -37,7 +36,7 @@ export function ThemeSettingsPage() {
         <UpdateAllThemesButton />
       </Focusable>
       {deleteMode ? (
-        <ThemeDeleteMenu sortedThemeList={sortedList} onLeave={() => setDeleteMode(false)} />
+        <DeleteMenu sortedThemeList={sortedList} onLeave={() => setDeleteMode(false)} />
       ) : (
         <Focusable className="flex flex-col gap-1">
           {sortedList.map((theme) => (
