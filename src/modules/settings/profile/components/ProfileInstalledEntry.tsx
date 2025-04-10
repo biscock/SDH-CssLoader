@@ -4,12 +4,20 @@ import { Theme } from "@/types";
 import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { FaListUl } from "react-icons/fa6";
 
-export function ProfileInstalledEntry({ data }: { data: Theme }) {
+export function ProfileInstalledEntry({
+  data,
+  passthroughRef,
+}: {
+  data: Theme;
+  passthroughRef?: React.Ref<HTMLDivElement>;
+}) {
   const { isWorking, selectedPreset } = useCSSLoaderValues();
   const { installTheme, changePreset } = useCSSLoaderActions();
 
   const updateStatus = useThemeInstallState(data);
   const isOutdated = updateStatus === "outdated";
+
+  const isSelected = selectedPreset?.id === data.id;
 
   return (
     <Focusable className="relative flex flex-row gap-1">
@@ -28,8 +36,10 @@ export function ProfileInstalledEntry({ data }: { data: Theme }) {
         />
       )}
       <Focusable
+        ref={passthroughRef}
         focusWithinClassName="gpfocuswithin"
         onActivate={() => {
+          if (isSelected) return;
           changePreset(data.name);
         }}
         onOKActionDescription="Select Profile"
@@ -42,10 +52,8 @@ export function ProfileInstalledEntry({ data }: { data: Theme }) {
         className="cl_profilesettings_radiocontainer"
       >
         <span>{data.display_name}</span>
-        <div className="border-2 border-white rounded-full flex items-center justify-center w-6 h-6 p-2">
-          {selectedPreset?.id === data.id ? (
-            <div className="w-full h-full bg-white rounded-full" />
-          ) : null}
+        <div className="border-2 border-white rounded-full flex items-center justify-center w-4 h-4 p-1">
+          {isSelected ? <div className="w-full h-full bg-white rounded-full" /> : null}
         </div>
       </Focusable>
       <DialogButton

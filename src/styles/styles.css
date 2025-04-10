@@ -83,6 +83,10 @@ MARK: TAILWIND
   padding: 0 !important;
 }
 
+.p-1 {
+  padding: 0.25rem !important;
+}
+
 .p-2 {
   padding: 0.5rem !important;
 }
@@ -103,6 +107,10 @@ MARK: TAILWIND
 
 .m-0 {
   margin: 0 !important;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem !important;
 }
 
 .ml-auto {
@@ -127,6 +135,7 @@ MARK: TAILWIND
 
 .border-2 {
   border-width: 2px !important;
+  border-style: solid !important;
 }
 
 .border-white {
@@ -141,8 +150,16 @@ MARK: TAILWIND
   width: 1.5rem !important;
 }
 
+.w-4 {
+  width: 1rem !important;
+}
+
 .h-6 {
   height: 1.5rem !important;
+}
+
+.h-4 {
+  height: 1rem !important;
 }
 
 .w-full {
@@ -191,6 +208,10 @@ MARK: TAILWIND
 
 .opacity-50 {
   opacity: 0.5 !important;
+}
+
+.bg-white {
+  background-color: white !important;
 }
 
 .absolute-center {

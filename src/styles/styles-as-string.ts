@@ -86,6 +86,10 @@ MARK: TAILWIND
   padding: 0 !important;
 }
 
+.p-1 {
+  padding: 0.25rem !important;
+}
+
 .p-2 {
   padding: 0.5rem !important;
 }
@@ -124,12 +128,17 @@ MARK: TAILWIND
   margin-top: 1rem !important;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem !important;
+}
+
 .mr-4 {
   margin-right: 1rem !important;
 }
 
 .border-2 {
   border-width: 2px !important;
+  border-style: solid !important;
 }
 
 .border-white {
@@ -144,8 +153,16 @@ MARK: TAILWIND
   width: 1.5rem !important;
 }
 
+.w-4 {
+  width: 1rem !important;
+}
+
 .h-6 {
   height: 1.5rem !important;
+}
+
+.h-4 {
+  height: 1rem !important;
 }
 
 .w-full {
@@ -756,4 +773,9 @@ MARK: Settings Page
   justify-content: center !important;
   gap: 0.5rem !important;
 }
+
+.bg-white {
+  background-color: white !important;
+}
+
 `;

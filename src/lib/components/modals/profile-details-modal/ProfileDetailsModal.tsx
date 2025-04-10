@@ -9,12 +9,14 @@ export function ProfileDetailsModal({
   data: Theme;
 }) {
   return (
-    <Modal title={data.display_name} closeModal={closeModal}>
+    <Modal closeModal={closeModal}>
+      <span className="font-bold text-2xl">{data.display_name}</span>
       <ul>
         {data.dependencies.map((e) => (
           <li key={e}>{e}</li>
         ))}
       </ul>
+      {data.dependencies.length === 0 && <span>This profile contains no themes</span>}
     </Modal>
   );
 }

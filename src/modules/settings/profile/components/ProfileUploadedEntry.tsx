@@ -5,14 +5,25 @@ import { DialogButton, Focusable } from "@decky/ui";
 import { FaDownload } from "react-icons/fa6";
 import { ProfileInstalledEntry } from "./ProfileInstalledEntry";
 
-export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
+export function ProfileUploadedEntry({
+  data,
+  passthroughRef,
+}: {
+  data: PartialCSSThemeInfo;
+  passthroughRef?: React.Ref<HTMLDivElement>;
+}) {
   const { isWorking, themes } = useCSSLoaderValues();
   const { installTheme } = useCSSLoaderActions();
 
   const updateStatus = useThemeInstallState(data);
 
   if (!!themes.find((e) => e.name === data.name)) {
-    return <ProfileInstalledEntry data={themes.find((e) => e.name === data.name) as Theme} />;
+    return (
+      <ProfileInstalledEntry
+        passthroughRef={passthroughRef}
+        data={themes.find((e) => e.name === data.name) as Theme}
+      />
+    );
   }
 
   return (
@@ -32,6 +43,7 @@ export function ProfileUploadedEntry({ data }: { data: PartialCSSThemeInfo }) {
         />
       )}
       <Focusable
+        ref={passthroughRef}
         focusWithinClassName="gpfocuswithin"
         onOKActionDescription="Download Profile"
         onActivate={() => {
