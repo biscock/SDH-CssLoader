@@ -75,7 +75,7 @@ export function generateThemeBrowserStore({
       search: "",
     },
     filterOptions: {
-      filters: [],
+      filters: {},
       order: ["Last Updated"],
     },
     indexToSnapToOnLoad: -1,
@@ -168,20 +168,28 @@ export function generateThemeBrowserStore({
 
   let prevTargetOverride: string | null = null;
   themeBrowserSharedStore.subscribe((state) => {
-    if (state.targetOverride !== prevTargetOverride) {
-      prevTargetOverride = state.targetOverride;
-      if (state.targetOverride) {
-        store.getState().setSearchOpts(
-          {
-            ...store.getState().searchOpts,
-            filters: state.targetOverride,
-            page: 1,
-          },
-          true
-        );
-        themeBrowserSharedStore.setState({ targetOverride: null });
-      }
+    if (state.targetOverride === prevTargetOverride) return;
+    prevTargetOverride = state.targetOverride;
+    if (state.targetOverride === null) return;
+
+    const { filterOptions, searchOpts, setSearchOpts } = store.getState();
+
+    // If you click on a filter from a desktop theme, you don't want the override applying to bpm themes
+    if (Object.keys(filterOptions.filters).includes(state.targetOverride)) {
+      setSearchOpts(
+        {
+          ...searchOpts,
+          filters: state.targetOverride,
+          page: 1,
+        },
+        true
+      );
     }
+
+    // This delay is essentially just so that the update has a chance to propagate to all instances
+    setTimeout(() => {
+      themeBrowserSharedStore.setState({ targetOverride: null });
+    }, 1000);
   });
 
   return store;

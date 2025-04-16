@@ -84,6 +84,6 @@ export interface ThemeSubmissionInfo {
 }
 
 export interface FilterQueryResponse {
-  filters: string[];
+  filters: Record<string, number>;
   order: string[];
 }
