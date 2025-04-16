@@ -5,13 +5,18 @@ import { ConfirmModal } from "../../../primitives";
 
 export function CreateProfileModal({ closeModal }: { closeModal?: () => void }) {
   const { themes } = useCSSLoaderValues();
-  const { createPreset } = useCSSLoaderActions();
+  const { createPreset, toast } = useCSSLoaderActions();
   const numOfEnabledThemes = themes.filter((e) => e.enabled).length;
 
   const [name, setName] = useState("");
 
   async function handleCreate() {
-    await createPreset(name);
+    const formattedName = name.trim();
+    if (formattedName.length === 0) {
+      toast("Invalid Name");
+      return;
+    }
+    await createPreset(formattedName);
     closeModal?.();
   }
 
