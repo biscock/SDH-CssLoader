@@ -24,6 +24,7 @@ export function ThemeStoreRouter() {
       title: "Deck UI Themes",
       content: (
         <ThemeBrowserStoreProvider
+          pageId="bpm-themes"
           filterPath="/themes/filters"
           themePath="/themes"
           themeType="BPM"
@@ -38,6 +39,7 @@ export function ThemeStoreRouter() {
       title: "Desktop Themes",
       content: (
         <ThemeBrowserStoreProvider
+          pageId="desktop-themes"
           filterPath="/themes/filters"
           themePath="/themes"
           themeType="DESKTOP"
@@ -60,8 +62,9 @@ export function ThemeStoreRouter() {
       title: "Submissions",
       content: (
         <ThemeBrowserStoreProvider
-          filterPath="/themes/awaiting_approval/filters"
-          themePath="/themes/awaiting_approval"
+          pageId="submissions"
+          filterPath="/submissions/filters"
+          themePath="/submissions"
           themeType="ALL"
           requiresAuth={true}
         >
@@ -76,6 +79,7 @@ export function ThemeStoreRouter() {
       title: "Starred Themes",
       content: (
         <ThemeBrowserStoreProvider
+          pageId="starred-themes"
           filterPath="/users/me/stars/filters"
           themePath="/users/me/stars"
           themeType="ALL"

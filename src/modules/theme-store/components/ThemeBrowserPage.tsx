@@ -10,6 +10,7 @@ import { LoadMoreButton } from "./LoadMoreButton";
 
 export function ThemeBrowserPage() {
   const initializeStore = useThemeBrowserStoreAction("initializeStore");
+  const isInitialized = useThemeBrowserStoreValue("isInitialized");
   const themes = useThemeBrowserStoreValue("themes");
   const loading = useThemeBrowserStoreValue("loading");
   const indexToSnapToOnLoad = useThemeBrowserStoreValue("indexToSnapToOnLoad");
@@ -21,6 +22,7 @@ export function ThemeBrowserPage() {
   const firstCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isInitialized) return;
     void initializeStore();
   }, []);
 

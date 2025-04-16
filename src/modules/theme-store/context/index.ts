@@ -1,2 +1,2 @@
-export * from "./ThemeBrowserSharedStore";
-export * from "./ThemeBrowserStore";
+export * from "./theme-browser-shared-store";
+export * from "./ThemeBrowserStoreProvider";
