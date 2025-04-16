@@ -60,6 +60,7 @@ export function BrowserSearchFields() {
           <div className="cl-store-filter-field-container cl-store-dropdown-hide-spacer">
             <span className="DialogLabel">Filter</span>
             <Dropdown
+              disabled={Object.keys(filters).length === 0}
               menuLabel="Filter"
               rgOptions={formattedFilters}
               strDefaultLabel="All"

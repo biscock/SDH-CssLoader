@@ -50,6 +50,21 @@ export function ThemeStoreRouter() {
       ),
     },
     {
+      id: "profile-themes",
+      title: "Profiles",
+      content: (
+        <ThemeBrowserStoreProvider
+          pageId="profile-themes"
+          filterPath="/themes/filters"
+          themePath="/themes"
+          themeType="PROFILE"
+          requiresAuth={false}
+        >
+          <ThemeBrowserPage />
+        </ThemeBrowserStoreProvider>
+      ),
+    },
+    {
       id: "account",
       title: "Account",
       content: <AccountPage />,
@@ -57,7 +72,7 @@ export function ThemeStoreRouter() {
   ];
 
   apiMeData?.permissions?.includes(Permissions.viewSubs) &&
-    tabs.splice(2, 0, {
+    tabs.splice(3, 0, {
       id: "submissions",
       title: "Submissions",
       content: (
@@ -74,7 +89,7 @@ export function ThemeStoreRouter() {
     });
 
   apiMeData?.username &&
-    tabs.splice(2, 0, {
+    tabs.splice(3, 0, {
       id: "starred-themes",
       title: "Starred Themes",
       content: (

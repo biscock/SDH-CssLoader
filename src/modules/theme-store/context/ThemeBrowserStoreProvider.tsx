@@ -29,7 +29,7 @@ export function ThemeBrowserStoreProvider({
   children: React.ReactNode;
   filterPath: string;
   themePath: string;
-  themeType: "ALL" | "DESKTOP" | "BPM";
+  themeType: "ALL" | "DESKTOP" | "BPM" | "PROFILE";
   requiresAuth?: boolean;
 }) {
   const storeRef = useRef<StoreApi<IThemeBrowserStore> | null>(null);

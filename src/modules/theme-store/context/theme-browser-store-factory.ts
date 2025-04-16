@@ -30,11 +30,27 @@ export interface ThemeBrowserStoreActions {
 
 export interface IThemeBrowserStore extends ThemeBrowserStoreValues, ThemeBrowserStoreActions {}
 
-function generateParamStr(searchOpts: ThemeQueryRequest, themeType: "ALL" | "DESKTOP" | "BPM") {
+function generateParamStr(
+  searchOpts: ThemeQueryRequest,
+  themeType: "ALL" | "DESKTOP" | "BPM" | "PROFILE"
+) {
   const searchOptsClone = structuredClone(searchOpts);
 
-  let prependString =
-    themeType === "ALL" ? "CSS" : themeType === "DESKTOP" ? "DESKTOP-CSS" : "BPM-CSS";
+  let prependString;
+  switch (themeType) {
+    case "ALL":
+      prependString = "CSS";
+      break;
+    case "DESKTOP":
+      prependString = "DESKTOP-CSS.-Profile";
+      break;
+    case "BPM":
+      prependString = "BPM-CSS.-Profile";
+      break;
+    case "PROFILE":
+      prependString = "CSS.PROFILE";
+  }
+
   // "All" is a fake term made up by the frontend to have a unique key for it, the server just expects empty
   searchOptsClone.filters === "All" ? (searchOptsClone.filters = "") : (prependString += ".");
   searchOptsClone.filters = prependString + searchOptsClone.filters;
@@ -52,7 +68,7 @@ export function generateThemeBrowserStore({
 }: {
   filterPath: string;
   themePath: string;
-  themeType: "ALL" | "DESKTOP" | "BPM";
+  themeType: "ALL" | "DESKTOP" | "BPM" | "PROFILE";
   requiresAuth?: boolean;
 }) {
   const store = createStore<IThemeBrowserStore>((set, get) => ({
@@ -107,6 +123,7 @@ export function generateThemeBrowserStore({
         ALL: "CSS",
         DESKTOP: "DESKTOP-CSS",
         BPM: "BPM-CSS",
+        PROFILE: "CSS",
       };
 
       try {
@@ -119,6 +136,10 @@ export function generateThemeBrowserStore({
         );
         if (response.filters) {
           set({ filterOptions: response });
+        }
+        // Profile IS A filter, so disable filter options
+        if (themeType === "PROFILE") {
+          set({ filterOptions: { ...get().filterOptions, filters: {} } });
         }
       } catch (error) {}
     },
