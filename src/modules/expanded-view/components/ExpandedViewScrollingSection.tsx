@@ -2,13 +2,12 @@ import { AuthorViewModal } from "@/lib";
 import { useThemeBrowserSharedActions } from "@/modules/theme-store/context";
 import { DialogButton, Focusable, Navigation, ScrollPanelGroup, showModal } from "@decky/ui";
 import { Selectable } from "../../../lib/primitives";
-import { useExpandedViewAction, useExpandedViewValue } from "../context";
+import { useExpandedViewActions, useExpandedViewValues } from "../context";
 import { ExpandedViewImageContainer } from "./ExpandedViewImageContainer";
 
 export function ExpandedViewScrollingSection() {
-  const data = useExpandedViewValue("data");
-  const close = useExpandedViewAction("close");
-  const openTheme = useExpandedViewAction("openTheme");
+  const { data } = useExpandedViewValues();
+  const { close, openTheme } = useExpandedViewActions();
 
   const { setTargetOverride } = useThemeBrowserSharedActions();
 

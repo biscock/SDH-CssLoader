@@ -4,12 +4,11 @@ import { DialogButton, Focusable, showModal } from "@decky/ui";
 import { useEffect, useRef, useState } from "react";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { ImCog } from "react-icons/im";
-import { useExpandedViewAction, useExpandedViewValue } from "../context";
+import { useExpandedViewActions, useExpandedViewValues } from "../context";
 
 export function ExpandedViewButtonsSection() {
-  const data = useExpandedViewValue("data");
-  const isStarred = useExpandedViewValue("isStarred");
-  const toggleStar = useExpandedViewAction("toggleStar");
+  const { data, isStarred } = useExpandedViewValues();
+  const { toggleStar } = useExpandedViewActions();
 
   const { apiFullToken, isWorking } = useCSSLoaderValues();
   const { installTheme } = useCSSLoaderActions();

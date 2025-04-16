@@ -1,7 +1,7 @@
-import { useExpandedViewValue } from "../context";
+import { useExpandedViewValues } from "../context";
 
 export function ExpandedViewCssVariables() {
-  const imageDimensionKeys = useExpandedViewValue("imageAreaStyleKeys");
+  const { imageAreaStyleKeys: imageDimensionKeys } = useExpandedViewValues();
 
   return (
     <style>

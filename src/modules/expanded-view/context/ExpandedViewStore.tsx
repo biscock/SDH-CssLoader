@@ -1,7 +1,8 @@
 import { getCSSLoaderState } from "@/backend";
 import { FullCSSThemeInfo } from "@/types";
 import { Navigation } from "@decky/ui";
-import { createStore, useStore } from "zustand";
+import { createStore } from "zustand";
+import { generateStoreSelector } from "zusteebles";
 
 interface IExpandedViewStoreValues {
   loaded: boolean;
@@ -152,13 +153,7 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
   };
 });
 
-const useExpandedViewState = (fn: (state: IExpandedViewStore) => any) =>
-  useStore(expandedViewStore, fn);
-
-export const useExpandedViewValue = <T extends keyof IExpandedViewStoreValues>(
-  key: T
-): IExpandedViewStore[T] => useExpandedViewState((state) => state[key]);
-
-export const useExpandedViewAction = <T extends keyof IExpandedViewStoreActions>(
-  key: T
-): IExpandedViewStore[T] => useExpandedViewState((state) => state[key]);
+export const useExpandedViewValues =
+  generateStoreSelector<IExpandedViewStoreValues>(expandedViewStore);
+export const useExpandedViewActions =
+  generateStoreSelector<IExpandedViewStoreActions>(expandedViewStore);

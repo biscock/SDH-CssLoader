@@ -12,16 +12,17 @@ import { FaRotate } from "react-icons/fa6";
 import {
   useThemeBrowserSharedActions,
   useThemeBrowserSharedValues,
-  useThemeBrowserStoreAction,
-  useThemeBrowserStoreValue,
+  useThemeBrowserStoreActions,
+  useThemeBrowserStoreValues,
 } from "../context";
 import { FilterOptionLabel } from "./FilterOptionLabel";
 
 export function BrowserSearchFields() {
-  const { filters, order } = useThemeBrowserStoreValue("filterOptions");
-  const searchOpts = useThemeBrowserStoreValue("searchOpts");
-  const setSearchOpts = useThemeBrowserStoreAction("setSearchOpts");
-  const refreshThemes = useThemeBrowserStoreAction("refreshThemes");
+  const {
+    filterOptions: { filters, order },
+    searchOpts,
+  } = useThemeBrowserStoreValues();
+  const { setSearchOpts, refreshThemes } = useThemeBrowserStoreActions();
 
   const { browserCardSize } = useThemeBrowserSharedValues();
   const { setBrowserCardSize } = useThemeBrowserSharedActions();

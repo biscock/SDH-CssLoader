@@ -1,12 +1,9 @@
 import { DialogButton } from "@decky/ui";
-import { useThemeBrowserStoreAction, useThemeBrowserStoreValue } from "../context";
+import { useThemeBrowserStoreActions, useThemeBrowserStoreValues } from "../context";
 
 export function LoadMoreButton() {
-  const searchOpts = useThemeBrowserStoreValue("searchOpts");
-  const themeTotal = useThemeBrowserStoreValue("themeTotal");
-  const themes = useThemeBrowserStoreValue("themes");
-  const loading = useThemeBrowserStoreValue("loading");
-  const setSearchOpts = useThemeBrowserStoreAction("setSearchOpts");
+  const { searchOpts, themeTotal, themes, loading } = useThemeBrowserStoreValues();
+  const { setSearchOpts } = useThemeBrowserStoreActions();
 
   function handleClick() {
     void setSearchOpts({ ...searchOpts, page: searchOpts.page + 1 });

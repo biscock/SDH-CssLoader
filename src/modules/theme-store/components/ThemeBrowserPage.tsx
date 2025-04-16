@@ -1,22 +1,19 @@
 import { useCSSLoaderValues } from "@/backend";
 import { ThemeCard } from "@/lib";
-import { useExpandedViewAction } from "@/modules/expanded-view";
+import { useExpandedViewActions } from "@/modules/expanded-view";
 import { Focusable } from "@decky/ui";
 import { useEffect, useRef } from "react";
 import { ImSpinner5 } from "react-icons/im";
-import { useThemeBrowserStoreAction, useThemeBrowserStoreValue } from "../context";
+import { useThemeBrowserStoreActions, useThemeBrowserStoreValues } from "../context";
 import { BrowserSearchFields } from "./BrowserSearchFields";
 import { LoadMoreButton } from "./LoadMoreButton";
 
 export function ThemeBrowserPage() {
-  const initializeStore = useThemeBrowserStoreAction("initializeStore");
-  const isInitialized = useThemeBrowserStoreValue("isInitialized");
-  const themes = useThemeBrowserStoreValue("themes");
-  const loading = useThemeBrowserStoreValue("loading");
-  const indexToSnapToOnLoad = useThemeBrowserStoreValue("indexToSnapToOnLoad");
+  const { initializeStore } = useThemeBrowserStoreActions();
+  const { isInitialized, themes, loading, indexToSnapToOnLoad } = useThemeBrowserStoreValues();
   const { backendVersion } = useCSSLoaderValues();
 
-  const openTheme = useExpandedViewAction("openTheme");
+  const { openTheme } = useExpandedViewActions();
 
   const endOfPageRef = useRef<HTMLDivElement>(null);
   const firstCardRef = useRef<HTMLDivElement>(null);

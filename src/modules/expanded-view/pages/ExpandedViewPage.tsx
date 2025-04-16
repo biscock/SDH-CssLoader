@@ -5,11 +5,10 @@ import {
   ExpandedViewLoadingPage,
   ExpandedViewScrollingSection,
 } from "../components";
-import { useExpandedViewValue } from "../context";
+import { useExpandedViewValues } from "../context";
 
 export function ExpandedViewPage() {
-  const loaded = useExpandedViewValue("loaded");
-  const error = useExpandedViewValue("error");
+  const { loaded, error } = useExpandedViewValues();
 
   if (!loaded) return <ExpandedViewLoadingPage />;
 

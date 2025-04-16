@@ -36,8 +36,8 @@ importers:
         specifier: ^4.5.2
         version: 4.5.2(@types/react@16.14.0)(react@18.3.1)
       zusteebles:
-        specifier: ^0.0.3
-        version: 0.0.3(react@18.3.1)(zustand@4.5.2(@types/react@16.14.0)(react@18.3.1))
+        specifier: ^0.0.5
+        version: 0.0.5(react@18.3.1)(zustand@4.5.2(@types/react@16.14.0)(react@18.3.1))
     devDependencies:
       '@rollup/plugin-alias':
         specifier: ^5.1.0
@@ -1047,8 +1047,8 @@ packages:
       react:
         optional: true
 
-  zusteebles@0.0.3:
-    resolution: {integrity: sha512-fHIGBwNAeLYCr7z/5q8zE3zhe6rUeEmAu9ZO88TUNH6iUyQSr4HPetuJ/6qPq+dhlPwj2MHinSVRIuuHk3FOoA==}
+  zusteebles@0.0.5:
+    resolution: {integrity: sha512-Xmp7pvv6gNnEO/1xggI5ELcetH3IItsDUmNxl9US90B/l+DheIEDmuw70pnyhoCX1ffa7o0DECehrmuWy4IH3A==}
     peerDependencies:
       react: ^18.0.0
       zustand: ^4.5.2
@@ -2016,7 +2016,7 @@ snapshots:
       '@types/react': 16.14.0
       react: 18.3.1
 
-  zusteebles@0.0.3(react@18.3.1)(zustand@4.5.2(@types/react@16.14.0)(react@18.3.1)):
+  zusteebles@0.0.5(react@18.3.1)(zustand@4.5.2(@types/react@16.14.0)(react@18.3.1)):
     dependencies:
       react: 18.3.1
       zustand: 4.5.2(@types/react@16.14.0)(react@18.3.1)

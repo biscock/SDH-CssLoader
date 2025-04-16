@@ -1,5 +1,6 @@
-import { createContext, useContext, useRef } from "react";
-import { createStore, StoreApi, useStore } from "zustand";
+import { createContext, useRef } from "react";
+import { createStore, StoreApi } from "zustand";
+import { generateStoreSelectorFromContext } from "zusteebles";
 import {
   generateThemeBrowserStore,
   IThemeBrowserStore,
@@ -62,17 +63,9 @@ export function ThemeBrowserStoreProvider({
   );
 }
 
-export const useThemeBrowserStore = <T,>(selector: (state: IThemeBrowserStore) => T) => {
-  const store = useContext(ThemeBrowserStoreContext);
-  if (!store) {
-    throw new Error("Missing StoreProvider");
-  }
-  return useStore(store, selector);
-};
-export const useThemeBrowserStoreValue = <T extends keyof ThemeBrowserStoreValues>(
-  key: T
-): IThemeBrowserStore[T] => useThemeBrowserStore((state) => state[key]);
-
-export const useThemeBrowserStoreAction = <T extends keyof ThemeBrowserStoreActions>(
-  key: T
-): IThemeBrowserStore[T] => useThemeBrowserStore((state) => state[key]);
+export const useThemeBrowserStoreValues =
+  // @ts-expect-error I have no idea why this typing doesn't work
+  generateStoreSelectorFromContext<ThemeBrowserStoreValues>(ThemeBrowserStoreContext);
+export const useThemeBrowserStoreActions =
+  // @ts-expect-error I have no idea why this typing doesn't work
+  generateStoreSelectorFromContext<ThemeBrowserStoreActions>(ThemeBrowserStoreContext);

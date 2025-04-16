@@ -46,7 +46,7 @@
     "react-icons": "^4.12.0",
     "tailwind-merge": "^2.3.0",
     "zustand": "^4.5.2",
-    "zusteebles": "^0.0.3"
+    "zusteebles": "^0.0.5"
   },
   "pnpm": {
     "peerDependencyRules": {

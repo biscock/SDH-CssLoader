@@ -1,18 +1,20 @@
 import { Focusable, ScrollPanelGroup } from "@decky/ui";
 import { Selectable } from "../../../lib/primitives";
-import { useExpandedViewAction, useExpandedViewValue } from "../context";
+import { useExpandedViewActions, useExpandedViewValues } from "../context";
 
 export function ExpandedViewImageContainer() {
-  const data = useExpandedViewValue("data");
   const {
-    imageCarouselEntryWidth,
-    imageCarouselEntryHeight,
-    selectedImageHeight,
-    selectedImageWidth,
-  } = useExpandedViewValue("imageAreaStyleKeys");
-  const focusedImageId = useExpandedViewValue("focusedImageId");
+    data,
+    focusedImageId,
+    imageAreaStyleKeys: {
+      imageCarouselEntryWidth,
+      imageCarouselEntryHeight,
+      selectedImageHeight,
+      selectedImageWidth,
+    },
+  } = useExpandedViewValues();
 
-  const setFocusedImage = useExpandedViewAction("setFocusedImage");
+  const { setFocusedImage } = useExpandedViewActions();
 
   return (
     <Focusable className="cl_expandedview_imageareacontainer">
