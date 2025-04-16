@@ -13,6 +13,9 @@ const ThemeBrowserPersistenceStore = createStore<
 
 const ThemeBrowserStoreContext = createContext<StoreApi<IThemeBrowserStore> | null>(null);
 
+// Each store is essentially the same thing, so we use a Context so that we can just put a provider for each page
+// However, when you change tabs and come back (which would delete and recreate the provider), the state shouldn't reset
+// So we use the ThemeBrowserPersistenceStore to hold the old copies of the stores so that if the component is recreated it can pick up where it left off
 export function ThemeBrowserStoreProvider({
   pageId,
   children,
