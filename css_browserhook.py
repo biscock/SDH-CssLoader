@@ -28,7 +28,8 @@ class BrowserTabHook:
             self.html_classes = res["classes"]
         else:
             Log(f"Failed to connect to tab with id {self.id}")
-            self.hook.connected_tabs.remove(self)
+            if self in self.hook.connected_tabs:
+                self.hook.connected_tabs.remove(self)
             return
 
         self.init_done = True
