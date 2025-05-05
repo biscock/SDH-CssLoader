@@ -62,7 +62,7 @@ export function BrowserSearchFields() {
             <Dropdown
               disabled={Object.keys(filters).length === 0}
               menuLabel="Filter"
-              rgOptions={formattedFilters}
+              rgOptions={Object.keys(filters).length === 0 ? [] : formattedFilters}
               strDefaultLabel="All"
               selectedOption={searchOpts.filters}
               onChange={(value) => {
