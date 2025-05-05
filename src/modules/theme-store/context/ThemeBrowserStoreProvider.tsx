@@ -23,6 +23,7 @@ export function ThemeBrowserStoreProvider({
   filterPath,
   themePath,
   themeType,
+  isSubmission = false,
   requiresAuth = false,
 }: {
   pageId: string;
@@ -31,6 +32,7 @@ export function ThemeBrowserStoreProvider({
   themePath: string;
   themeType: "ALL" | "DESKTOP" | "BPM" | "PROFILE";
   requiresAuth?: boolean;
+  isSubmission?: boolean;
 }) {
   const storeRef = useRef<StoreApi<IThemeBrowserStore> | null>(null);
 
@@ -45,6 +47,7 @@ export function ThemeBrowserStoreProvider({
         filterPath,
         themePath,
         themeType,
+        isSubmission,
         requiresAuth,
       });
       ThemeBrowserPersistenceStore.setState((state) => ({

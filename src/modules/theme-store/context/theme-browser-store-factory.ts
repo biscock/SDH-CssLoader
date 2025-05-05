@@ -2,6 +2,8 @@ import { getCSSLoaderState } from "@/backend";
 import {
   FilterQueryResponse,
   PartialCSSThemeInfo,
+  SubmissionDto,
+  SubmissionQueryResponse,
   ThemeQueryRequest,
   ThemeQueryResponse,
 } from "@/types";
@@ -64,11 +66,13 @@ export function generateThemeBrowserStore({
   filterPath,
   themePath,
   themeType,
+  isSubmission = false,
   requiresAuth = false,
 }: {
   filterPath: string;
   themePath: string;
   themeType: "ALL" | "DESKTOP" | "BPM" | "PROFILE";
+  isSubmission?: boolean;
   requiresAuth?: boolean;
 }) {
   const store = createStore<IThemeBrowserStore>((set, get) => ({
@@ -79,20 +83,20 @@ export function generateThemeBrowserStore({
     searchOpts: {
       page: 1,
       perPage: 50,
-      filters: "All",
-      order: "Last Updated",
+      filters: isSubmission ? "AwaitingApproval" : "All",
+      order: isSubmission ? "First to Last" : "Last Updated",
       search: "",
     },
     prevSearchOpts: {
       page: 1,
       perPage: 50,
-      filters: "All",
-      order: "Last Updated",
+      filters: isSubmission ? "AwaitingApproval" : "All",
+      order: isSubmission ? "First to Last" : "Last Updated",
       search: "",
     },
     filterOptions: {
       filters: {},
-      order: ["Last Updated"],
+      order: isSubmission ? ["First to Last"] : ["Last Updated"],
     },
     indexToSnapToOnLoad: -1,
     initializeStore: async () => {
@@ -134,9 +138,14 @@ export function generateThemeBrowserStore({
             requiresAuth,
           }
         );
+        // There is a dedicated page for profiles, so they don't need to be in the other tabs
+        if (themeType !== "ALL" && response.filters?.["Profile"]) {
+          delete response.filters["Profile"];
+        }
         if (response.filters) {
           set({ filterOptions: response });
         }
+
         // Profile IS A filter, so disable filter options
         if (themeType === "PROFILE") {
           set({ filterOptions: { ...get().filterOptions, filters: {} } });
@@ -162,13 +171,27 @@ export function generateThemeBrowserStore({
         const { searchOpts } = get();
 
         const { apiFetch } = getCSSLoaderState();
-        const response = await apiFetch<ThemeQueryResponse>(
+        const response = await apiFetch<ThemeQueryResponse | SubmissionQueryResponse>(
           `${themePath}?${generateParamStr(searchOpts, themeType)}`,
           {},
           {
             requiresAuth,
           }
         );
+
+        // If the response is a submission, we need to strip all the extra submission data
+        if (isSubmission) {
+          response.items = response.items.map((theme) => {
+            theme = theme as SubmissionDto;
+            if (theme.newTheme) {
+              return theme.newTheme;
+            }
+            return theme;
+          }) as PartialCSSThemeInfo[];
+        } else {
+          response.items = response.items as PartialCSSThemeInfo[];
+        }
+
         if (response.items) {
           set({ themeTotal: response.total });
           if (searchOpts.page === 1) {

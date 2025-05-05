@@ -81,7 +81,8 @@ export function ThemeStoreRouter() {
           filterPath="/submissions/filters"
           themePath="/submissions"
           themeType="ALL"
-          requiresAuth={true}
+          isSubmission
+          requiresAuth
         >
           <ThemeBrowserPage />
         </ThemeBrowserStoreProvider>
@@ -98,7 +99,7 @@ export function ThemeStoreRouter() {
           filterPath="/users/me/stars/filters"
           themePath="/users/me/stars"
           themeType="ALL"
-          requiresAuth={true}
+          requiresAuth
         >
           <ThemeBrowserPage />
         </ThemeBrowserStoreProvider>
