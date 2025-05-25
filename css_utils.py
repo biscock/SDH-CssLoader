@@ -114,7 +114,12 @@ def is_steam_beta_active() -> bool:
     return content not in stable_branches
 
 def create_steam_symlink() -> Result:
-    return create_symlink(get_theme_path(), os.path.join(get_steam_path(), "steamui", "themes_custom"))
+    link = os.path.join(get_steam_path(), "steamui", "themes_custom")
+
+    if (not PLATFORM_WIN) and os.path.exists(link):
+        os.unlink(link)
+
+    return create_symlink(get_theme_path(), link)
 
 def create_cef_flag() -> Result:
     path = os.path.join(get_steam_path(), ".cef-enable-remote-debugging")
