@@ -190,7 +190,7 @@ class BrowserTabHook:
 
         return Result(False, "Css Commit Retry Count Exceeded")
     
-    async def remove_all_css(self, retry : int = 3) -> Result:
+    async def remove_all_css(self, retry : int = 2) -> Result:
         js = """
         (function() {
             document.querySelectorAll('.css-loader-style').forEach(x => x.remove());
@@ -268,18 +268,26 @@ class BrowserHook:
             start_time = time.time()
 
             while await_response:
-                result = await queue.get()
+                try:
+                    async with asyncio.timeout(2.5):
+                        result = await queue.get()
 
-                if (start_time + 2) < time.time():
-                    Result(False, f"Request for {method} took more than 2s. Assuming it failed ({len(self.connected_tabs)})")
+                        if (start_time + 2) < time.time():
+                            Result(False, f"Request for {method} took more than 2s. Assuming it failed ({len(self.connected_tabs)})")
+                            self.ws_response.remove(queue)
+                            del queue
+                            return None
+
+                        if "id" in result and result["id"] == id:
+                            self.ws_response.remove(queue)
+                            del queue
+                            return result   
+                        
+                except asyncio.TimeoutError:
+                    Result(False, f"Request for {method} timed out after 2.5s. Assuming it failed ({len(self.connected_tabs)})")
                     self.ws_response.remove(queue)
                     del queue
-                    return None
-                
-                if "id" in result and result["id"] == id:
-                    self.ws_response.remove(queue)
-                    del queue
-                    return result          
+                    return None       
                 
             return None
         raise RuntimeError("Websocket not opened")   
