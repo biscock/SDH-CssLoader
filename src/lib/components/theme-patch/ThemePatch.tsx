@@ -87,6 +87,7 @@ export function ThemePatch({
       {patch.components.map((component) => (
         <ThemePatchComponent
           key={component.name}
+          currentPatchValue={patch.value}
           component={component}
           themeName={themeName}
           patchName={patch.name}

@@ -13,7 +13,7 @@ export function ThemePatchComponent({
   shouldHaveBottomSeparator,
 }: {
   component: ThemePatchComponent;
-  currentPatchValue?: string;
+  currentPatchValue: string;
   patchName: string;
   themeName: string;
   shouldHaveBottomSeparator: boolean;
