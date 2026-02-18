@@ -26,15 +26,17 @@ export function ThemeSettingsPage() {
 
   return (
     <Focusable className="cl_settingspage_container">
-      <Focusable className="flex gap-4 mb-4">
-        <DialogButton
-          className="CSSLoader_InstalledThemes_ModeButton"
-          onClick={() => setDeleteMode(!deleteMode)}
-        >
-          {deleteMode ? "Go Back" : "Delete Themes"}
-        </DialogButton>
-        <UpdateAllThemesButton />
-      </Focusable>
+      {themes.length > 0 && (
+        <Focusable className="flex gap-4 mb-4">
+          <DialogButton
+            className="CSSLoader_InstalledThemes_ModeButton"
+            onClick={() => setDeleteMode(!deleteMode)}
+          >
+            {deleteMode ? "Go Back" : "Delete Themes"}
+          </DialogButton>
+          <UpdateAllThemesButton />
+        </Focusable>
+      )}
       {deleteMode ? (
         <DeleteMenu sortedThemeList={sortedList} onLeave={() => setDeleteMode(false)} />
       ) : (
