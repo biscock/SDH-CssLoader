@@ -11,19 +11,22 @@ import {
 import { ProfileContextProvider, useProfileContext } from "../state";
 
 export function ProfileSettingsPage() {
+  const { downloadedProfiles } = useProfileContext();
   const [deleteMode, setDeleteMode] = useState(false);
   return (
     <ProfileContextProvider>
-      <Focusable className="flex gap-4 mb-4">
-        <DisableProfileButton />
-        <DialogButton
-          className="CSSLoader_InstalledThemes_ModeButton"
-          onClick={() => setDeleteMode(!deleteMode)}
-        >
-          {deleteMode ? "Go Back" : "Delete Profiles"}
-        </DialogButton>
-        <UpdateAllProfilesButton />
-      </Focusable>
+      {downloadedProfiles.length > 0 && (
+        <Focusable className="flex gap-4 mb-4">
+          <DisableProfileButton />
+          <DialogButton
+            className="CSSLoader_InstalledThemes_ModeButton"
+            onClick={() => setDeleteMode(!deleteMode)}
+          >
+            {deleteMode ? "Go Back" : "Delete Profiles"}
+          </DialogButton>
+          <UpdateAllProfilesButton />
+        </Focusable>
+      )}
       {deleteMode ? (
         <ProfileDeleteMenu disableDeleteMode={() => setDeleteMode(false)} />
       ) : (
