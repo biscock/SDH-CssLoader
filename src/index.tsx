@@ -7,16 +7,29 @@ import { getDeckyPatchState } from "./decky-patches";
 import { ExpandedViewPage } from "./modules/expanded-view";
 import { SettingsPageRouter } from "./modules/settings";
 import { ThemeStoreRouter } from "./modules/theme-store";
+import {
+  getThemeBrowserSharedState,
+  THEME_STORE_FIRST_TAB_ID,
+} from "./modules/theme-store/context";
 
 export default definePlugin(() => {
   getCSSLoaderState().initializeStore();
   getDeckyPatchState().initializeStore();
 
-  routerHook.addRoute("/cssloader/theme-store", () => (
-    <StyleProvider>
-      <ThemeStoreRouter />
-    </StyleProvider>
-  ));
+  routerHook.addRoute("/cssloader/theme-store", () => {
+    // When you navigate from theme store to another page and back, valve will automatically restore the focus to where it was
+    // However, when you close this tab and go back, focus is reset to the beginning, so we also need to reset our saved tab value back to default
+    const state = getThemeBrowserSharedState();
+    if (!state.skipNextTabReset) {
+      state.setCurrentTab(THEME_STORE_FIRST_TAB_ID);
+    }
+    state.setSkipNextTabReset(false);
+    return (
+      <StyleProvider>
+        <ThemeStoreRouter />
+      </StyleProvider>
+    );
+  });
 
   routerHook.addRoute("/cssloader/expanded-view", () => (
     <StyleProvider>

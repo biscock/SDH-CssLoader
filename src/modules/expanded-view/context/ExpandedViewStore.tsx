@@ -1,4 +1,5 @@
 import { getCSSLoaderState } from "@/backend";
+import { getThemeBrowserSharedState } from "@/modules/theme-store/context";
 import { FullCSSThemeInfo } from "@/types";
 import { Navigation } from "@decky/ui";
 import { createStore } from "zustand";
@@ -71,6 +72,7 @@ const expandedViewStore = createStore<IExpandedViewStore>((set, get) => {
     },
     openTheme: async (themeId) => {
       set({ loaded: false, error: null, openedId: themeId });
+      getThemeBrowserSharedState().setSkipNextTabReset(true);
       Navigation.Navigate("/cssloader/expanded-view");
       const { apiFetch, apiFullToken } = getCSSLoaderState();
       try {
