@@ -9,10 +9,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up NodeJS 18
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18
   
@@ -37,7 +37,7 @@ jobs:
         mv "./SDH-CssLoader" ./upload
     
     - name: Upload package artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SDH-CSSLoader-Decky
         path: ./upload
@@ -48,10 +48,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python 3.10.2
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10.2"
 
@@ -68,7 +68,7 @@ jobs:
       run: pyinstaller --noconfirm --noconsole --onefile --add-data "./assets;/assets" --name "CssLoader-Standalone-Headless" ./main.py ./css_win_tray.py
 
     - name: Upload package artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SDH-CSSLoader-Win-Standalone
         path: |
@@ -89,10 +89,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python 3.10
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10"
 
@@ -124,7 +124,7 @@ jobs:
           "CssLoader-Standalone-Headless-macOS-${{ matrix.arch }}.zip"
 
     - name: Upload package artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: SDH-CSSLoader-macOS-${{ matrix.arch }}-Standalone
         path: |
