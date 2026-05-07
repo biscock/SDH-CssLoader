@@ -282,9 +282,18 @@ if __name__ == '__main__':
 
     import css_win_tray
 
-    if PLATFORM_MAC:
+    # When the tray is disabled the macOS-specific threading dance (asyncio in
+    # a worker thread, AppKit on main) is unnecessary \u2014 and in fact harmful,
+    # because ``start_icon_blocking`` would return immediately, leaving only the
+    # daemon thread running, which Python kills on main-thread exit. Fall
+    # through to the shared ``run_forever`` path in that case.
+    use_mac_threading = PLATFORM_MAC and not store_or_file_config("disable_tray")
+
+    if use_mac_threading:
         # AppKit's NSStatusItem must own the main thread, so flip the threading
-        # model: asyncio loop runs in a daemon thread and pystray runs on main.
+        # model: asyncio loop runs in a worker thread and pystray runs on main.
+        # The thread is non-daemon so a stray main-thread error doesn't silently
+        # kill the asyncio loop and all background work with it.
         def _runner():
             asyncio.set_event_loop(loop)
             try:
@@ -295,7 +304,8 @@ if __name__ == '__main__':
                 except Exception:
                     pass
 
-        threading.Thread(target=_runner, daemon=True).start()
+        loop_thread = threading.Thread(target=_runner, daemon=False)
+        loop_thread.start()
 
         try:
             css_win_tray.start_icon_blocking(Plugin, loop)
@@ -307,7 +317,11 @@ if __name__ == '__main__':
                 loop.call_soon_threadsafe(loop.stop)
             except Exception:
                 pass
+            loop_thread.join(timeout=5)
     else:
+        # Either Linux/Windows, or macOS with the tray disabled. ``start_icon``
+        # is a no-op when ``disable_tray`` is set, so this path keeps the
+        # asyncio loop on the main thread for everyone.
         css_win_tray.start_icon(Plugin, loop)
 
         try:
