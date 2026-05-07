@@ -74,3 +74,59 @@ jobs:
         path: |
           ./dist/CssLoader-Standalone.exe
           ./dist/CssLoader-Standalone-Headless.exe
+
+  build-standalone-mac:
+    name: Build SDH-CSSLoader Standalone for macOS (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-13
+            arch: x86_64
+          - runner: macos-14
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller==5.13.2
+        pip install -r requirements.txt
+
+    # On macOS pystray uses NSStatusBar via PyObjC, so the binary must be
+    # built as a windowed (.app) bundle. The ``:`` separator in --add-data is
+    # the POSIX form (Windows uses ``;``).
+    - name: Build Python Backend (windowed)
+      run: pyinstaller --noconfirm --windowed --onefile --add-data "./assets:assets" --name "CssLoader-Standalone" ./main.py ./css_win_tray.py
+
+    - name: Build Python Backend Headless (windowed)
+      run: pyinstaller --noconfirm --windowed --onefile --add-data "./assets:assets" --name "CssLoader-Standalone-Headless" ./main.py ./css_win_tray.py
+
+    - name: Strip extended attributes and zip .app bundles
+      run: |
+        cd dist
+        xattr -cr "CssLoader-Standalone.app" || true
+        xattr -cr "CssLoader-Standalone-Headless.app" || true
+        ditto -c -k --sequesterRsrc --keepParent \
+          "CssLoader-Standalone.app" \
+          "CssLoader-Standalone-macOS-${{ matrix.arch }}.zip"
+        ditto -c -k --sequesterRsrc --keepParent \
+          "CssLoader-Standalone-Headless.app" \
+          "CssLoader-Standalone-Headless-macOS-${{ matrix.arch }}.zip"
+
+    - name: Upload package artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: SDH-CSSLoader-macOS-${{ matrix.arch }}-Standalone
+        path: |
+          ./dist/CssLoader-Standalone-macOS-${{ matrix.arch }}.zip
+          ./dist/CssLoader-Standalone-Headless-macOS-${{ matrix.arch }}.zip

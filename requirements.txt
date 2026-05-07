@@ -4,3 +4,5 @@ aiohttp_cors==0.7.0
 watchdog==2.1.7
 certifi==2022.12.7
 pystray
+# pystray uses the AppKit / Cocoa backend on macOS via PyObjC.
+pyobjc-framework-Cocoa; sys_platform == 'darwin'

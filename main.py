@@ -246,6 +246,9 @@ if __name__ == '__main__':
     ALWAYS_RUN_SERVER = True
     IS_STANDALONE = True
     import logging
+    import threading
+
+    from css_utils import PLATFORM_MAC
 
     logging.basicConfig(
         format='[%(asctime)s][%(levelname)s]: %(message)s',
@@ -258,7 +261,8 @@ if __name__ == '__main__':
     Logger.addHandler(logging.StreamHandler())
     Logger.setLevel(logging.INFO)
 
-    asyncio.set_event_loop(asyncio.new_event_loop())
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
     class A:
         async def run(self):
@@ -271,18 +275,44 @@ if __name__ == '__main__':
                     print(str(e))
                 except Exception as e:
                     print(str(e))
-                
+
                 count += 1
 
-    asyncio.get_event_loop().run_until_complete(A().run())
+    loop.run_until_complete(A().run())
 
     import css_win_tray
-    
-    css_win_tray.start_icon(Plugin, asyncio.get_event_loop())
 
-    try:
-        asyncio.get_event_loop().run_forever()
-    except KeyboardInterrupt:
-        pass
+    if PLATFORM_MAC:
+        # AppKit's NSStatusItem must own the main thread, so flip the threading
+        # model: asyncio loop runs in a daemon thread and pystray runs on main.
+        def _runner():
+            asyncio.set_event_loop(loop)
+            try:
+                loop.run_forever()
+            finally:
+                try:
+                    loop.close()
+                except Exception:
+                    pass
 
-    css_win_tray.stop_icon()
+        threading.Thread(target=_runner, daemon=True).start()
+
+        try:
+            css_win_tray.start_icon_blocking(Plugin, loop)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            css_win_tray.stop_icon()
+            try:
+                loop.call_soon_threadsafe(loop.stop)
+            except Exception:
+                pass
+    else:
+        css_win_tray.start_icon(Plugin, loop)
+
+        try:
+            loop.run_forever()
+        except KeyboardInterrupt:
+            pass
+
+        css_win_tray.stop_icon()

@@ -414,6 +414,10 @@ class BrowserHook:
         while True:
             await asyncio.sleep(3)
             try:
+                # On Windows, trust env so corporate proxies (HTTP_PROXY etc.)
+                # are honoured. On macOS / Linux those vars are far rarer and
+                # tend to break the local Steam CDP connection, so don't trust
+                # the env there.
                 async with aiohttp.ClientSession(trust_env=PLATFORM_WIN) as web:
                     res = await web.get(f"http://127.0.0.1:8080/json/version", timeout=3)
 
