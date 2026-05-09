@@ -67,6 +67,18 @@ To autostart on login, create `~/Library/LaunchAgents/com.deckthemes.cssloader.b
 
 The Desktop UI does this automatically during onboarding; this is only needed if you skipped it.
 
+### macOS tray menu
+
+Right-clicking (or left-clicking) the paint-roller icon in the menu bar opens a menu with:
+
+- **Open Desktop App** — surfaces the CSSLoader Desktop UI. Works whether Desktop was launched fresh, is already running with a visible window, or is silently running in the background via Desktop's `Settings → Run at Startup` toggle. The tray invokes `open -n -a "/Applications/CSSLoader Desktop.app"`; Desktop's `tauri-plugin-single-instance` intercepts the duplicate launch, hands the existing process the new argv, exits the duplicate, and the existing process un-hides its window and promotes itself to a foreground (Dock-visible) app. This behaviour is what makes the silent autostart in CSSLoader Desktop v1.3.x usable end to end.
+- **Open Themes Folder** — opens `~/homebrew/themes/` in Finder.
+- **Reload Themes** — re-scans the themes folder. Equivalent to Desktop's "Reload Themes" button.
+- **Live CSS Editing** — toggles dev-mode (auto-reload on file change). Useful when authoring a theme.
+- **Exit** — terminates the backend process. The LaunchAgent will restart it on the next login.
+
+If the Desktop UI is not installed at `/Applications/CSSLoader Desktop.app` (or `~/Applications/CSSLoader Desktop.app`), the **Open Desktop App** entry is greyed out.
+
 ### macOS settings
 
 The backend reads `~/homebrew/themes/STORE` for runtime config. Two macOS-relevant keys:
