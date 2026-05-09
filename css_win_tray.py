@@ -107,7 +107,15 @@ def open_desktop():
 
     try:
         if css_utils.PLATFORM_MAC:
-            subprocess.Popen(["open", path])
+            # ``-n`` forces a fresh process even if Desktop is already running
+            # (e.g. launched silently via the Run-at-Startup LaunchAgent with
+            # its window hidden). The Desktop app uses tauri-plugin-single-
+            # instance to detect the duplicate launch, hand the existing
+            # process the new argv, and exit; the existing instance then
+            # un-hides its main window and brings it forward. Without
+            # ``-n``, ``open -a`` would just activate the hidden process,
+            # which on macOS doesn't show its windows automatically.
+            subprocess.Popen(["open", "-n", "-a", path])
         else:
             subprocess.Popen([path])
     except Exception as e:
