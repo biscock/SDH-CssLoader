@@ -111,6 +111,19 @@ jobs:
     - name: Build Python Backend Headless (windowed)
       run: pyinstaller --noconfirm --windowed --onefile --add-data "./assets:assets" --name "CssLoader-Standalone-Headless" ./main.py ./css_win_tray.py
 
+    # Mark both bundles as agent apps via LSUIElement=true. Without this the
+    # backend shows up in the macOS Dock as a normal GUI app even though its
+    # only UI is the menu-bar (NSStatusItem) icon. Setting LSUIElement keeps
+    # the menu-bar icon working and hides the Dock entry.
+    - name: Mark .app bundles as LSUIElement (hide from Dock)
+      run: |
+        cd dist
+        for app in "CssLoader-Standalone.app" "CssLoader-Standalone-Headless.app"; do
+          plist="$app/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Delete :LSUIElement" "$plist" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :LSUIElement bool true" "$plist"
+        done
+
     - name: Strip extended attributes and zip .app bundles
       run: |
         cd dist
