@@ -12,14 +12,20 @@ DECKY_HOME = os.getenv("DECKY_HOME", os.path.join(HOME, "homebrew"))
 DECKY_USER = os.getenv("DECKY_USER")
 
 if not DECKY_USER:
-    DECKY_USER = os.getlogin()
+    try:
+        DECKY_USER = os.getlogin()
+    except OSError:
+        # os.getlogin() can fail on macOS / inside detached sessions; fall back
+        DECKY_USER = USER
 
 if not os.path.exists(DECKY_HOME):
     os.mkdir(DECKY_HOME)
 
 PLATFORM_WIN = platform.system() == "Windows"
+PLATFORM_MAC = platform.system() == "Darwin"
+PLATFORM_LINUX = not PLATFORM_WIN and not PLATFORM_MAC
 
-if not PLATFORM_WIN:
+if PLATFORM_LINUX:
     import pwd
 
 Logger = getLogger("CSS_LOADER")
@@ -54,13 +60,20 @@ def create_dir(dirPath : str):
 
     os.mkdir(dirPath)
 
-    if not PLATFORM_WIN:
-        a = pwd.getpwnam(DECKY_USER)
-        uid = a.pw_uid
-        gid = a.pw_gid
+    # Steam Deck installs Decky as root and needs the themes folder chowned to
+    # the deck user. On macOS / regular Linux desktops the current process is
+    # already the right user, so chown is unnecessary (and on macOS pwd lookups
+    # for the login user can be flaky). Only do this on Linux.
+    if PLATFORM_LINUX:
+        try:
+            a = pwd.getpwnam(DECKY_USER)
+            uid = a.pw_uid
+            gid = a.pw_gid
 
-        if (os.stat(dirPath).st_uid != uid):
-            os.chown(dirPath, uid, gid) # Change to deck user
+            if (os.stat(dirPath).st_uid != uid):
+                os.chown(dirPath, uid, gid) # Change to deck user
+        except KeyError:
+            pass
 
 def get_user_home() -> str:
     return HOME
@@ -91,11 +104,15 @@ def get_steam_path() -> str:
             val, type = winreg.QueryValueEx(key, "InstallPath")
             if type != winreg.REG_SZ:
                 raise Exception(f"Expected type {winreg.REG_SZ}, got {type}")
-            
+
             Log(f"Got win steam install path: '{val}'")
             return val
         except Exception as e:
             return "C:\\Program Files (x86)\\Steam" # Taking a guess here
+    elif PLATFORM_MAC:
+        # On macOS Steam stores its CEF / steamui assets under
+        # ~/Library/Application Support/Steam.
+        return os.path.join(get_user_home(), "Library", "Application Support", "Steam")
     else:
         return f"{get_user_home()}/.steam/steam"
 
